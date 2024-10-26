@@ -32,12 +32,14 @@ class Listing extends Model
     public function view(){
         return $this->hasMany(Viewing::class, 'listing_id');
     }
-    public function photos(){
+    public function photos()
+    {
         return $this->hasMany(Photos::class);
-
     }
-    public function amenities(){
-        return $this->hasOne(Amenities::class);
-
+    
+    public function amenities()
+    {
+        return $this->hasOne(Amenities::class); 
     }
+    
 }

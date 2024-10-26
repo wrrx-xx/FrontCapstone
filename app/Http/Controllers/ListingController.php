@@ -109,7 +109,8 @@ class ListingController extends Controller implements HasMiddleware
              }
      
              // Save amenities
-             $listing->amenity()->create($validatedData['amenities']);
+             $amenities = new Amenities($validatedData['amenities']);
+             $listing->amenities()->save($amenities);
      
              DB::commit();
              return response()->json(['message' => 'Listing created successfully', 'listing' => $listing], 201);
@@ -119,6 +120,7 @@ class ListingController extends Controller implements HasMiddleware
              return response()->json(['message' => 'Failed to create listing', 'error' => $e->getMessage()], 500);
          }
      }
+     
      
 
 

@@ -38,38 +38,74 @@ class AuthController extends Controller
     
     }
 
-    public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email|exists:users',
-            'password' => 'required'
-        ]);
+    // public function login(Request $request)
+    // {
+    //     $request->validate([
+    //         'email' => 'required|email|exists:users',
+    //         'password' => 'required'
+    //     ]);
 
-        $user = User::where('email', $request->email)->first();
+    //     $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return [
-                'errors' => [
-                    'email' => ['The provided credentials are incorrect.']
-                ]
-            ];
-            // return [
-            //     'message' => 'The provided credentials are incorrect.' 
-            // ];
+    //     if (!$user || !Hash::check($request->password, $user->password)) {
+    //         return [
+    //             'errors' => [
+    //                 'email' => ['The provided credentials are incorrect.']
+    //             ]
+    //         ];
+    //         // return [
+    //         //     'message' => 'The provided credentials are incorrect.' 
+    //         // ];
            
-        }
+    //     }
 
-        $token = $user->createToken($user->email);
+    //     $token = $user->createToken($user->email);
 
-        // Check user role and redirect accordingly
-        if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard'); // Change to the actual route for admin
-        } elseif ($user->role === 'owner') {
-            return redirect()->route('owner'); // Change to the actual route for owner
-        } else {
-            return redirect()->route('dashboard'); // Fallback route if the role is not recognized
-        }
+    //     // Check user role and redirect accordingly
+    //     if ($user->role === 'admin') {
+    //         return redirect()->route('admin.dashboard'); // Change to the actual route for admin
+    //     } elseif ($user->role === 'owner') {
+    //         return redirect()->route('owner'); // Change to the actual route for owner
+    //     } else {
+    //         return redirect()->route('dashboard'); // Fallback route if the role is not recognized
+    //     }
+    // }
+
+
+    // comment this function or remove I used this for postman testing
+    public function login(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email|exists:users,email',
+        'password' => 'required'
+    ]);
+
+    $user = User::where('email', $request->email)->first();
+
+    if (!$user || !Hash::check($request->password, $user->password)) {
+        return response()->json([
+            'errors' => [
+                'email' => ['The provided credentials are incorrect.']
+            ]
+        ], 401); // Unauthorized response
     }
+
+    // Create a token for the user
+    $token = $user->createToken($user->email)->plainTextToken;
+
+    // Return a success response with user information and token
+    return response()->json([
+        'message' => 'Login successful',
+        'token' => $token,
+        'user' => [
+            'id' => $user->id,
+            'email' => $user->email,
+            'role' => $user->role,
+            // Add any other user details you want to return
+        ]
+    ], 200); // OK response
+}
+
 
     public function logout(Request $request)
     {
