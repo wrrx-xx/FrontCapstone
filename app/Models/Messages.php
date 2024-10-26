@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Messages extends Model
+{
+    use HasFactory;
+    protected $fillable = [
+        'inquiry_id',
+        'sender_id',
+        'message_body',
+    ];
+
+    public function  inquiry(){
+        return $this->belongsTo(Inquiries::class,'inquiry_id');
+    }
+    public function   sender(){
+        return $this->belongsTo(User::class,'sender_id');
+    }
+
+}
