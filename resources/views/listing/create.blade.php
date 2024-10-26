@@ -127,319 +127,161 @@
 							<h3>Add Property</h3>
 							<hr>
 						</div>
-							<form id="stepByStepForm" class="file-upload" action="{{ route('listing.store') }}" method="POST" enctype="multipart/form-data">
-								@csrf
-								<ul class="progress-step">
-									<li class="progress-bar__dot full box-md position-relative me-4 me-lg-0">
-										<span class="mb-0 position-absolute top-50 start-50 translate-middle fs-6"><i class="far fa-edit"></i></span>
-									</li>
-									<li class="progress-bar__connector align-items-center d-none d-lg-block">
-										<span class="fs-5 mb-0 ms-2 text-dark">Description</span>
-									</li>
-									
-									<li class="progress-bar__dot box-md position-relative me-4 me-lg-0">
-										<span class="mb-0 position-absolute top-50 start-50 translate-middle fs65"><i class="fas fa-photo-video"></i></span>
-									</li>
-									<li class="progress-bar__connector align-items-center d-none d-lg-block">
-										<span class="fs-5 mb-0 ms-2 text-dark">Media</span>
-									</li>
-
-									<li class="progress-bar__dot box-md position-relative me-4 me-lg-0">
-										<span class="mb-0 position-absolute top-50 start-50 translate-middle fs65"><i class="fas fa-map-marker-alt"></i></span>
-									</li>
-									<li class="progress-bar__connector align-items-center d-none d-lg-block">
-										<span class="fs-5 mb-0 ms-2 text-dark">Location</span>
-									</li>
-
-									<li class="progress-bar__dot box-md position-relative">
-										<span class="mb-0 position-absolute top-50 start-50 translate-middle fs65"><i class="fas fa-bars"></i></span>
-									</li>
-									<li class="progress-bar__connector align-items-center d-none d-lg-block">
-										<span class="fs-5 mb-0 ms-2 text-dark">Amenities</span>
-									</li>
-								</ul>
-								
-								<!-- Description step -->
-								<div class="step step1">
-									 <!-- Row START -->
-									
-									<div class="row gx-5 align-items-center justify-content-center">
-									<!-- Property detail -->
+						<form id="stepByStepForm" class="file-upload" action="{{ route('listing.store') }}" method="POST" enctype="multipart/form-data">
+							@csrf
+							<ul class="progress-step">
+								<li class="progress-bar__dot full box-md position-relative me-4 me-lg-0">
+									<span class="mb-0 position-absolute top-50 start-50 translate-middle fs-6"><i class="far fa-edit"></i></span>
+								</li>
+								<li class="progress-bar__connector align-items-center d-none d-lg-block">
+									<span class="fs-5 mb-0 ms-2 text-dark">Description</span>
+								</li>
+								<li class="progress-bar__dot box-md position-relative me-4 me-lg-0">
+									<span class="mb-0 position-absolute top-50 start-50 translate-middle fs65"><i class="fas fa-photo-video"></i></span>
+								</li>
+								<li class="progress-bar__connector align-items-center d-none d-lg-block">
+									<span class="fs-5 mb-0 ms-2 text-dark">Media</span>
+								</li>
+								<li class="progress-bar__dot box-md position-relative me-4 me-lg-0">
+									<span class="mb-0 position-absolute top-50 start-50 translate-middle fs65"><i class="fas fa-map-marker-alt"></i></span>
+								</li>
+								<li class="progress-bar__connector align-items-center d-none d-lg-block">
+									<span class="fs-5 mb-0 ms-2 text-dark">Location</span>
+								</li>
+								<li class="progress-bar__dot box-md position-relative">
+									<span class="mb-0 position-absolute top-50 start-50 translate-middle fs65"><i class="fas fa-bars"></i></span>
+								</li>
+								<li class="progress-bar__connector align-items-center d-none d-lg-block">
+									<span class="fs-5 mb-0 ms-2 text-dark">Amenities</span>
+								</li>
+							</ul>
+						
+							<!-- Description step -->
+							<div class="step step1">
+								<div class="row gx-5 align-items-center justify-content-center">
 									<div class="col-xxl-10 mb-5 mb-xxl-0">
-								<div class="row g-3 bg-secondary-soft rounded p-3 p-md-5">
-									<h4 class="my-0">Property Status</h4>
-									<!-- Title -->
-									<div class="col-md-12">
-										<label class="form-label">Title *</label>
-										<input type="text" class="form-control" name="title" aria-label="Title">
+										<div class="row g-3 bg-secondary-soft rounded p-3 p-md-5">
+											<h4 class="my-0">Property Status</h4>
+											<div class="col-md-12">
+												<label class="form-label">Title *</label>
+												<input type="text" class="form-control" name="title" aria-label="Title">
+											</div>
+											<div class="col-md-12">
+												<label for="body" class="form-label">Description *</label>
+												<textarea class="form-control" name="body" id="body" rows="4" spellcheck="false"></textarea>
+											</div>
+											<div class="col-md-6">
+												<label class="form-label">Type *</label>
+												<select class="form-select" name="type">
+													<option value="">Select item</option>
+													<option>Apartment</option>
+													<option>Boarding house</option>
+													<option>House</option>
+													<option>Room</option>
+												</select>
+											</div>
+											<div class="col-md-6">
+												<label class="form-label">Availability *</label>
+												<select class="form-select" name="availability">
+													<option value="open">Open</option>
+													<option value="closed">Closed</option>
+												</select>
+											</div>
+											<div class="col-md-6">
+												<label class="form-label">Reservation Status *</label>
+												<select class="form-select" name="reservation">
+													<option value="open">Open</option>
+													<option value="closed">Closed</option>
+												</select>
+											</div>
+											<div class="col-md-6">
+												<label class="form-label">Price *</label>
+												<input type="text" class="form-control" name="price" aria-label="Price">
+											</div>
+											<div class="col-md-6">
+												<label class="form-label">Reservation Amount *</label>
+												<input type="text" class="form-control" name="reservation_amount" aria-label="Reservation Amount">
+											</div>
+										</div>
 									</div>
-									<!-- Description -->
-									<div class="col-md-12">
-										<label for="exampleFormControlTextarea1" class="form-label">Description *</label>
-										<textarea class="form-control" name="body" id="exampleFormControlTextarea1" rows="4" spellcheck="false"></textarea>
-									</div>
-
-									<!-- Type -->
-									<div class="col-md-6">
-										<label class="form-label">Type *</label>
-										<select class="form-select " aria-label="Default select example" name="type">
-											<option value="">Select item</option>
-											<option>Apartment</option>
-											<option>Boarding house</option>
-											<option>House</option>
-											<option>Room</option>
-											
-										</select>
-									</div>
-									
-									<!-- Status -->
-									<div class="col-md-6">
-										<label class="form-label">Status *</label>
-										<select class="form-select " aria-label="Default select example" name="availability">
-											<option value="">Select item</option>
-											<option>open</option>
-											<option>closed</option>
-											
-										</select>
-									</div>
-									<!-- Reservation -->
-									<div class="col-md-6">
-										<label class="form-label">Reservation *</label>
-										<select class="form-select " aria-label="Default select example" name="reservation">
-											<option value="">Select item</option>
-											<option>open</option>
-											<option>closed</option>
-											
-										</select>
-									</div>
-
-									<h4 class="mt-5 mb-0">Property price</h4>
-									<div class="col-md-6">
-										<label class="form-label">Enter price *</label>
-										<input type="text" class="form-control" aria-label="price" name="price"> <!-- Changed name for clarity -->
-									</div>
-									<!-- Reservation price -->
-									<div class="col-md-6">
-										<label class="form-label">Reservation price *</label>
-										<input type="text" class="form-control" aria-label="price" name="reservation_price"> <!-- Changed name for clarity -->
-									</div> 
-									</div>
-									</div>
-								</div> <!-- Row END -->
 								</div>
-						 
-								<!-- Media step -->
-								<div class="step step2 hidden">
-									 <!-- Row START -->
-									 <div class="row gx-5 align-items-center justify-content-center">
-										<!-- Property detail -->
-										<div class="col-xxl-10 mb-5 mb-xxl-0">
-											<div class="row g-3 bg-secondary-soft p-3 p-md-5 rounded">
-												<h4 class="mb-4 mt-0">Upload your property photo</h4>
-												<!-- upload file -->
-												<div class="col-md-12 mt-0">
-													<div class="d-flex justify-content-center align-items-center p-4 bg-primary-soft border-dashed rounded">
-														<input type="file" id="customFile" name="photos[]"  hidden>
-														<label for="customFile" style="cursor:pointer;">
-															<span class="fs-2 text-primary"><i class="fas fa-file-upload me-4"></i></span>
-														</label>
-														<div>
-															<h6 class="mb-1">Drag file here or click to upload</h6>
-															<span>upload up to 8 files</span>
-														</div>
+							</div>
+						
+							<!-- Media step -->
+							<div class="step step2 hidden">
+								<div class="row gx-5 align-items-center justify-content-center">
+									<div class="col-xxl-10 mb-5 mb-xxl-0">
+										<div class="row g-3 bg-secondary-soft p-3 p-md-5 rounded">
+											<h4 class="mb-4 mt-0">Upload Property Photos</h4>
+											<div class="col-md-12">
+												<input type="file" name="photos[]" multiple>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						
+							<!-- Location step -->
+							<div class="step step3 hidden">
+								<div class="row gx-5">
+									<div class="col-xxl-6 mb-5 mb-xxl-0">
+										<div class="bg-secondary-soft p-3 p-sm-5 rounded">
+											<h4>Location Details</h4>
+											<div class="col-md-6">
+												<label class="form-label">City *</label>
+												<input type="text" class="form-control" name="city" aria-label="City">
+											</div>
+											<div class="col-md-6">
+												<label class="form-label">Baranggay *</label>
+												<input type="text" class="form-control" name="baranggay" aria-label="Baranggay">
+											</div>
+											<div class="col-md-12">
+												<label class="form-label">Address *</label>
+												<textarea class="form-control" name="address" rows="4" spellcheck="false"></textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						
+							<!-- Amenities step -->
+							<div class="step step4 hidden">
+								<div class="row mb-4 gx-5">
+									<div class="col-xxl-12">
+										<div class="bg-secondary-soft p-5 rounded">
+											<h5 class="font-base mb-2">Amenities</h5>
+											<div class="row">
+												<div class="col-md-4">
+													<div class="form-check">
+														<input type="checkbox" class="form-check-input" name="wifi" id="wifi">
+														<label class="form-check-label" for="wifi">Wifi</label>
+													</div>
+													<div class="form-check">
+														<input type="checkbox" class="form-check-input" name="parking" id="parking">
+														<label class="form-check-label" for="parking">Parking</label>
+													</div>
+													<div class="form-check">
+														<input type="checkbox" class="form-check-input" name="bathroom" id="bathroom">
+														<label class="form-check-label" for="bathroom">Bathroom</label>
 													</div>
 												</div>
-
-												
-											</div> <!-- Row END -->
-										</div>
-									</div> <!-- Row END -->
-								</div>
-						 
-								<!-- Location step -->
-								<div class="step step3 hidden">
-									 <!-- Row START -->
-									 <div class="row gx-5">
-										<!-- Location detail -->
-										<div class="col-xxl-6 mb-5 mb-xxl-0">
-											<div class="bg-secondary-soft p-3 p-sm-5 rounded">
-												<div class="row g-3">
-													<h4 class="my-4">Location Detail</h4>
-													<!-- City -->
-													<div class="col-md-6">
-														<label class="form-label">City *</label>
-														<input type="text" class="form-control" name="city" aria-label="City">
-													</div>
-													<div class="col-md-6">
-														<label class="form-label">Baranggay *</label>
-														<input type="text" class="form-control"name="baranggay" ria-label="City">
-													</div>
-													<!-- Address -->
-													<div class="col-md-12">
-														<label for="exampleFormControlTextarea2" class="form-label">Address *</label>
-														<textarea class="form-control"name="address" id="exampleFormControlTextarea2" rows="4" spellcheck="false"></textarea>
-													</div>
-												</div> <!-- Row END -->
-											</div>
-										</div>
-										<!-- Google map -->
-										<div class="col-xxl-6">
-											<div class="row g-3 bg-secondary-soft p-3 p-md-5 rounded">
-												<div class="position-md-absolute end-0 top-0 w-100 h-400 mb-4">
-													<iframe class="w-100 h-100 grayscale" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.9663095343008!2d-74.00425878428698!3d40.74076684379132!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259bf5c1654f3%3A0xc80f9cfce5383d5d!2sGoogle!5e0!3m2!1sen!2sin!4v1586000412513!5m2!1sen!2sin" style="border:0;" aria-hidden="false" tabindex="0"></iframe>	
-												</div>
-
-											</div>
-										</div>
-									</div> <!-- Row END -->
-								</div>
-
-								<!-- Amenities step -->
-								<div class="step step4 hidden">
-									<!-- Row START -->
-									<div class="row mb-4 gx-5">
-										<div class="col-xxl-12 mb-xxl-0">
-											<div class="bg-secondary-soft p-5 rounded">
-												<div class="row">
-													<!-- Info -->
-													<div class="col-sm-6 col-md-4 mt-4 mt-sm-0">
-														<!-- Title -->
-														<h5 class="font-base mb-2">Interior Details</h5>
-														<!-- Kitchen -->
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="kitchen" id="flexCheckDefault1">
-															<label class="form-check-label" for="flexCheckDefault1">
-																Kitchen
-															</label>
-														</div>
-														<!-- Laundry -->
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="laundry" id="flexCheckDefault2">
-															<label class="form-check-label" for="flexCheckDefault2">
-																Laundry
-															</label>
-														</div>
-														<!-- Gym -->
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="gym" id="flexCheckDefault3">
-															<label class="form-check-label" for="flexCheckDefault3">
-																Gym
-															</label>
-														</div>
-														<!-- Projector Room -->
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="projector_room" id="flexCheckDefault4">
-															<label class="form-check-label" for="flexCheckDefault4">
-																Projector Room
-															</label>
-														</div>
-													</div>
-								
-													<!-- Info -->
-													<div class="col-sm-6 col-md-4 mt-4 mt-sm-0">
-														<!-- Title -->
-														<h5 class="font-base mb-2">Outdoor Details</h5>
-														<!-- Back yard -->
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="back_yard" id="flexCheckDefault5">
-															<label class="form-check-label" for="flexCheckDefault5">
-																Back yard
-															</label>
-														</div>
-														<!-- Front yard -->
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="front_yard" id="flexCheckDefault6">
-															<label class="form-check-label" for="flexCheckDefault6">
-																Front yard
-															</label>
-														</div>
-														<!-- Attached garage -->
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="attached_garage" id="flexCheckDefault7">
-															<label class="form-check-label" for="flexCheckDefault7">
-																Attached garage
-															</label>
-														</div>
-														<!-- Pool -->
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="pool" id="flexCheckDefault8">
-															<label class="form-check-label" for="flexCheckDefault8">
-																Pool
-															</label>
-														</div>
-													</div>
-								
-													<!-- Info -->
-													<div class="col-sm-6 col-md-4 mt-4 mt-md-0">
-														<!-- Title -->
-														<h5 class="font-base mb-2">Other Features</h5>
-														<!-- Elevator -->
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="elevator" id="flexCheckDefault9">
-															<label class="form-check-label" for="flexCheckDefault9">
-																Elevator
-															</label>
-														</div>
-														<!-- Wifi -->
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="wifi" id="flexCheckDefault10">
-															<label class="form-check-label" for="flexCheckDefault10">
-																Wifi
-															</label>
-														</div>
-														<!-- School -->
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="school" id="flexCheckDefault11">
-															<label class="form-check-label" for="flexCheckDefault11">
-																School
-															</label>
-														</div>
-														<!-- Transportation hub -->
-														<div class=" form-check">
-															<input class="form-check-input" type="checkbox" name="transportation_hub" id="flexCheckDefault12">
-															<label class="form-check-label" for="flexCheckDefault12">
-																Transportation hub
-															</label>
-														</div>
-														<!-- Super market -->
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="super_market" id="flexCheckDefault13">
-															<label class="form-check-label" for="flexCheckDefault13">
-																Super market
-															</label>
-														</div>
-														<!-- Clinic -->
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="clinic" id="flexCheckDefault14">
-															<label class="form-check-label" for="flexCheckDefault14">
-																Clinic
-															</label>
-														</div>
-													</div>
-												</div> <!-- Row END -->
+												<!-- Repeat for other amenities as needed -->
 											</div>
 										</div>
 									</div>
 								</div>
-						 
-							 <!-- Buttons -->
-								<div class="mt-5 d-flex justify-content-between">
-									 <button id="previous" class="disabled btn btn-md btn-dark-soft" disabled>
-											previous
-									 </button>
-									 <button id="next" class="btn btn-primary-soft btn-md">
-											next
-									 </button>
-									 <!-- <button id="validate" type="submit" class="hidden btn btn-success-soft btn-md">
-										Submit
-									</button> -->
-								</div>
-								<div class="text-end">
-									<button id="validate" type="submit" class="hidden btn btn-success btn-md">
-										Submit
-									</button>
-								</div>
-						 </form>
+							</div>
+						
+							<!-- Navigation Buttons -->
+							<div class="mt-5 d-flex justify-content-between">
+								<button id="previous" class="disabled btn btn-dark-soft" disabled>Previous</button>
+								<button id="next" class="btn btn-primary-soft">Next</button>
+							</div>
+							<div class="text-end">
+								<button id="validate" type="submit" class="hidden btn btn-success btn-md">Submit</button>
+							</div>
+						</form>
+						
 					</div>
 				</div> <!-- Row END -->
 			</div>
@@ -448,7 +290,6 @@
 	</div>
 </main>
 <!-- **************** MAIN CONTENT END **************** -->
-
 <!-- Back to top -->
 <div class="back-top"><i class="bi bi-arrow-up-short position-absolute top-50 start-50 translate-middle"></i></div>
 <!-- Back to top -->
@@ -473,92 +314,100 @@ const dots = document.getElementsByClassName('progress-bar__dot')
 const numberOfSteps = 4
 let currentStep = 1
 
-for(let i = 0 ; i < dots.length ; ++i){
-	 dots[i].addEventListener('click', ()=>{
-		 goToStep(i+1) 
-	 })
+// Check if all necessary elements exist
+if (!previousButton || !nextButton || !submitButton || !form) {
+    console.error("One or more elements are missing.");
 }
 
+// Attach event listeners to the dots for step navigation
+for(let i = 0 ; i < dots.length ; ++i){
+    dots[i].addEventListener('click', ()=>{
+        goToStep(i+1) 
+    })
+}
+
+// Button click event handlers
 previousButton.onclick = goPrevious
 nextButton.onclick = goNext
 
-
 function goNext(e) {
-	 e.preventDefault()
-	 currentStep += 1
-	 goToStep(currentStep)
+    e.preventDefault()
+    currentStep += 1
+    goToStep(currentStep)
 }
 
 function goPrevious(e) {
-	 e.preventDefault()
-	 currentStep -= 1
-	 goToStep(currentStep)
+    e.preventDefault()
+    currentStep -= 1
+    goToStep(currentStep)
 }
 
 function goToStep(stepNumber){   
-	 currentStep = stepNumber
-	 
-	 let inputsToHide = document.getElementsByClassName('step')
-	 let inputs = document.getElementsByClassName(`step${currentStep}`)
-	 let indicators = document.getElementsByClassName('progress-bar__dot')
-	 
-	 for(let i = indicators.length-1; i >= currentStep ; --i){
-			indicators[i].classList.remove('full')
-	 }
-	 
-	 for(let i = 0; i < currentStep; ++i){
-			indicators[i].classList.add('full')
-	 }
-	 
-	 //hide all input
-	 for (let i = 0; i < inputsToHide.length; ++i) {
-			hide(inputsToHide[i])
-	 }
-	 
-	 //only show the right one
-	 for (let i = 0; i < inputs.length; ++i) {
-			show(inputs[i])
-	 }
-	 
-	 //if we reached final step
-	 if(currentStep === numberOfSteps){
-			enable(previousButton)
-			disable(nextButton)
-			show(submitButton)
-	 }
-	 
-	 //else if first step
-	 else if(currentStep === 1){
-		 disable(previousButton)
-			enable(next)
-			hide(submitButton)
-	 }
-	 
-	 else {
-			enable(previousButton)
-			enable(next)
-			hide(submitButton)
-	 }
+    currentStep = stepNumber
+    
+    let inputsToHide = document.getElementsByClassName('step')
+    let inputs = document.getElementsByClassName(`step${currentStep}`)
+    let indicators = document.getElementsByClassName('progress-bar__dot')
+    
+    for(let i = indicators.length - 1; i >= currentStep; --i){
+        indicators[i].classList.remove('full')
+    }
+    
+    for(let i = 0; i < currentStep; ++i){
+        indicators[i].classList.add('full')
+    }
+    
+    // Hide all steps
+    for (let i = 0; i < inputsToHide.length; ++i) {
+        hide(inputsToHide[i])
+    }
+    
+    // Show the current step
+    for (let i = 0; i < inputs.length; ++i) {
+        show(inputs[i])
+    }
+    
+    // If we reached the final step
+    if(currentStep === numberOfSteps){
+        enable(previousButton)
+        disable(nextButton)
+        show(submitButton)
+    }
+    
+    // If it's the first step
+    else if(currentStep === 1){
+        disable(previousButton)
+        enable(nextButton)
+        hide(submitButton)
+    }
+    
+    // Otherwise
+    else {
+        enable(previousButton)
+        enable(nextButton)
+        hide(submitButton)
+    }
 }
 
+// Helper functions for enabling, disabling, showing, and hiding elements
 function enable(elem) {
-	 elem.classList.remove("disabled");
-	 elem.disabled = false;
+    elem.classList.remove("disabled");
+    elem.disabled = false;
 }
 
 function disable(elem) {
-	 elem.classList.add("disabled");
-	 elem.disabled = true;
+    elem.classList.add("disabled");
+    elem.disabled = true;
 }
 
 function show(elem){
-	 elem.classList.remove('hidden')
+    elem.classList.remove('hidden')
 }
 
 function hide(elem){
-	 elem.classList.add('hidden')
+    elem.classList.add('hidden')
 }
-	</script>
+</script>
 
 </body>
 

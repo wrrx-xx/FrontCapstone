@@ -35,12 +35,12 @@
 
 <main>
     <section class="pt-3 pt-md-5">
-        <div class="container card-grid">
+        <div class="container wcard-grid">
             <div class="row align-items-center">
                 <div class="col-md-6 mt-5 mt-md-0">
                     <h3>Please log in with your account!</h3>
                     <p class="mb-4 mb-lg-5">Login to your account easily with less information.</p>
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('login.store') }}">
                         @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label text-dark">Email address *</label>
@@ -50,7 +50,7 @@
                             <label for="password" class="form-label text-dark">Password *</label>
                             <input type="password" id="password" class="form-control bg-light border-0" name="password" required>
                             <div id="passwordHelpBlock" class="form-text">
-                                Your password must be 8 characters at least.
+                                Your password must be 8c characters at least.
                             </div>
                         </div>
                         <div class="d-flex justify-content-between mb-4">
