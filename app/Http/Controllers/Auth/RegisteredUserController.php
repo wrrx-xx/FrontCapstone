@@ -45,14 +45,14 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'phone_number' => $request->phone_number,
             'password' => Hash::make($request->password),
-            'role' => 'tenant', // Set default role, adjust as necessary
+            'role' => 'owner', // Set default role, adjust as necessary
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return view('dashboard');
     }
 
 }

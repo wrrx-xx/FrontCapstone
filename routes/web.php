@@ -12,40 +12,36 @@ use App\Http\Controllers\PhotosController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\SupportMessagesController;
+use App\Http\Controllers\TenantController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\ViewingController;
 use Illuminate\Http\Request;
 use Illuminate\Routing\ViewController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/home', function () {
+Route::get('/', function () {
     return view('home');
 });
+
+Route::get('/dashboard',[TenantController::class,'index' ])->name('tenant.dashboard');
+Route::post('/logout',[TenantController::class, 'outindex'])->name('outing');
 Route::get('/listing',[ListingController::class ,  'index']);
 
-Route::get('/signin', [AuthController::class, 'index'])->name('signin');
-Route::get('/signup', [AuthController::class, 'create'])->name('signup');
-Route::post('/signup', [AuthController::class, 'register'])->name('register.store');
-Route::post('/signin', [AuthController::class, 'login'])->name('login.store');
-Route::post('/signout', [AuthController::class, 'logout'])->name('signout');
-Route::get('/owner',[Owner::class, 'index'])->name('owner');
+Route::get('/login', [AuthController::class, 'index'])->name('login');
+Route::get('/signup', [AuthController::class, 'create'])->name('register');
+
+
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/clisting',[ListingController::class, 'create']);
-    Route::post('/listing', [ListingController::class, 'store'])->name('listing.store');
-    Route::get('/listing', [ListingController::class, 'ownerindex'])->name('owner.property');
-    Route::post('/verify', [VerificationController::class, 'store']);
-    Route::apiResource('/viewing',ViewingController::class);
-    Route::apiResource('/reservation',ReservationController::class);
-    Route::apiResource('/amenity',AmenitiesController::class);
-    Route::apiResource('/inquiry',InquiriesController::class);
-    Route::apiResource('/view',ViewController::class);
-    Route::apiResource('/photo',PhotosController::class);
-    Route::apiResource('/support',SupportController::class);
-    Route::apiResource('/suppmess',SupportMessagesController::class);
+Route::middleware('auth')->group(function () {
+   
+    Route::get('/listing/mylisting',[ListingController::class, 'ownerindex'])->name('myproperty');
+    Route::post('/listing/create',[ListingController::class, 'store'])->name('listing.store');
+    Route::get('/owner',[UserController::class, 'ownerindex'])->name('owner.dashboard');
+    Route::get('/listing/create',[ListingController::class, 'create'])->name('listing');
     
 });
 

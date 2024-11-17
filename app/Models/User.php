@@ -73,4 +73,13 @@ class User extends Authenticatable
         return $this->hasMany(Messages::class,'sender_id');
 
     }
+    public function isAdmin(){
+        return $this->role=='admin';
+    }
+    public function isOwner(){
+        return $this->role=='owner';
+    }
+    public function isTenant(){
+        return $this->role=='tenant';
+    }
 }

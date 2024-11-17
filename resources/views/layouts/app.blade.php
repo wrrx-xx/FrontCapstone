@@ -1,36 +1,67 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Text&display=swap" rel="stylesheet">
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/font-awesome/css/all.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}">
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
-    </body>
+    <!-- Theme CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+
+<body>
+    <header>
+    @if (Auth::check())
+        @if (Auth::user()->isAdmin())
+            @include('layouts.admin-navigation')
+        @elseif (Auth::user()->isOwner())
+            @include('layouts.owner-navigation')
+        @elseif (Auth::user()->isTenant())
+            @include('layouts.tenant-navigation')
+        @else
+            @include('layouts.guest-navigation')
+        @endif
+    @else
+        @include('layouts.guest-navigation')
+    @endif
+    </header>
+    <section>
+        @yield('content')
+    </section>
+
+    <div class="back-top">
+        <i class="bi bi-arrow-up-short position-absolute top-50 start-50 translate-middle"></i>
+    </div>
+    <!-- Back to top -->
+    @if (!Auth::check() || (Auth::user()->isTenant() ))
+    @include('partials.footer')
+@endif
+
+    <!-- JS libraries, plugins and custom scripts -->
+    <!-- Bootstrap JS -->
+    <script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Vendors -->
+    <script src="assets/vendor/purecounterjs/dist/purecounter_vanilla.js"></script>
+    <script src="assets/vendor/chart/chart.js"></script>
+    <!-- Template Functions -->
+    <script src="assets/js/functions.js"></script>
+    
+</body>
 </html>

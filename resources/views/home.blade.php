@@ -1,12 +1,9 @@
-@extends('layouts.guest')
+@extends('layouts.app')
 <!-- **************** MAIN CONTENT START **************** -->
 
-
-
-<main>
+@section('content')
 <!-- =======================
 Main Banner START -->
-@section('content')
 <section class="position-relative overflow-hidden">
 	<!-- Svg -->
 	<figure class="rotate position-absolute top-50 start-100 translate-middle">
@@ -665,140 +662,7 @@ Property END -->
 
 <!-- =======================
 Review START -->
-<section class="position-relative pt-0 overflow-hidden">
-	<div class="container">
-		<!-- Svg-->
-		<figure class="position-absolute top-50 start-100 translate-middle ms-5 opacity-1">
-			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1243px" height="1244px">
-				<path class="fill-primary-soft" fill-rule="evenodd"  opacity="0.502"
-				d="M45.742,493.325 L503.836,43.741 C562.962,-14.286 657.919,-13.383 715.931,45.758 L1199.273,538.511 C1257.284,597.652 1256.381,692.635 1197.256,750.662 L739.162,1200.246 C680.037,1258.273 585.079,1257.370 527.068,1198.229 L43.725,705.475 C-14.286,646.335 -13.383,551.351 45.742,493.325 Z"/>
-			</svg>
-		</figure>
 
-		<!-- Title -->
-		<div class="text-center">
-			<h2>Reviews</h2>
-			<p>Merits ye if Mr narrow points. Melancholy particular Devonshire alteration it</p>
-		</div>
-
-		<div class="row mt-5 justify-content-center align-items-center">
-			<div class="col-12 position-relative">
-				<!-- Svg START -->
-				<figure class="d-none d-md-block position-absolute top-100 start-0 translate-middle opacity-5">
-					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="159px" height="205px">
-					<path class="fill-primary" fill-rule="evenodd"
-					 d="M131.877,161.137 C122.214,145.318 146.789,130.343 156.436,146.136 C166.098,161.956 141.523,176.930 131.877,161.137 ZM102.788,148.291 C96.165,137.449 113.009,127.185 119.620,138.010 C126.243,148.852 109.400,159.116 102.788,148.291 ZM98.098,115.688 C97.764,115.693 97.430,115.698 97.095,115.702 C87.479,115.833 81.098,105.385 85.605,96.890 C85.762,96.594 85.918,96.299 86.075,96.004 C90.835,87.031 103.995,86.764 109.248,95.364 C114.501,103.964 108.255,115.550 98.098,115.688 ZM59.357,44.201 C50.238,29.271 73.432,15.137 82.536,30.043 C91.656,44.974 68.462,59.107 59.357,44.201 ZM44.404,12.517 C38.975,3.630 52.781,-4.783 58.201,4.090 C63.629,12.977 49.823,21.390 44.404,12.517 ZM64.988,55.048 C75.194,71.756 49.239,87.572 39.050,70.891 C28.845,54.183 54.800,38.367 64.988,55.048 ZM51.593,90.928 C55.542,91.881 59.273,94.599 61.390,98.064 C63.626,101.726 64.079,105.911 63.266,110.038 C62.449,114.180 59.524,117.544 56.122,119.836 C52.847,122.044 47.921,122.629 44.144,121.718 C40.195,120.765 36.464,118.047 34.347,114.582 C32.111,110.920 31.657,106.735 32.471,102.607 C33.288,98.465 36.213,95.102 39.614,92.810 C42.890,90.602 47.816,90.016 51.593,90.928 ZM36.481,164.301 C41.258,172.122 29.109,179.525 24.340,171.717 C19.563,163.896 31.712,156.493 36.481,164.301 ZM7.631,155.390 C1.334,145.081 17.349,135.323 23.636,145.615 C29.933,155.924 13.918,165.683 7.631,155.390 ZM10.248,45.625 C5.254,37.449 17.955,29.709 22.941,37.872 C27.935,46.048 15.234,53.788 10.248,45.625 ZM19.485,74.678 C25.999,85.342 9.433,95.438 2.929,84.790 C-3.585,74.126 12.982,64.031 19.485,74.678 ZM17.920,122.574 C24.326,133.061 8.035,142.988 1.640,132.519 C-4.766,122.031 11.525,112.105 17.920,122.574 ZM53.841,137.370 C59.270,146.257 45.464,154.670 40.044,145.797 C34.616,136.910 48.422,128.497 53.841,137.370 ZM61.209,171.627 C65.123,168.989 70.829,170.628 73.208,174.522 C75.758,178.697 74.232,183.873 70.306,186.519 C66.392,189.157 60.686,187.519 58.307,183.624 C55.757,179.449 57.283,174.273 61.209,171.627 ZM67.685,155.446 C63.016,147.803 74.889,140.568 79.550,148.199 C84.218,155.842 72.345,163.076 67.685,155.446 ZM97.851,161.408 C100.692,159.672 103.939,159.319 107.140,159.948 C111.661,160.837 114.513,164.448 116.065,168.498 C116.132,168.673 116.199,168.847 116.266,169.022 C117.260,171.617 116.678,175.801 115.281,178.149 C114.175,180.009 112.696,181.563 110.901,182.772 C108.686,184.265 105.820,184.672 103.239,184.389 C100.804,184.122 97.931,183.180 96.217,181.268 C96.093,181.128 95.968,180.989 95.843,180.849 C92.845,177.505 91.214,173.544 92.311,169.006 C93.052,165.944 95.162,163.050 97.851,161.408 ZM119.617,193.116 C124.503,201.115 112.078,208.686 107.200,200.700 C102.314,192.702 114.740,185.130 119.617,193.116 Z"/>
-					</svg>
-				</figure>
-				<!-- Svg END -->
-
-				<!-- Svg START -->
-				<figure class="d-none d-md-block position-absolute top-0 end-0">
-					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="149px" height="98px">
-						<path fill-rule="evenodd"  class="fill-primary"
-						 d="M147.198,27.887 C145.967,29.114 144.424,29.392 142.924,30.170 C141.203,31.064 139.209,32.361 137.826,33.721 C135.482,36.025 132.089,40.278 131.844,43.717 C131.662,46.280 127.774,47.989 126.484,45.169 C124.883,41.668 123.251,38.198 120.706,35.278 C118.179,32.378 116.624,30.734 112.707,31.105 C108.581,31.496 107.783,24.789 111.738,23.942 C112.949,23.684 114.945,22.142 116.003,21.447 C117.588,20.406 118.617,19.023 119.838,17.602 C122.096,14.974 122.737,11.800 123.553,8.576 C123.545,8.542 123.542,8.507 123.532,8.474 C122.696,5.729 126.039,4.390 127.932,5.912 C129.189,6.922 130.088,8.756 130.881,10.145 C132.076,12.237 133.194,14.318 134.651,16.258 C137.597,20.182 141.410,21.000 145.767,22.465 C148.039,23.230 149.000,26.089 147.198,27.887 ZM23.551,17.278 C22.397,17.876 21.061,18.746 20.134,19.657 C18.563,21.202 16.289,24.052 16.125,26.357 C16.002,28.075 13.396,29.220 12.532,27.331 C11.458,24.984 10.365,22.658 8.659,20.701 C6.966,18.757 5.923,17.656 3.298,17.904 C0.533,18.166 -0.003,13.670 2.648,13.103 C3.460,12.930 4.798,11.896 5.507,11.431 C6.569,10.733 7.259,9.806 8.077,8.854 C9.591,7.092 10.021,4.965 10.567,2.804 C10.562,2.781 10.560,2.757 10.553,2.736 C9.993,0.896 12.234,-0.002 13.502,1.018 C14.345,1.696 14.947,2.925 15.479,3.855 C16.280,5.258 17.029,6.652 18.006,7.953 C19.980,10.583 22.536,11.131 25.456,12.113 C26.979,12.626 27.623,14.542 26.415,15.747 C25.591,16.569 24.556,16.756 23.551,17.278 ZM117.314,81.883 C118.125,81.710 119.464,80.676 120.172,80.211 C121.235,79.513 121.924,78.586 122.742,77.634 C124.256,75.872 124.686,73.745 125.233,71.584 C125.227,71.561 125.225,71.538 125.219,71.516 C124.658,69.676 126.899,68.778 128.168,69.798 C129.011,70.476 129.613,71.705 130.144,72.635 C130.945,74.038 131.694,75.432 132.671,76.733 C134.646,79.363 137.201,79.911 140.122,80.893 C141.644,81.406 142.289,83.322 141.081,84.527 C140.256,85.349 139.222,85.536 138.216,86.058 C137.063,86.656 135.727,87.526 134.800,88.437 C133.228,89.982 130.954,92.832 130.790,95.137 C130.668,96.855 128.062,98.000 127.197,96.111 C126.124,93.764 125.031,91.438 123.325,89.481 C121.631,87.537 120.589,86.436 117.963,86.684 C115.198,86.946 114.663,82.451 117.314,81.883 Z"/>
-					</svg>
-				</figure>
-				<!-- Svg END-->
-
-				<!-- Slider START -->
-				<div class="tiny-slider dots-creative arrow-round mb-0">
-					<div class="tiny-slider-inner" data-autoplay="true" data-arrow="true" data-dots="false" data-items="1" data-autoheight="false">
-
-						<!-- Slide 1 -->
-						<div class="testimonial mb-3">
-							<div class="col-12 col-md-7 offset-0 offset-md-3 position-relative">
-								<!-- Image -->
-								<img src="assets/images/property/pd/09.jpg" class="rounded" alt="">
-								<!-- Info -->
-								<div class="col-11 col-sm-8 col-lg-6 testimonial-items">
-									<!-- Title -->
-									<h4>Customer reviews</h4>
-									<p>How promotion excellent curiosity yet attempted happiness Gay prosperous impression had conviction For every delay death ask style.</p>
-									<div class="d-flex">
-										<!-- Avatar -->
-										<div class="avatar">
-											<img class="avatar-img rounded-circle" src="assets/images/avatar/06.jpg" alt="avatar">
-										</div>
-										<!-- Avatar info -->
-										<div class="ms-3">
-											<h5 class="mb-0">Frances Guerrero</h5>
-											<ul class="list-inline">
-												<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
-												<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
-												<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
-												<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
-												<li class="list-inline-item me-0 small"><i class="fas fa-star-half-alt text-warning"></i></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Slide 2 -->
-						<div class="testimonial">
-							<div class="col-12 col-md-7 offset-0 offset-md-3 position-relative">
-								<!-- Image -->
-								<img src="assets/images/property/pd/06.jpg" class="rounded" alt="">
-								<!-- Info -->
-								<div class="col-11 col-lg-6 testimonial-items">
-									<!-- Title -->
-									<h4>Customer reviews</h4>
-									<p>The good gathering doesn't bearing day Stars over Open behold May male tree replenish don't blessed beast. </p>
-									<div class="d-flex">
-										<!-- Avatar -->
-										<div class="avatar">
-											<img class="avatar-img rounded-circle" src="assets/images/avatar/1.jpg" alt="avatar">
-										</div>
-										<!-- Avatar info -->
-										<div class="ms-3">
-											<h5 class="mb-0">John Wick</h5>
-											<ul class="list-inline">
-												<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
-												<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
-												<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
-												<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
-												<li class="list-inline-item me-0 small"><i class="fas fa-star-half-alt text-warning"></i></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- Slider END -->
-			</div>
-		</div>
-		<!-- Review button -->
-		<div class="row mt-0 mt-md-5 justify-content-center">
-			<div class="col-md-8 bg-primary-soft px-4 py-3 rounded">
-				<div class="row align-items-center text-center text-lg-start">
-					<div class="col-lg-6">
-						<!-- Title -->
-						<h5 class="">See what other people are saying</h5>
-						<!-- Rating -->
-						<div class="d-flex justify-content-center justify-content-lg-start">
-							<ul class="list-inline">
-								<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
-								<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
-								<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
-								<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
-								<li class="list-inline-item me-0 small"><i class="fas fa-star-half-alt text-warning"></i></li>
-							</ul>
-							<h5 class="ps-2 mb-2 mb-md-0">4.5 / 5.5</h5>
-						</div>
-					</div>
-					<!-- Button -->
-					<div class="col-lg-6 text-center text-lg-end">
-						<button class="btn btn-orange-soft" type="button">View all review</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
 <!-- =======================
 Review END -->
 
@@ -892,25 +756,10 @@ City START -->
 </section>
 <!-- =======================
 City END -->
-@endsection
+
 
 </main>
-<!-- **************** MAIN CONTENT END **************** -->
 
-<!-- =======================
-Footer START -->
-
-<!-- =======================
-Footer END -->
-
-<!-- Back to top -->
-<div class="back-top"><i class="bi bi-arrow-up-short position-absolute top-50 start-50 translate-middle"></i></div>
-<!-- Back to top -->
-
-<!-- =======================
-JS libraries, plugins and custom scripts -->
-
-<!-- Bootstrap JS -->
 <script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Vendors -->
@@ -920,8 +769,4 @@ JS libraries, plugins and custom scripts -->
 
 <!-- Template Functions -->
 <script src="assets/js/functions.js"></script>
-
-</body>
-
-<!-- Mirrored from themes.webestica.com/realty/index-3.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 23 Oct 2024 10:21:41 GMT -->
-</html>
+@endsection

@@ -16,7 +16,7 @@
                 <div class="col-lg-6 mt-5 mt-lg-0 order-2 order-lg-1">
                     <h3>Create Your New Account</h3>
                     <p class="mb-4 mb-lg-5">Join us and explore amazing properties.</p>
-                    <form method="POST" action="{{ route('register') }}">
+                    <form method="POST" action="{{ route('register.store') }}">
                         @csrf
     
                         <div class="row mb-3">

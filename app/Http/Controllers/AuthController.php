@@ -4,16 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 
 class AuthController extends Controller
 {   
     public function index(){
-        return view('sign.login');
+        return view('auth.login');
     }
     public function create(){
-        return view('sign.register');
+        return view('auth.register');
     }
     public function register(Request $request)
     {
@@ -34,47 +35,46 @@ class AuthController extends Controller
         //     'user' => $user,
         //     'token' => $token->plainTextToken
         // ];
-        return view('dashboard');
+        return redirect()->route('tenant.dashboard');
     
     }
 
     public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email|exists:users',
-            'password' => 'required'
-        ]);
+{
+    $request->validate([
+        'email' => 'required|email|exists:users,email',
+        'password' => 'required'
+    ]);
 
-        $user = User::where('email', $request->email)->first();
+    $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return [
-                'errors' => [
-                    'email' => ['The provided credentials are incorrect.']
-                ]
-            ];
-            // return [
-            //     'message' => 'The provided credentials are incorrect.' 
-            // ];
-           
-        }
-
-        $token = $user->createToken($user->email);
-
-        // Check user role and redirect accordingly
-        if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard'); // Change to the actual route for admin
-        } elseif ($user->role === 'owner') {
-            return redirect()->route('owner'); // Change to the actual route for owner
-        } else {
-            return redirect()->route('dashboard'); // Fallback route if the role is not recognized
-        }
+    if (!$user || !Hash::check($request->password, $user->password)) {
+        return back()->withErrors([
+            'email' => 'The provided credentials are incorrect.',
+        ])->withInput();
     }
+
+    // Log the user in
+    Auth::login($user);
+
+    // Redirect based on user role
+    if ($user->role === 'admin') {
+        return redirect()->route('admin.dashboard');  // Change to the actual route for admin
+    } elseif ($user->role === 'owner') {
+        return redirect()->route('owner'); // Change to the actual route for owner
+    } else {
+        return redirect()->route('tenant.dashboard'); // Change to the actual route for tenant
+    }
+}
+    public function ownerlogin(){
+        return view('owner.dashboard');
+    }
+
 
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
 
-        return view('auth.login');
+        return redirect('/');
     }
 }

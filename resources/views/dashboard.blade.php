@@ -107,7 +107,7 @@
 								<p class="text-body mt-3 mb-2">Manage Account</p>
 									<a class="list-group-item hover-primary-soft" href="agent-profile.html"><i class="fas fa-fw fa-user-alt me-2"></i>My Profile</a>
 									<a class="list-group-item hover-primary-soft" href="agent-package.html"><i class="fas fa-fw fa-boxes me-2"></i>My Packages</a>
-									<a class="list-group-item hover-primary-soft" href="{{ route('signout') }}"><i class="fas fa-fw fa-sign-out-alt me-2"></i>Log Out</a>
+									<a class="list-group-item hover-primary-soft" href="{{ route('logout') }}"><i class="fas fa-fw fa-sign-out-alt me-2"></i>Log Out</a>
 
 								<p class="text-body mt-3 mb-1">Agent of:</p>
 									<a class="list-group-item" href="#">

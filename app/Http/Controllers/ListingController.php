@@ -22,7 +22,7 @@ class ListingController extends Controller implements HasMiddleware
         ];
     }
     public function create(){
-        return view('listing.create');
+        return view('create');
     }
     public function ownerindex(){
         return view('owner.property');
@@ -101,7 +101,7 @@ class ListingController extends Controller implements HasMiddleware
     // Handle photo uploads
     if ($request->hasFile('photos')) {
         foreach ($request->file('photos') as $photo) {
-            $path = $photo->store('photos', 'public'); // Store in public/photos
+            $path = $photo->store('images', 'public'); // Store in public/photos
             $listing->photos()->create(['url' => $path]);
         }
     }

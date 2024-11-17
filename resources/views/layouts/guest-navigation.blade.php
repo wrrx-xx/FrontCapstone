@@ -1,0 +1,61 @@
+<header class="navbar-light navbar-sticky header-static">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <!-- Logo START -->
+            <a class="navbar-brand" href="{{ url('/') }}">
+                <img class="navbar-brand-item" src="assets/images/logo.svg" alt="logo">
+            </a>
+            <!-- Logo END -->
+
+            <!-- Responsive navbar toggler -->
+            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Main navbar START -->
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav navbar-nav-scroll mx-auto">
+                    <!-- Separate Home Link -->
+
+                </ul>
+
+                <!-- Other Navigation Items -->
+                <ul class="navbar-nav navbar-nav-scroll mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link navbar-primary-soft-hover" href="{{ url('/home') }}" id="homeMenu">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="listings" data-bs-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">Listings</a>
+                        <ul class="dropdown-menu" aria-labelledby="listings">
+                            {{-- <li><a class="dropdown-item" href="{{ route('listing.index') }}">Room</a></li>
+                                <li><a class="dropdown-item" href="{{ route('listing.index') }}">Boarding House</a></li>
+                                <li><a class="dropdown-item" href="{{ route('listing.index') }}">Apartment</a></li> --}}
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('register') }}">Sign Up</a>
+                    </li>
+
+                    <!-- Add more items as needed -->
+                </ul>
+            </div>
+            <!-- Main navbar END -->
+
+            <!-- Add listing button -->
+            <div class="ms-5 ms-lg-0">
+                <a href="#" class="btn btn-sm btn-dark-soft"><i class="fas fa-plus me-2"></i>Add listing</a>
+            </div>
+
+        </div>
+    </nav>
+</header>
+<!-- ======================= Header END -->
