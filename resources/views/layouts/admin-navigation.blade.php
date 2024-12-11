@@ -66,13 +66,14 @@
                         <!-- Sidebar menu -->
                         <div class="list-group list-group-borderless p-3 p-md-4">
                             <p class="text-body mb-2">Main</p>
-                            <a class="list-group-item hover-primary-soft" href="{{ route('owner') }}"><i
+                            <a class="list-group-item hover-primary-soft" href="{{ route('admin.dashboard') }}"><i
                                     class="fas fa-fw fa-tachometer-alt me-2"></i>Dashboard</a>
 
                             <p class="text-body mt-3 mb-2">Manage Listing</p>
-                            <a class="list-group-item hover-primary-soft" href="{{ route('listing') }}"><i
+                            <a class="list-group-item hover-primary-soft" href="{{ route('listing.create') }}"><i
                                     class="bi fa-fw bi-bookmark-plus-fill me-2"></i>Add Property</a>
-                            {{-- <a class="list-group-item hover-primary-soft" href="{{ route('myproperty') }}"><i class="fas fa-fw fa-home me-2"></i>My Property</a> --}}
+                                    
+                            <a class="list-group-item hover-primary-soft" href="{{ route('listing.myproperty', ['id' => auth()->user()->id]) }}"><i class="fas fa-fw fa-home me-2"></i>My Property</a>
                             <a class="list-group-item hover-primary-soft" href="agent-review.html"><i
                                     class="far fa-fw fa-comment-dots me-2"></i>Review</a>
 
@@ -82,13 +83,14 @@
                             <p class="text-body mt-3 mb-2">Manage Account</p>
                             <a class="list-group-item hover-primary-soft" href="#"><i
                                     class="fas fa-fw fa-user-alt me-2"></i>My Profile</a>
-                            <form action="#" method="POST" class="d-inline">
-                                @csrf
-                                <button type="submit" class="list-group-item hover-primary-soft"
-                                    style="border: none; background: none; cursor: pointer;">
-                                    <i class="fas fa-fw fa-sign-out-alt me-2"></i>Log Out
-                                </button>
-                            </form>
+                                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="list-group-item hover-primary-soft"
+                                            style="border: none; background: none; cursor: pointer;">
+                                            <i class="fas fa-fw fa-sign-out-alt me-2"></i>Log Out
+                                        </button>
+                                    </form>
+        
 
 
                         </div>

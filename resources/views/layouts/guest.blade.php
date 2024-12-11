@@ -28,19 +28,9 @@
 
 <body>
     <header>
-    @if (Auth::check())
-        @if (Auth::user()->isAdmin())
-            @include('layouts.admin-navigation')
-        @elseif (Auth::user()->isOwner())
-            @include('layouts.owner-navigation')
-        @elseif (Auth::user()->isTenant())
-            @include('layouts.tenant-navigation')
-        @else
-            @include('layouts.guest-navigation')
-        @endif
-    @else
+
         @include('layouts.guest-navigation')
-    @endif
+ 
     </header>
     <section>
         @yield('content')
@@ -50,9 +40,9 @@
         <i class="bi bi-arrow-up-short position-absolute top-50 start-50 translate-middle"></i>
     </div>
     <!-- Back to top -->
-    @if (!Auth::check() || (Auth::user()->isTenant() ))
+ 
     @include('partials.footer')
-@endif
+
 
     <!-- JS libraries, plugins and custom scripts -->
     <!-- Bootstrap JS -->
@@ -61,7 +51,7 @@
     <script src="{{ asset('assets/vendor/purecounterjs/dist/purecounter_vanilla.js') }}"></script>
     <script src="{{ asset('assets/vendor/chart/chart.js') }}"></script>
     <!-- Template Functions -->
-    <script src="{{asset('assets/js/functions.js')}}"></script>
+    <script src="{{ asset('assets/js/functions.js') }}"></script>
     
 </body>
 </html>

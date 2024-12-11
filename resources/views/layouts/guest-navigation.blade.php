@@ -26,17 +26,9 @@
                     <li class="nav-item">
                         <a class="nav-link navbar-primary-soft-hover" href="{{ url('/home') }}" id="homeMenu">Home</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="listings" data-bs-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">Listings</a>
-                        <ul class="dropdown-menu" aria-labelledby="listings">
-                            {{-- <li><a class="dropdown-item" href="{{ route('listing.index') }}">Room</a></li>
-                                <li><a class="dropdown-item" href="{{ route('listing.index') }}">Boarding House</a></li>
-                                <li><a class="dropdown-item" href="{{ route('listing.index') }}">Apartment</a></li> --}}
-                        </ul>
-                    </li>
+                    
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About Us</a>
+                        <a class="nav-link" href="{{ url('/list') }}">Listings</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">Login</a>
