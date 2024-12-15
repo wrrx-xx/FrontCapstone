@@ -27,16 +27,13 @@ class ListingController extends Controller
         return view('owner.property');
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        // $user= $request ->user();
-        // if($user->role === 'owner'){
-        //     return Listing::where('owner_id', $user->id)->get();
-        // } else{
-        //     return Listing::all();
-        // }
-        $listing = Listing::all();
-        return view('gridlisting.index');
+        // Fetch all listings with pagination
+        $listings = Listing::paginate(10); // Adjust the number per page as needed
+
+        // Pass the listings to the view
+        return view('listing.display', ['listings' => $listings]);
     }
 
 
@@ -116,13 +113,13 @@ class ListingController extends Controller
     }
 
 
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Listing $listing)
+    public function show($id)
     {
-        return ['listings' => $listing];
+        // Retrieve the listing by its ID
+        $listing = Listing::with(['photos', 'amenities'])->findOrFail($id);
+    
+        // Return the 'show' view with the listing data
+        return view('listing.view', compact('listing'));
     }
 
     /**

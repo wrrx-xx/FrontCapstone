@@ -3,7 +3,7 @@
         <div class="container">
             <!-- Logo START -->
             <a class="navbar-brand" href="{{ url('/') }}">
-                <img class="navbar-brand-item" src="assets/images/logo.svg" alt="logo">
+                <img class="navbar-brand-item" src="{{ asset('assets/images/logo.svg<!-- Separate Home Link') }}" alt="logo">
             </a>
             <!-- Logo END -->
 
@@ -28,7 +28,7 @@
                     </li>
                     
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/list') }}">Listings</a>
+                        <a class="nav-link" href="{{ route('listing.display') }}">Listings</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">Login</a>

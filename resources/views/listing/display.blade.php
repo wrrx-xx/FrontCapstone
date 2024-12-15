@@ -22,27 +22,15 @@
 
                             <div class="col-lg-8 pt-3 pt-lg-0">
                                 <div class="row g-3 align-items-center">
-                                    <!-- Search item -->
-                                    <div class="col-sm-6 col-md-3 pb-2 pb-md-0">
-                                        <select class="form-select form-select-sm js-choice"
-                                            aria-label=".form-select-sm example">
-                                            <option value="">Type</option>
-                                            <option>Rent</option>
-                                            <option>Sale</option>
-                                        </select>
-                                    </div>
-                                    <!-- Search item -->
+                                    
                                     <div class="col-sm-6 col-md-3 pb-2 pb-md-0">
                                         <select class="form-select form-select-sm js-choice"
                                             aria-label=".form-select-sm example">
                                             <option value="">Categories</option>
-                                            <option>Aparement</option>
-                                            <option>Land</option>
+                                            <option>Apartment</option>
+                                            <option>Boarding House</option>
                                             <option>Houses</option>
-                                            <option>Villas</option>
-                                            <option>Retails</option>
-                                            <option>Shop</option>
-                                            <option>Office</option>
+                                            <option>Room</option>
                                         </select>
                                     </div>
                                     <!-- Search item -->
@@ -251,31 +239,7 @@
                                         <!-- Form START -->
                                         <form>
                                             <!-- Type item -->
-                                            <h6 class="font-base">Type:</h6>
-                                            <ul class="list-inline mb-4">
-                                                <!-- Rent -->
-                                                <li class="list-inline-item">
-                                                    <input type="radio" class="btn-check" name="options"
-                                                        id="option1" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="option1">Rent</label>
-                                                </li>
-                                                <!-- Sale -->
-                                                <li class="list-inline-item">
-                                                    <input type="radio" class="btn-check" name="options"
-                                                        id="option2" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="option2">Sale</label>
-                                                </li>
-                                                <!-- Buy -->
-                                                <li class="list-inline-item">
-                                                    <input type="radio" class="btn-check" name="options"
-                                                        id="option3" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="option3">Buy</label>
-                                                </li>
-                                            </ul>
-                                            <hr class="my-0" />
+                                            
 
                                             <!-- Category item -->
                                             <h6 class="font-base mt-4">
@@ -286,126 +250,36 @@
                                                 <li class="list-inline-item mb-2">
                                                     <input type="checkbox" class="btn-check" id="btn-check-2" />
                                                     <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-2">Aparement</label>
+                                                        for="btn-check-2">Apartment</label>
                                                 </li>
                                                 <!-- Land -->
                                                 <li class="list-inline-item mb-2">
                                                     <input type="checkbox" class="btn-check" id="btn-check-3" />
                                                     <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-3">Land</label>
+                                                        for="btn-check-3">Boarding House</label>
                                                 </li>
                                                 <!-- House -->
                                                 <li class="list-inline-item mb-2">
                                                     <input type="checkbox" class="btn-check" id="btn-check-4" />
                                                     <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-4">Houses</label>
+                                                        for="btn-check-4">House</label>
                                                 </li>
                                                 <!-- Villas -->
                                                 <li class="list-inline-item mb-2">
                                                     <input type="checkbox" class="btn-check" id="btn-check-5" />
                                                     <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-5">Villas</label>
+                                                        for="btn-check-5">Room</label>
                                                 </li>
-                                                <!-- Retails -->
-                                                <li class="list-inline-item mb-2">
-                                                    <input type="checkbox" class="btn-check" id="btn-check-6" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-6">Retails</label>
-                                                </li>
-                                                <!-- Shop -->
-                                                <li class="list-inline-item mb-2">
-                                                    <input type="checkbox" class="btn-check" id="btn-check-7" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-7">Shop</label>
-                                                </li>
-                                                <!-- Office -->
-                                                <li class="list-inline-item mb-2">
-                                                    <input type="checkbox" class="btn-check" id="btn-check-8" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-8">Office</label>
-                                                </li>
+                                                
                                             </ul>
                                             <hr class="my-0" />
 
-                                            <!-- Bedroom item -->
-                                            <h6 class="font-base mt-4">
-                                                <i class="fas fa-fw fa-bed me-2"></i>Bedroom:
-                                            </h6>
-                                            <ul class="list-inline mb-4 g-3">
-                                                <!-- 1 -->
-                                                <li class="list-inline-item">
-                                                    <input type="checkbox" class="btn-check" id="btn-check-9" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-9">1</label>
-                                                </li>
-                                                <!-- 2 -->
-                                                <li class="list-inline-item">
-                                                    <input type="checkbox" class="btn-check" id="btn-check-10" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-10">2</label>
-                                                </li>
-                                                <!-- 3 -->
-                                                <li class="list-inline-item">
-                                                    <input type="checkbox" class="btn-check" id="btn-check-11" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-11">3</label>
-                                                </li>
-                                                <!-- 4 -->
-                                                <li class="list-inline-item">
-                                                    <input type="checkbox" class="btn-check" id="btn-check-12" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-12">4</label>
-                                                </li>
-                                                <!-- 5 -->
-                                                <li class="list-inline-item">
-                                                    <input type="checkbox" class="btn-check" id="btn-check-13" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-13">5+</label>
-                                                </li>
-                                            </ul>
-                                            <hr class="my-0" />
-
+                                            
                                             <!-- Bathroom item -->
-                                            <h6 class="font-base mt-4">
-                                                <i class="fas fa-fw fa-bath me-2"></i>Bathroom:
-                                            </h6>
-                                            <ul class="list-inline mb-4 g-3">
-                                                <!-- 1 -->
-                                                <li class="list-inline-item">
-                                                    <input type="checkbox" class="btn-check" id="btn-check-14" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-14">1</label>
-                                                </li>
-                                                <!-- 2 -->
-                                                <li class="list-inline-item">
-                                                    <input type="checkbox" class="btn-check" id="btn-check-15" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-15">2</label>
-                                                </li>
-                                                <!-- 3 -->
-                                                <li class="list-inline-item">
-                                                    <input type="checkbox" class="btn-check" id="btn-check-16" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-16">3</label>
-                                                </li>
-                                                <!-- 4 -->
-                                                <li class="list-inline-item">
-                                                    <input type="checkbox" class="btn-check" id="btn-check-17" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-17">4</label>
-                                                </li>
-                                                <!-- 5 -->
-                                                <li class="list-inline-item">
-                                                    <input type="checkbox" class="btn-check" id="btn-check-18" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-18">5+</label>
-                                                </li>
-                                            </ul>
-                                            <hr class="my-0" />
-
+                                           
                                             <!-- Area item -->
                                             <h6 class="font-base mt-4">
-                                                <i class="fas fa-fw fa-street-view me-2"></i>Area:
+                                                <i class="fas fa-fw fa-street-view me-2"></i>Barangay:
                                             </h6>
                                             <select class="form-select mb-4 js-choice"
                                                 aria-label="Default select example">
@@ -430,42 +304,8 @@
                                             <hr class="my-0" />
 
                                             <!-- View item -->
-                                            <h6 class="font-base mt-4">
-                                                <i class="fas fa-fw fa-mountain me-2"></i>View:
-                                            </h6>
-                                            <ul class="list-inline mb-4 g-3">
-                                                <!-- Sea -->
-                                                <li class="list-inline-item">
-                                                    <input type="checkbox" class="btn-check" id="btn-check-19" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-19">Sea</label>
-                                                </li>
-                                                <!-- Mountain -->
-                                                <li class="list-inline-item">
-                                                    <input type="checkbox" class="btn-check" id="btn-check-20" />
-                                                    <label class="btn btn-sm btn-light btn-primary-soft-check"
-                                                        for="btn-check-20">Mountain</label>
-                                                </li>
-                                            </ul>
-                                            <hr class="my-0" />
-
-                                            <!-- Price range START -->
-                                            <h6 class="font-base mt-4">
-                                                <i class="fas fa-dollar-sign me-2"></i>Price range
-                                            </h6>
-                                            <div class="position-relative mt-2">
-                                                <div class="noui-wrapper m-b-50 p-l-r">
-                                                    <div class="d-flex justify-content-between">
-                                                        <input type="text" class="text-body input-with-range-min" />
-                                                        <input type="text" class="text-body input-with-range-max" />
-                                                    </div>
-                                                    <div class="noui-slider-range m-b-20 mt-2" data-range-min="10000"
-                                                        data-range-max="20000" data-range-selected-min="11000"
-                                                        data-range-selected-max="17000"></div>
-                                                </div>
-                                            </div>
-                                            <!-- Price range END -->
-
+                                            
+                                           
                                             <!-- More filter START -->
                                             <div class="mt-5">
                                                 <!-- More search button link -->
@@ -564,69 +404,6 @@
                                                         <!-- Row END -->
                                                         <!-- Amenities END -->
 
-                                                        <!-- Measurement START -->
-                                                        <h6 class="font-base mt-3">
-                                                            <i class="fas fa-drafting-compass me-2"></i>Measurement unit
-                                                        </h6>
-                                                        <!-- Radio -->
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="flexRadioDefault" id="flexRadioDefault" />
-                                                            <label class="form-check-label" for="flexRadioDefault">
-                                                                Square meters - m<sup>2</sup>
-                                                            </label>
-                                                        </div>
-                                                        <!-- Radio -->
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="flexRadioDefault" id="flexRadioDefault10" />
-                                                            <label class="form-check-label" for="flexRadioDefault10">
-                                                                Square feet - ft<sup>2</sup>
-                                                            </label>
-                                                        </div>
-                                                        <!-- Radio -->
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="flexRadioDefault" id="flexRadioDefault11" />
-                                                            <label class="form-check-label" for="flexRadioDefault11">
-                                                                Acres - ac
-                                                            </label>
-                                                        </div>
-                                                        <!-- Radio -->
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="flexRadioDefault" id="flexRadioDefault12" />
-                                                            <label class="form-check-label" for="flexRadioDefault12">
-                                                                Aquare yards - yd<sup>2</sup>
-                                                            </label>
-                                                        </div>
-                                                        <!-- Radio -->
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="flexRadioDefault" id="flexRadioDefault13" />
-                                                            <label class="form-check-label" for="flexRadioDefault13">
-                                                                Hectares area - ha
-                                                            </label>
-                                                        </div>
-                                                        <!-- Measurement END -->
-                                                        <!-- Property size START -->
-                                                        <h6 class="font-base mt-4 mb-0">
-                                                            <i class="fas fa-drafting-compass me-2"></i>Property size
-                                                        </h6>
-                                                        <div class="position-relative my-3">
-                                                            <div class="noui-wrapper m-b-50 p-l-r">
-                                                                <div class="d-flex justify-content-between">
-                                                                    <input type="text"
-                                                                        class="text-body input-with-range-min" />
-                                                                    <input type="text"
-                                                                        class="text-body input-with-range-max" />
-                                                                </div>
-                                                                <div class="noui-slider-range m-b-20 mt-2"
-                                                                    data-range-min="2000" data-range-max="50000"
-                                                                    data-range-selected-min="18000"
-                                                                    data-range-selected-max="24000"></div>
-                                                            </div>
-                                                        </div>
                                                         <!-- Property size END -->
                                                     </div>
                                                 </div>
@@ -848,104 +625,38 @@
                     <!-- Navbar START -->
                     <nav id="navbar-example2" class="navbar navbar-dark bg-dark rounded-1">
                         <ul class="nav p-2">
-                            <!-- Dropdown item -->
+                            <!-- Dropdown items for filters -->
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" href="#" id="typeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Type
                                 </a>
-                                <ul class="dropdown-menu mt-2" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">Rent</a></li>
-                                    <li><a class="dropdown-item" href="#">Sale</a></li>
+                                <ul class="dropdown-menu mt-2" aria-labelledby="typeDropdown">
+                                    <li><a class="dropdown-item" href="?type=Rent">Rent</a></li>
+                                    <li><a class="dropdown-item" href="?type=Sale">Sale</a></li>
                                 </ul>
                             </li>
-                            <!-- Dropdown item -->
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Category
-                                </a>
-                                <ul class="dropdown-menu mt-2" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">Apartment</a></li>
-                                    <li><a class="dropdown-item" href="#">Land</a></li>
-                                    <li><a class="dropdown-item" href="#">House</a></li>
-                                    <li><a class="dropdown-item" href="#">Office</a></li>
-                                    <li><a class="dropdown-item" href="#">Shop</a></li>
-                                    <li><a class="dropdown-item" href="#">Villa</a></li>
-                                </ul>
-                            </li>
-                            <!-- Dropdown item -->
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    City
-                                </a>
-                                <ul class="dropdown-menu mt-2" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">New york</a></li>
-                                    <li><a class="dropdown-item" href="#">Los Angeles</a></li>
-                                    <li><a class="dropdown-item" href="#">Pheoenix</a></li>
-                                </ul>
-                            </li>
-                            <!-- Dropdown item -->
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Area
-                                </a>
-                                <ul class="dropdown-menu mt-2" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">Queens</a></li>
-                                    <li><a class="dropdown-item" href="#">Manhattan</a></li>
-                                    <li><a class="dropdown-item" href="#">WestSide</a></li>
-                                </ul>
-                            </li>
-                            <!-- Dropdown item -->
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Default Order
-                                </a>
-                                <ul class="dropdown-menu mt-2" aria-labelledby="navbarDropdown">
-                                    <li>
-                                        <a class="dropdown-item" href="#">Price - Low to High</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">Price - High to Low</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">Featured Listings First</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">Date - Old to New</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">Date - New to Old</a>
-                                    </li>
-                                </ul>
-                            </li>
+                            <!-- Add more dropdowns for filters as needed -->
                         </ul>
                     </nav>
                     <!-- Navbar END -->
-
+                
                     <div class="row mt-5">
-                        <!-- Property START -->
+                        <!-- Loop through listings -->
+                        @foreach($listings as $listing)
                         <div class="col-md-12">
                             <div class="card mb-5 card-img-scale">
                                 <div class="row g-3">
                                     <div class="col-md-5 col-lg-12 col-xl-5">
                                         <div class="card overflow-hidden">
                                             <!-- Image -->
-                                            <img class="card-img rounded-1" src="assets/images/property/grid-list/02.jpg"
-                                                alt="Card image" />
+                                            <img class="card-img rounded-1" src="{{ asset('storage/' . ($listing->photos->first()->photo_url ?? 'default.jpg')) }}" alt="Listing image" />
                                             <!-- Image overlay -->
                                             <div class="card-img-overlay">
-                                                <!-- Meta -->
                                                 <div class="d-flex justify-content-between align-items-center">
-                                                    <a href="#" class="badge bg-orange">Limited</a>
+                                                    <a href="#" class="badge bg-orange">{{ $listing->availability }}</a>
                                                     <div>
-                                                        <a href="#" class="badge bg-dark text-white me-2"><i
-                                                                class="fas fa-video pe-2"></i><span>2</span></a>
-                                                        <a href="#" class="badge bg-dark text-white"><i
-                                                                class="fas fa-camera pe-2"></i><span>2</span></a>
+                                                        <a href="#" class="badge bg-dark text-white me-2"><i class="fas fa-video pe-2"></i><span>2</span></a>
+                                                        <a href="#" class="badge bg-dark text-white"><i class="fas fa-camera pe-2"></i><span>{{ $listing->photos->count() }}</span></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -956,443 +667,73 @@
                                         <div class="row">
                                             <!-- Detail -->
                                             <div class="col-md-7">
-                                                <!-- Title -->
                                                 <h4 class="card-title">
-                                                    <a href="#">5620 morningstar Avenue</a>
+                                                    <a href="#">{{ $listing->title }}</a>
                                                 </h4>
                                                 <p class="small mb-3 mb-md-2 text-primary-hover">
-                                                    <a href="#"><i class="fas fa-map-marker-alt me-1"></i>Chicago HQ
-                                                        Estica Cop. 8573 Livingston</a>
+                                                    <a href="#"><i class="fas fa-map-marker-alt me-1"></i>{{ $listing->address }}, {{ $listing->city }}</a>
                                                 </p>
-                                                <!-- Meta -->
-                                                <ul
-                                                    class="nav nav-divider align-items-center text-uppercase small mb-2 mb-lg-3">
+                                                <ul class="nav nav-divider align-items-center text-uppercase small mb-2 mb-lg-3">
                                                     <li class="nav-item me-4 mb-1">
-                                                        <i class="fas fa-bed pe-1"></i> <span>5</span>
+                                                        <i class="fas fa-bed pe-1"></i> <span>{{ $listing->bedrooms ?? 'N/A' }}</span>
                                                     </li>
                                                     <li class="nav-item me-4 mb-1">
-                                                        <i class="fas fa-bath pe-1"></i> <span>3</span>
-                                                    </li>
-                                                    <li class="nav-item me-4 mb-1">
-                                                        <i class="fas fa-user pe-1"></i> <span>6</span>
+                                                        <i class="fas fa-bath pe-1"></i> <span>{{ $listing->bathrooms ?? 'N/A' }}</span>
                                                     </li>
                                                     <li class="nav-item me-4 mb-1">
                                                         <i class="fas fa-square pe-1"></i>
-                                                        <span>2900<sup class="text-lowercase">m2</sup></span>
+                                                        <span>{{ $listing->area ?? 'N/A' }}<sup class="text-lowercase">m2</sup></span>
                                                     </li>
                                                 </ul>
                                             </div>
                                             <div class="col-md-5">
                                                 <div class="d-sm-flex justify-content-sm-between">
-                                                    <!-- Badge -->
                                                     <div class="mb-2 mb-sm-0">
-                                                        <span class="badge bg-primary-soft text-primary"><i
-                                                                class="fas fa-user-friends pe-1"></i>Family</span>
-                                                        <span class="badge bg-warning-soft text-warning"><i
-                                                                class="fas fa-rupee-sign pe-1"></i>For
-                                                            rent</span>
-                                                        <span class="badge bg-success-soft text-success"><i
-                                                                class="fas fa-home pe-1"></i>Apartment</span>
+                                                        <span class="badge bg-primary-soft text-primary">{{ $listing->type }}</span>
+                                                        <span class="badge bg-warning-soft text-warning">{{ ucfirst($listing->reservation) }}</span>
                                                     </div>
-                                                    <!-- Price -->
                                                     <div>
                                                         <div class="d-flex d-md-block align-items-center mb-2 mb-lg-0">
                                                             <h5 class="text-success mb-0 me-3 me-md-0">
-                                                                $20,000
+                                                                ₱{{ number_format($listing->price, 2) }}
                                                             </h5>
-                                                            <h6
-                                                                class="text-decoration-line-through mb-0 me-3 me-md-0 text-muted">
-                                                                $24,000
-                                                            </h6>
-                                                            <p class="badge bg-orange text-white mb-0">
-                                                                15% off
-                                                            </p>
+                                                           
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- Avatar and button -->
                                             <div class="d-flex justify-content-between align-items-center">
-                                                <!-- Avatar -->
                                                 <div class="d-flex align-items-center">
                                                     <div class="avatar avatar-sm me-2">
-                                                        <img class="avatar-img rounded-circle"
-                                                            src="assets/images/avatar/06.jpg" alt="avatar" />
+                                                        {{-- <img class="avatar-img rounded-circle" src="{{ asset('storage/' . ($listing->owner->profile_photo ?? 'default-avatar.jpg')) }}" alt="Owner avatar" /> --}}
                                                     </div>
                                                     <p class="mb-1">
-                                                        <a href="#" class="text-reset btn-link">Jerry Reid</a>
+                                                        {{-- <a href="#" class="text-reset btn-link">{{ $listing->owner->name }}</a> --}}
                                                     </p>
                                                 </div>
-                                                <!-- Button -->
                                                 <div class="d-flex align-items-center">
-                                                    <a href="#" class="text-end me-3 mb-0 h5"><i
-                                                            class="fas fa-fw fa-heart text-danger"></i></a>
-                                                    <a href="#" class="btn btn-dark btn-sm">View details</a>
+                                                    <a href="#" class="text-end me-3 mb-0 h5"><i class="fas fa-fw fa-heart text-danger"></i></a>
+                                                    {{-- <a href="{{ route('listings.show', $listing->id) }}" class="btn btn-dark btn-sm">View details</a> --}}
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- Row END -->
                                     </div>
                                     <!-- Card body END -->
                                 </div>
-                                <!-- Row END -->
                             </div>
                         </div>
-                        <!-- Property END -->
-
-                        <!-- Property START -->
-                        <div class="col-md-12">
-                            <div class="card mb-5 card-img-scale">
-                                <div class="row g-3">
-                                    <div class="col-md-5 col-lg-12 col-xl-5">
-                                        <div class="card overflow-hidden">
-                                            <!-- Image -->
-                                            <img class="card-img rounded-1" src="assets/images/property/grid-list/09.jpg"
-                                                alt="Card image" />
-                                            <!-- Image overlay -->
-                                            <div class="card-img-overlay">
-                                                <div class="text-end">
-                                                    <a href="#" class="badge bg-dark text-white me-2"><i
-                                                            class="fas fa-video pe-2"></i><span>2</span></a>
-                                                    <a href="#" class="badge bg-dark text-white"><i
-                                                            class="fas fa-camera pe-2"></i><span>2</span></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Card body START -->
-                                    <div class="col-md-7 col-lg-12 col-xl-7">
-                                        <div class="row">
-                                            <!-- Detail -->
-                                            <div class="col-md-7">
-                                                <!-- Title -->
-                                                <h4 class="card-title">
-                                                    <a href="#">Store in Woodside, San Francisco</a>
-                                                </h4>
-                                                <p class="small mb-2 text-primary-hover">
-                                                    <a href="#"><i class="fas fa-map-marker-alt me-1"></i>Chicago HQ
-                                                        Estica Cop. 8573 Livingston</a>
-                                                </p>
-                                                <!-- Meta -->
-                                                <ul
-                                                    class="nav nav-divider align-items-center text-uppercase small mb-1 mb-lg-3">
-                                                    <li class="nav-item me-4 mb-1">
-                                                        <i class="fas fa-bed pe-1"></i> <span>5</span>
-                                                    </li>
-                                                    <li class="nav-item me-4 mb-1">
-                                                        <i class="fas fa-bath pe-1"></i> <span>3</span>
-                                                    </li>
-                                                    <li class="nav-item me-4 mb-1">
-                                                        <i class="fas fa-user pe-1"></i> <span>6</span>
-                                                    </li>
-                                                    <li class="nav-item me-4 mb-1">
-                                                        <i class="fas fa-square pe-1"></i>
-                                                        <span>2900<sup class="text-lowercase">m2</sup></span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <div class="d-sm-flex justify-content-sm-between">
-                                                    <!-- Badge -->
-                                                    <div class="mb-2 mb-sm-0">
-                                                        <span class="badge bg-primary-soft text-primary"><i
-                                                                class="fas fa-user-friends pe-1"></i>Family</span>
-                                                        <span class="badge bg-danger-soft text-danger"><i
-                                                                class="fas fa-rupee-sign pe-1"></i>For
-                                                            sale</span>
-                                                        <span class="badge bg-success-soft text-success"><i
-                                                                class="fas fa-home pe-1"></i>Villa</span>
-                                                    </div>
-                                                    <!-- Price -->
-                                                    <div>
-                                                        <div class="d-flex d-md-block align-items-center mb-2 mb-lg-0">
-                                                            <h5 class="text-success mb-0 me-3 me-md-0">
-                                                                $220,000
-                                                            </h5>
-                                                            <h6
-                                                                class="text-decoration-line-through mb-0 me-3 me-md-0 text-muted">
-                                                                $224,000
-                                                            </h6>
-                                                            <p class="badge bg-orange text-white mb-0">
-                                                                20% off
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Avatar and button -->
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <!-- Avatar -->
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar avatar-sm me-2">
-                                                        <img class="avatar-img rounded-circle"
-                                                            src="assets/images/avatar/1.jpg" alt="avatar" />
-                                                    </div>
-                                                    <p class="mb-1">
-                                                        <a href="#" class="text-reset btn-link">Bryan Knight</a>
-                                                    </p>
-                                                </div>
-                                                <!-- Button -->
-                                                <div class="d-flex align-items-center">
-                                                    <a href="#" class="text-end me-3 mb-0 h5"><i
-                                                            class="far fa-heart fa-fw text-dark"></i></a>
-                                                    <a href="#" class="btn btn-dark btn-sm">View details</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Row END -->
-                                    </div>
-                                    <!-- Card body END -->
-                                </div>
-                                <!-- Row END -->
-                            </div>
-                        </div>
-                        <!-- Property END -->
-
-                        <!-- Property START -->
-                        <div class="col-md-12">
-                            <div class="card mb-5 card-img-scale">
-                                <div class="row g-3">
-                                    <div class="col-md-5 col-lg-12 col-xl-5">
-                                        <div class="card overflow-hidden">
-                                            <!-- Image -->
-                                            <img class="card-img rounded-1" src="assets/images/property/grid-list/06.jpg"
-                                                alt="Card image" />
-                                            <!-- Image overlay -->
-                                            <div class="card-img-overlay">
-                                                <div class="text-end">
-                                                    <a href="#" class="badge bg-dark text-white me-2"><i
-                                                            class="fas fa-video pe-2"></i><span>2</span></a>
-                                                    <a href="#" class="badge bg-dark text-white"><i
-                                                            class="fas fa-camera pe-2"></i><span>2</span></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Card body START -->
-                                    <div class="col-md-7 col-lg-12 col-xl-7">
-                                        <div class="row">
-                                            <!-- Detail -->
-                                            <div class="col-md-7">
-                                                <!-- Title -->
-                                                <h4 class="card-title">
-                                                    <a href="#">157485 Camino Codorniz</a>
-                                                </h4>
-                                                <p class="small mb-2 text-primary-hover">
-                                                    <a href="#"><i class="fas fa-map-marker-alt me-1"></i>Chicago HQ
-                                                        Estica Cop. 8573 Livingston</a>
-                                                </p>
-                                                <!-- Meta -->
-                                                <ul
-                                                    class="nav nav-divider align-items-center text-uppercase small mb-1 mb-lg-3">
-                                                    <li class="nav-item me-4 mb-1">
-                                                        <i class="fas fa-bed pe-1"></i> <span>6</span>
-                                                    </li>
-                                                    <li class="nav-item me-4 mb-1">
-                                                        <i class="fas fa-bath pe-1"></i> <span>4</span>
-                                                    </li>
-                                                    <li class="nav-item me-4 mb-1">
-                                                        <i class="fas fa-user pe-1"></i> <span>6</span>
-                                                    </li>
-                                                    <li class="nav-item me-4 mb-1">
-                                                        <i class="fas fa-square pe-1"></i>
-                                                        <span>2900<sup class="text-lowercase">m2</sup></span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <div class="d-sm-flex justify-content-sm-between">
-                                                    <!-- Badge -->
-                                                    <div class="mb-2 mb-sm-0">
-                                                        <span class="badge bg-primary-soft text-primary"><i
-                                                                class="fas fa-user-friends pe-1"></i>Family</span>
-                                                        <span class="badge bg-warning-soft text-warning"><i
-                                                                class="fas fa-rupee-sign pe-1"></i>For
-                                                            rent</span>
-                                                        <span class="badge bg-success-soft text-success"><i
-                                                                class="fas fa-home pe-1"></i>shop</span>
-                                                    </div>
-                                                    <!-- Price -->
-                                                    <div>
-                                                        <h5 class="text-success mb-2">$80,000</h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Avatar and button -->
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <!-- Avatar -->
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar avatar-sm me-2">
-                                                        <img class="avatar-img rounded-circle"
-                                                            src="assets/images/avatar/2.jpg" alt="avatar" />
-                                                    </div>
-                                                    <p class="mb-1">
-                                                        <a href="#" class="text-reset btn-link">Judy Nguyen</a>
-                                                    </p>
-                                                </div>
-                                                <!-- Button -->
-                                                <div class="d-flex align-items-center">
-                                                    <a href="#" class="text-end me-3 mb-0 h5"><i
-                                                            class="far fa-heart fa-fw text-dark"></i></a>
-                                                    <a href="#" class="btn btn-dark btn-sm">View details</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Row END -->
-                                    </div>
-                                    <!-- Card body END -->
-                                </div>
-                                <!-- Row END -->
-                            </div>
-                        </div>
-                        <!-- Property END -->
-
-                        <!-- Property START -->
-                        <div class="col-md-12">
-                            <div class="card mb-5 card-img-scale">
-                                <div class="row g-3">
-                                    <div class="col-md-5 col-lg-12 col-xl-5">
-                                        <div class="card overflow-hidden">
-                                            <!-- Image -->
-                                            <img class="card-img rounded-1" src="assets/images/property/grid-list/03.jpg"
-                                                alt="Card image" />
-                                            <!-- Image overlay -->
-                                            <div class="card-img-overlay">
-                                                <!-- Meta -->
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <a href="#" class="badge bg-orange">Limited</a>
-                                                    <div>
-                                                        <a href="#" class="badge bg-dark text-white me-2"><i
-                                                                class="fas fa-video pe-2"></i><span>2</span></a>
-                                                        <a href="#" class="badge bg-dark text-white"><i
-                                                                class="fas fa-camera pe-2"></i><span>5</span></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Card body START -->
-                                    <div class="col-md-7 col-lg-12 col-xl-7">
-                                        <div class="row">
-                                            <!-- Detail -->
-                                            <div class="col-md-7">
-                                                <!-- Title -->
-                                                <h4 class="card-title">
-                                                    <a href="#">Single House Near New York</a>
-                                                </h4>
-                                                <p class="small mb-2 text-primary-hover">
-                                                    <a href="#"><i class="fas fa-map-marker-alt me-1"></i>Chicago HQ
-                                                        Estica Cop. 8573 Livingston</a>
-                                                </p>
-                                                <!-- Meta -->
-                                                <ul
-                                                    class="nav nav-divider align-items-center text-uppercase small mb-1 mb-lg-3">
-                                                    <li class="nav-item me-4 mb-1">
-                                                        <i class="fas fa-bed pe-1"></i> <span>5</span>
-                                                    </li>
-                                                    <li class="nav-item me-4 mb-1">
-                                                        <i class="fas fa-bath pe-1"></i> <span>3</span>
-                                                    </li>
-                                                    <li class="nav-item me-4 mb-1">
-                                                        <i class="fas fa-user pe-1"></i> <span>6</span>
-                                                    </li>
-                                                    <li class="nav-item me-4 mb-1">
-                                                        <i class="fas fa-square pe-1"></i>
-                                                        <span>2900<sup class="text-lowercase">m2</sup></span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <div class="d-sm-flex justify-content-sm-between">
-                                                    <!-- Badge -->
-                                                    <div class="mb-2 mb-sm-0">
-                                                        <span class="badge bg-primary-soft text-primary"><i
-                                                                class="fas fa-user-friends pe-1"></i>Family</span>
-                                                        <span class="badge bg-warning-soft text-warning"><i
-                                                                class="fas fa-rupee-sign pe-1"></i>For
-                                                            sale</span>
-                                                        <span class="badge bg-success-soft text-success"><i
-                                                                class="fas fa-home pe-1"></i>home</span>
-                                                    </div>
-                                                    <!-- Price -->
-                                                    <div>
-                                                        <div class="d-flex d-md-block align-items-center mb-2 mb-lg-0">
-                                                            <h5 class="text-success mb-0 me-3 me-md-0">
-                                                                $100,000
-                                                            </h5>
-                                                            <h6
-                                                                class="text-decoration-line-through mb-0 me-3 me-md-0 text-muted">
-                                                                $12,000
-                                                            </h6>
-                                                            <p class="badge bg-orange text-white mb-0">
-                                                                20% off
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Avatar and button -->
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <!-- Avatar -->
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar avatar-sm me-2">
-                                                        <img class="avatar-img rounded-circle"
-                                                            src="assets/images/avatar/06.jpg" alt="avatar" />
-                                                    </div>
-                                                    <p class="mb-1">
-                                                        <a href="#" class="text-reset btn-link">Jerry Reid</a>
-                                                    </p>
-                                                </div>
-                                                <!-- Button -->
-                                                <div class="d-flex align-items-center">
-                                                    <a href="#" class="text-end me-3 mb-0 h5"><i
-                                                            class="fas fa-fw fa-heart text-danger"></i></a>
-                                                    <a href="#" class="btn btn-dark btn-sm">View details</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Row END -->
-                                    </div>
-                                    <!-- Card body END -->
-                                </div>
-                                <!-- Row END -->
-                            </div>
-                        </div>
-                        <!-- Property END -->
+                        @endforeach
                     </div>
-                    <!-- Row END -->
-
+                
                     <!-- Pagination START -->
                     <div class="col-12">
                         <nav class="mt-4 d-flex justify-content-center" aria-label="navigation">
-                            <ul class="pagination pagination-bordered rounded">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1"><i
-                                            class="fas fa-chevron-left"></i></a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">1</a>
-                                </li>
-                                <li class="page-item active">
-                                    <a class="page-link" href="#">2</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">3</a>
-                                </li>
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#">..</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">15</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
-                                </li>
-                            </ul>
+                            {{ $listings->links('pagination::bootstrap-4') }}
                         </nav>
                     </div>
                     <!-- Pagination END -->
                 </div>
+                
                 <!-- Main content END -->
             </div>
             <!-- Row END -->

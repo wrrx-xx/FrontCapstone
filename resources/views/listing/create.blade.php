@@ -47,8 +47,8 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="body">Complete Address</label>
-                        <textarea name="address" id="body" class="form-control" required></textarea>
+                        <label for="address">Complete Address</label>
+                        <textarea name="address" id="address" class="form-control" required></textarea>
                     </div>
                 </div>
                 
@@ -137,25 +137,23 @@
             </div>
 
             <!-- Step 4: Photos -->
-           <!-- Step 4: Photos -->
-           
-<div class="form-step" id="step4" style="display: none; background-color: #f8f9fa; border: 2px solid ; padding: 20px; border-radius: 15px;">
-    <h4 class="text-start">Step 4: Upload Photos</h4>
-    <div class="form-group">
-        <label for="photos" style="display: flex; align-items: center;">
-            <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; margin-right: 8px;">
-                <path d="M3 17v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2" />
-                <path d="M12 3v12" />
-                <path d="M9 6l3-3 3 3" />
-            </svg>
-            Upload Photos
-        </label>
-        <input type="file" name="photos[]" id="photos" class="form-control" multiple required>
-    </div>
-    <br>
-    <button type="button" class="btn btn-secondary prev-btn">Previous</button>
-    <button type="submit" class="btn btn-success">Submit</button>
-</div>
+            <div class="form-step" id="step4" style="display: none; background-color: #f8f9fa; border: 2px solid ; padding: 20px; border-radius: 15px;">
+                <h4 class="text-start">Step 4: Upload Photos</h4>
+                <div class="form-group">
+                    <label for="photos" style="display: flex; align-items: center;">
+                        <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; margin-right: 8px;">
+                            <path d="M3 17v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2" />
+                            <path d="M12 3v12" />
+                            <path d="M9 6l3-3 3 3" />
+                        </svg>
+                        Upload Photos
+                    </label>
+                    <input type="file" name="photos[]" id="photos" class="form-control" multiple required>
+                </div>
+                <br>
+                <button type="button" class="btn btn-secondary prev-btn">Previous</button>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
         </form>
     </div>
 
@@ -179,5 +177,4 @@
             });
         });
     </script>
-
 @endsection
