@@ -10,6 +10,7 @@ class Reservation extends Model
     use HasFactory;
     protected $fillable = [
         'listing_id',
+       'prospect_id',
         'reservation_status'
         ];
 

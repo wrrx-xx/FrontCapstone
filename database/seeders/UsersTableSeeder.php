@@ -38,5 +38,16 @@ class UsersTableSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        User::create([
+            'fname' => 'Jane',
+            'mname' => 'A.',
+            'lname' => 'Doe',
+            'email' => 'tenant@t',
+            'phone_number' => '0987654321',
+            'password' => Hash::make('123'), // Use a secure password
+            'role' => 'tenant',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }

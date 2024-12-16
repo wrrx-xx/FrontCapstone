@@ -1,4 +1,4 @@
-@extends('layouts.guest')
+@extends('layouts.app')
 @section('content')
     <!-- =======================
     Main Banner START -->
@@ -668,7 +668,7 @@
                                             <!-- Detail -->
                                             <div class="col-md-7">
                                                 <h4 class="card-title">
-                                                    <a href="#">{{ $listing->title }}</a>
+                                                    <a href="{{ route('listings.show', $listing->id) }}">{{ $listing->title }}</a>
                                                 </h4>
                                                 <p class="small mb-3 mb-md-2 text-primary-hover">
                                                     <a href="#"><i class="fas fa-map-marker-alt me-1"></i>{{ $listing->address }}, {{ $listing->city }}</a>

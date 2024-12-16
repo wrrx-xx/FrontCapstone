@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('listing_id')->constrained('listings')->cascadeOnDelete();
             $table->foreignId('prospect_id')->constrained('users')->cascadeOnDelete();
-            $table->enum('reservation_status', ['approved', 'declined']);
+            $table->enum('reservation_status', ['approved', 'declined','pending']);
             $table->timestamps();
         });
     }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('requested_by')->constrained('users')->cascadeOnDelete();
             $table->date('viewing_date');
             $table->time('viewing_time');
-            $table->enum('viewing_status', ['approved', 'declined', 'cancelled']);
+            $table->enum('viewing_status', ['approved', 'declined', 'cancelled','pending']);
             $table->timestamps();
         });
     }

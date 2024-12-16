@@ -564,7 +564,7 @@ Review END -->
 
 <!-- =======================
 City START -->
-<section class="pt-0">
+{{-- <section class="pt-0">
 	<div class="container card-grid">
 		<!-- Title -->
 		<div class="text-center mb-3 mb-md-5">
@@ -649,7 +649,7 @@ City START -->
 			</div>
 		</div> <!-- Row END -->
 	</div>	
-</section>
+</section> --}}
 <!-- =======================
 City END -->
 

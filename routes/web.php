@@ -37,9 +37,12 @@ Route::get('/owner/dashboard', function () {
     return view('owner.dashboard');
 })->middleware(['auth', 'verified'])->name('owner.dashboard');
 
-Route::get('/tenant/dashboard', function () {
-    return view('tenant.dashboard');
-})->middleware(['auth', 'verified','tenant'])->name('tenant.dashboard');
+Route::get('/tenant/home', function () {
+    $listings = Listing::paginate(10); // Adjust the number per page as needed
+
+    // Pass the listings to the view
+    return view('listing.display', ['listings' => $listings]);
+})->middleware(['auth', 'verified','tenant'])->name('tenant.home');
 
 Route::get('/staff/dashboard', function () {
     return view('staff.dashboard');
@@ -52,6 +55,7 @@ Route::middleware('auth')->group(function () {
    
     Route::get('/listing/mylisting',[ListingController::class, 'ownerindex'])->name('owner.property');
     Route::resource('/listing', ListingController::class);
+    Route::resource('/reserve', ReservationController::class);
     Route::get('/listings/owner/{id}', [ListingController::class, 'myproperty'])->name('listing.myproperty');
 });
 

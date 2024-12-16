@@ -3,7 +3,7 @@
         <div class="container">
             <!-- Logo START -->
             <a class="navbar-brand" href="{{ url('/') }}">
-                <img class="navbar-brand-item" src="{{ asset('assets/images/logo.svg<!-- Separate Home Link') }}" alt="logo">
+                <img class="navbar-brand-item" src="{{ asset('assets/images/logo.svg') }}" alt="logo">
             </a>
             <!-- Logo END -->
 
@@ -18,23 +18,30 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav navbar-nav-scroll mx-auto">
                     <!-- Separate Home Link -->
-
                 </ul>
 
-                <!-- Other Navigation Items -->
+                <!-- Tenant Navigation Items -->
                 <ul class="navbar-nav navbar-nav-scroll mx-auto">
                     <li class="nav-item">
                         <a class="nav-link navbar-primary-soft-hover" href="{{ url('/') }}" id="homeMenu">Home</a>
                     </li>
-                    
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('listing.display') }}">Listings</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">Login</a>
+                        <a class="nav-link" href="{{ route('reserve.index') }}" >Bookings</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}">Sign Up</a>
+                        <a class="nav-link" href="#">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Payments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Support</a>
+                    </li>
+                    <li class="nav-item">
+                        
                     </li>
 
                     <!-- Add more items as needed -->
@@ -42,9 +49,14 @@
             </div>
             <!-- Main navbar END -->
 
-            <!-- Add listing button -->
+            <!-- Optional Add listing button (if applicable) -->
             <div class="ms-5 ms-lg-0">
-                <a href="#" class="btn btn-sm btn-dark-soft"><i class="fas fa-plus me-2"></i>Add listing</a>
+                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                    @csrf
+                    <button type="submit" class="nav-link btn btn-link" style="border: none; background: none; padding: 0;">
+                        Logout
+                    </button>
+                </form>
             </div>
 
         </div>
