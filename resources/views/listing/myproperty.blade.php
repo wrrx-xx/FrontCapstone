@@ -5,10 +5,6 @@
     <div class="row">
         <div class="col-12">
             <!-- Page title -->
-            <div class="my-5">
-                <h1>My Properties</h1>
-                <hr>
-            </div>
             <!-- Property list START -->
             <div class="row">
                 <div class="col-md-12">

@@ -20,7 +20,7 @@ class Viewing extends Model
     public function  listing(){
     return $this->belongsTo(Listing::class, 'listing_id');
     }
-    public function  request(){
+    public function  requestedBy(){
         return $this->belongsTo(User::class,'requested_by');
         }
 }

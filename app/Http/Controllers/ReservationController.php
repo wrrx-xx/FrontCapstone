@@ -61,10 +61,7 @@ class ReservationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Reservation $reservation)
-    {
-        return  $reservation;
-    }
+    
 
     /**
      * Update the specified resource in storage.
@@ -87,5 +84,111 @@ class ReservationController extends Controller
         $reservation->delete();
 
         return ['message'=> 'reservation was delelted'];
+    }
+    public function ownerindex()
+
+    {
+
+        // Get the authenticated user's ID
+
+        $userId = Auth::id();
+
+
+        // Fetch the viewings for listings owned by the authenticated user
+
+        $viewings = Viewing::whereHas('listing', function ($query) use ($userId) {
+
+            $query->where('owner_id', $userId);
+
+        })
+
+        ->with('listing') // Eager load the related listing
+
+        ->get();
+
+
+        // Return the view with the viewings data
+
+        return view('booking.dashindex', compact('viewings'));
+
+    }
+
+
+    /**
+
+     * Show the details of a specific viewing.
+
+     *
+
+     * @param  int  $id
+
+     * @return \Illuminate\Http\Response
+
+     */
+
+    public function show($id)
+
+    {
+
+        $viewing = Viewing::findOrFail($id);
+
+        return view('viewings.show', compact('viewing'));
+
+    }
+
+
+    /**
+
+     * Accept a viewing request.
+
+     *
+
+     * @param  int  $id
+
+     * @return \Illuminate\Http\Response
+
+     */
+
+    public function accept($id)
+
+    {
+
+        $viewing = Viewing::findOrFail($id);
+
+        $viewing->viewing_status = 'approved';
+
+        $viewing->save();
+
+
+        return redirect()->route('booking.owner')->with('success', 'Viewing request accepted successfully!');
+
+    }
+
+
+    /**
+
+     * Decline a viewing request.
+
+     *
+
+     * @param  int  $id
+
+     * @return \Illuminate\Http\Response
+
+     */
+
+    public function decline($id)
+
+    {
+
+        $viewing = Viewing::findOrFail($id);
+
+        $viewing->viewing_status = 'declined';
+
+        $viewing->save();
+
+
+        return redirect()->route('booking.owner')->with('success', 'Viewing request declined successfully!');
+
     }
 }
