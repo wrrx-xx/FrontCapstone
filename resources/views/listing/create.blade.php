@@ -1,155 +1,162 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="main-content">
+    <div class="container">
+        <h1 class="text-center" style="margin-bottom: 20px; font-size: 2.5rem; color: #343a40;">Create a New Listing</h1>
 
-<div class="container mx-auto p-4">
-    
-    @if ($errors->any())
-        <div class="alert alert-danger mb-4">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li class="text-red-600">{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="{{ route('listing.store') }}" method="POST" enctype="multipart/form-data" id="listingForm" class="space-y-4">
-        @csrf
-
-        <!-- Step 1: Basic Information -->
-        <div class="form-step p-4 border border-gray-300 rounded-lg bg-gray-50">
-          
-            <h4 class="text-lg font-semibold">Step 1: Basic Information</h4>
-            
-            <div class="mb-4">
-                <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
-                <input type="text" name="title" id="title" class="mt-1 block w-full border-gray-300 rounded-lg" required>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
-            
-            <div class="mb-4">
-                <label for="body" class="block text-sm font-medium text-gray-700">Description</label>
-                <textarea name="body" id="body" class="mt-1 block w-full border-gray-300 rounded-lg" required></textarea>
-            </div>
-            
-            <h4 class="text-lg font-semibold mt-3">Property Information</h4>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label for="city" class="block text-sm font-medium text-gray-700">City</label>
-                    <input type="text" name="city" id="city" class="mt-1 block w-full border-gray-300 rounded-lg" required>
+        @endif
+
+        <form action="{{ route('listing.store') }}" method="POST" enctype="multipart/form-data" id="listingForm">
+            @csrf
+
+            <!-- Step 1: Basic Information -->
+            <div class="form-step" id="step1" style="background-color: #f8f9fa; border: 2px solid; padding: 20px; border-radius: 15px;">
+                <div class="row gx-5 align-items-center justify-content-center text-start">
+                    <h4 class="text-start">Step 1: Basic Information</h4>
+                    
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" name="title" id="title" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="body">Description</label>
+                        <textarea name="body" id="body" class="form-control" required></textarea>
+                    </div>
+                    
+                    <h4 class="text-start mt-3">Property Information</h4>
+                    
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="city">City</label>
+                            <input type="text" name="city" id="city" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="baranggay">Barangay</label>
+                            <input type="text" name="baranggay" id="baranggay" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Complete Address</label>
+                        <textarea name="address" id="address" class="form-control" required></textarea>
+                    </div>
                 </div>
-                <div>
-                    <label for="baranggay" class="block text-sm font-medium text-gray-700">Barangay</label>
-                    <input type="text" name="baranggay" id="baranggay" class="mt-1 block w-full border-gray-300 rounded-lg" required>
-                </div>
-            </div>
-            
-            <div class="mb-4">
-                <label for="address" class="block text-sm font-medium text-gray-700">Complete Address</label>
-                <textarea name="address" id="address" class="mt-1 block w-full border-gray-300 rounded-lg" required></textarea>
-            </div>
-            
-            <button type="button" class="btn btn-primary next-btn">Next</button>
-        </div>
-
-        <!-- Step 2: Listing Details -->
-        <div class="form-step hidden p-4 border border-gray-300 rounded-lg bg-gray-50">
-            <h4 class="text-lg font-semibold">Step 2: Listing Details</h4>
-            
-            <div class="mb-4">
-                <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
-                <select name="type" id="type" class="mt-1 block w-full border-gray-300 rounded-lg" required>
-                    <option value="Apartment">Apartment</option>
-                    <option value="House">House</option>
-                    <option value="Boarding house">Boarding house</option>
-                    <option value="Room">Room</option>
-                </select>
+                
+                <br>
+                <button type="button" class="btn btn-primary next-btn">Next</button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label for="availability" class="block text-sm font-medium text-gray-700">Availability</label>
-                    <select name="availability" id="availability" class="mt-1 block w-full border-gray-300 rounded-lg" required>
-                        <option value="open">Open</option>
-                        <option value="closed">Closed</option>
+            <!-- Step 2: Listing Details -->
+            <div class="form-step" id="step2" style="display: none; background-color: #f8f9fa; border: 2px solid ; padding: 20px; border-radius: 15px;">
+                <h4 class="text-start">Step 2: Listing Details</h4>
+                
+                <div class="form-group">
+                    <label for="type">Type</label>
+                    <select name="type" id="type" class="form-control" required>
+                        <option value="Apartment">Apartment</option>
+                        <option value="House">House</option>
+                        <option value="Boarding house">Boarding house</option>
+                        <option value="Room">Room</option>
                     </select>
                 </div>
-                <div>
-                    <label for="reservation" class="block text-sm font-medium text-gray-700">Reservation</label>
-                    <select name="reservation" id="reservation" class="mt-1 block w-full border-gray-300 rounded-lg" required>
-                        <option value="open">Open</option>
-                        <option value="closed">Closed</option>
-                    </select>
+
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label for="availability">Availability</label>
+                        <select name="availability" id="availability" class="form-control" required>
+                            <option value="open">Open</option>
+                            <option value="closed">Closed</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="reservation">Reservation</label>
+                        <select name="reservation" id="reservation" class="form-control" required>
+                            <option value="open">Open</option>
+                            <option value="closed">Closed</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="grid grid-cols-1 md -grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
-                    <input type="number" name="price" id="price" class="mt-1 block w-full border-gray-300 rounded-lg" step="0.01" required>
+                
+                <div class="form-group row">
+                    <div class="col-md-9">
+                        <label for="price">Price</label>
+                        <input type="number" name="price" id="price" class="form-control" step="0.01" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="reservation_amount">Reservation Amount</label>
+                        <input type="number" name="reservation_amount" id="reservation_amount" class="form-control" step="0.01" required>
+                    </div>
                 </div>
-                <div>
-                    <label for="reservation_amount" class="block text-sm font-medium text-gray-700">Reservation Amount</label>
-                    <input type="number" name="reservation_amount" id="reservation_amount" class="mt-1 block w-full border-gray-300 rounded-lg" step="0.01" required>
+                
+                <br>
+                <button type="button" class="btn btn-secondary prev-btn">Previous</button>
+                <button type="button" class="btn btn-primary next-btn">Next</button>
+            </div>
+
+            <!-- Step 3: Amenities -->
+            <div class="form-step" id="step3" style="display: none; background-color: #f8f9fa; border: 2px solid ; padding: 20px; border-radius: 15px;">
+                <h4 class="text-start">Step 3: Amenities</h4>
+
+                <div class="form-check">
+                    <input type="checkbox" name="wifi" id="wifi" class="form-check-input">
+                    <label for="wifi" class="form-check-label">WiFi</label>
                 </div>
-            </div>
-            
-            <button type="button" class="btn btn-secondary prev-btn">Previous</button>
-            <button type="button" class="btn btn-primary next-btn">Next</button>
-        </div>
 
-        <!-- Step 3: Amenities -->
-        <div class="form-step hidden p-4 border border-gray-300 rounded-lg bg-gray-50">
-            <h4 class="text-lg font-semibold">Step 3: Amenities</h4>
+                <div class="form-check">
+                    <input type="checkbox" name="parking" id="parking" class="form-check-input">
+                    <label for="parking" class="form-check-label">Parking</label>
+                </div>
 
-            <div class="flex items-center mb-2">
-                <input type="checkbox" name="wifi" id="wifi" class="form-checkbox h-5 w-5 text-blue-600">
-                <label for="wifi" class="ml-2 text-sm text-gray-700">WiFi</label>
-            </div>
+                <div class="form-check">
+                    <input type="checkbox" name="bathroom" id="bathroom" class="form-check-input">
+                    <label for="bathroom" class="form-check-label">Bathroom</label>
+                </div>
 
-            <div class="flex items-center mb-2">
-                <input type="checkbox" name="parking" id="parking" class="form-checkbox h-5 w-5 text-blue-600">
-                <label for="parking" class="ml-2 text-sm text-gray-700">Parking</label>
-            </div>
+                <div class="form-check">
+                    <input type="checkbox" name="kitchen" id="kitchen" class="form-check-input">
+                    <label for="kitchen" class="form-check-label">Kitchen</label>
+                </div>
 
-            <div class="flex items-center mb-2">
-                <input type="checkbox" name="bathroom" id="bathroom" class="form-checkbox h-5 w-5 text-blue-600">
-                <label for="bathroom" class="ml-2 text-sm text-gray-700">Bathroom</label>
-            </div>
-
-            <div class="flex items-center mb-2">
-                <input type="checkbox" name="kitchen" id="kitchen" class="form-checkbox h-5 w-5 text-blue-600">
-                <label for="kitchen" class="ml-2 text-sm text-gray-700">Kitchen</label>
+                <div class="form-check">
+                    <input type="checkbox" name="laundry" id="laundry" class="form-check-input">
+                    <label for="laundry" class="form-check-label">Laundry</label>
+                </div>
+                <br>
+                <button type="button" class="btn btn-secondary prev-btn">Previous</button>
+                <button type="button" class="btn btn-primary next-btn">Next</button>
             </div>
 
-            <div class="flex items-center mb-2">
-                <input type="checkbox" name="laundry" id="laundry" class="form-checkbox h-5 w-5 text-blue-600">
-                <label for="laundry" class="ml-2 text-sm text-gray-700">Laundry</label>
+            <!-- Step 4: Photos -->
+            <div class="form-step" id="step4" style="display: none; background-color: #f8f9fa; border: 2px solid ; padding: 20px; border-radius: 15px;">
+                <h4 class="text-start">Step 4: Upload Photos</h4>
+                <div class="form-group">
+                    <label for="photos" style="display: flex; align-items: center;">
+                        <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; margin-right: 8px;">
+                            <path d="M3 17v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2" />
+                            <path d="M12 3v12" />
+                            <path d="M9 6l3-3 3 3" />
+                        </svg>
+                        Upload Photos
+                    </label>
+                    <input type="file" name="photos[]" id="photos" class="form-control" multiple required>
+                </div>
+                <br>
+                <button type="button" class="btn btn-secondary prev-btn">Previous</button>
+                <button type="submit" class="btn btn-success">Submit</button>
             </div>
-            
-            <button type="button" class="btn btn-secondary prev-btn">Previous</button>
-            <button type="button" class="btn btn-primary next-btn">Next</button>
-        </div>
-
-        <!-- Step 4: Photos -->
-        <div class="form-step hidden p-4 border border-gray-300 rounded-lg bg-gray-50">
-            <h4 class="text-lg font-semibold">Step 4: Upload Photos</h4>
-            <div class="mb-4">
-                <label for="photos" class="block text-sm font-medium text-gray-700">
-                    <svg class="inline-block w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 17v2a2 2 0 002 2h14a2 2 0 002-2v-2M12 3v12m-3-3l3-3 3 3" />
-                    </svg>
-                    Upload Photos
-                </label>
-                <input type="file" name="photos[]" id="photos" class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" multiple required>
-                <div class="mt-1 text-sm text-gray-500" id="user_avatar_help">You can upload multiple photos.</div>
-            </div>
-            <button type="button" class="btn btn-secondary prev-btn">Previous</button>
-            <button type="submit" class="btn btn-success">Submit</button>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
+    </div>
     <script>
         const steps = document.querySelectorAll('.form-step');
         let currentStep = 0;

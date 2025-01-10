@@ -25,7 +25,7 @@
     <!-- Theme CSS -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+  
 </head>
 
 <body>
