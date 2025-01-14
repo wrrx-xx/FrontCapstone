@@ -160,7 +160,7 @@ class ReservationController extends Controller
         $viewing->save();
 
 
-        return redirect()->route('booking.owner')->with('success', 'Viewing request accepted successfully!');
+        return redirect()->route('payment.create')->with('success', 'Viewing request accepted successfully!');
 
     }
 

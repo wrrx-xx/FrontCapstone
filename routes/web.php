@@ -7,6 +7,8 @@ use App\Http\Controllers\FlagsController;
 use App\Http\Controllers\InquiriesController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\Owner;
+use App\Http\Controllers\Payment;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PhotosController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SupportController;
@@ -60,6 +62,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/bookings',[ReservationController::class, 'ownerindex'])->name('booking.owner');
     Route::post('/booking/{id}/accept', [ReservationController::class, 'accept'])->name('booking.accept');
     Route::post('/booking/{id}/decline', [ReservationController::class, 'decline'])->name('booking.decline');
+    Route::get('/payment/create/{id}', [PaymentController::class, 'create'])->name('payment.create');
+    Route::post('/payment/store', [PaymentController::class, 'store'])->name('payment.store');
 });
 
 Route::middleware('auth')->group(function () {

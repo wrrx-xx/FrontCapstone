@@ -18,7 +18,7 @@ class UsersTableSeeder extends Seeder
             'fname' => 'John',
             'mname' => 'Doe',
             'lname' => 'Smith',
-            'email' => 'r@r',
+            'email' => 'owner1@own',
             'phone_number' => '1234567890',
             'password' => Hash::make('123'), // Use a secure password
             'role' => 'owner',
@@ -26,6 +26,17 @@ class UsersTableSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
+        User::create([
+            'fname' => 'Shin',
+            'mname' => 'Doe',
+            'lname' => 'Tense',
+            'email' => 'owner2@own',
+            'phone_number' => '1234567890',
+            'password' => Hash::make('123'), // Use a secure password
+            'role' => 'owner',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
         // Create an admin user
         User::create([
             'fname' => 'Jane',
@@ -39,6 +50,18 @@ class UsersTableSeeder extends Seeder
             'updated_at' => now(),
         ]);
         User::create([
+            'fname' => 'john',
+            'mname' => 'A.',
+            'lname' => 'Smitshu',
+            'email' => 'tenant1@t',
+            'phone_number' => '0987654321',
+            'password' => Hash::make('123'), // Use a secure password
+            'role' => 'tenant',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        
+        User::create([
             'fname' => 'Jane',
             'mname' => 'A.',
             'lname' => 'Doe',
@@ -49,5 +72,6 @@ class UsersTableSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        
     }
 }

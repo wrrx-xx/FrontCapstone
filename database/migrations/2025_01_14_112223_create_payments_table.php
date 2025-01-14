@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('payments', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('viewing_id')->constrained('viewings')->cascadeOnDelete();
+            $table->foreignId('listing_id')->constrained('listings')->cascadeOnDelete(); // Link to the listing
+            $table->double('amount', 10, 2); // Amount after cash advance
+            $table->double('cash_advance', 10, 2)->default(0); // Cash advance amount
+            $table->enum('payment_method', ['gcash', 'cash']);
+            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('payments');
+    }
+};
