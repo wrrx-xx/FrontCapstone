@@ -55,8 +55,11 @@ class ListingController extends Controller
             'availability' => 'required|in:open,closed',
             'reservation' => 'required|in:open,closed',
             'reservation_amount' => 'required|numeric',
-            'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate photo uploads
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif', // Validate photo uploads
+            'map_link' => '|string|max:255',
+            'waiver_file' => '|mimes:pdf|max:255', // Validate PDF file for waiver_file
         ]);
+        
 
         // Create the listing
         $listing = Listing::create([
@@ -71,6 +74,8 @@ class ListingController extends Controller
             'availability' => $request->availability,
             'reservation' => $request->reservation,
             'reservation_amount' => $request->reservation_amount,
+            'map_link' => $request->maps,
+            'waiver_file' => $request->waiver,
         ]);
 
         // Create amenities

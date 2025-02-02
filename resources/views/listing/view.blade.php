@@ -725,7 +725,7 @@
                                         <hr>
                                         <div class="row">
                                             <div class="col-12">
-                                                <form action="{{ route('reserve.store') }}" method="POST">
+                                                <form action="{{ route('book.store') }}" method="POST">
                                                     @csrf
                                                     <input type="hidden" name="listing_id" value="{{ $listing->id }}">
                                                     <div class="mb-3">

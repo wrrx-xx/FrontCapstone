@@ -19,25 +19,37 @@ class Listing extends Model
         'type',
         'availability',
         'reservation',
-        'reservation_amount'
+        'reservation_amount',
+        'waiver_file',
+        'map_link',
+        'tenant_id',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
-    public function message(){
+    public function message()
+    {
         return $this->hasMany(Messages::class);
     }
-    public function view(){
+    public function view()
+    {
         return $this->hasMany(Viewing::class, 'listing_id');
     }
-    public function photos(){
+    public function photos()
+    {
         return $this->hasMany(Photos::class);
-
-    }
-    public function amenities(){
+    }                                   
+    public function amenities()
+    {
         return $this->hasOne(Amenities::class);
-
+    }
+    public function billings()
+    {
+        return $this->hasMany(Billings::class, 'listing_id');
+    }
+    public function tenant(){
+        return $this->belongsTo(User::class, 'tenant_id');
     }
 }

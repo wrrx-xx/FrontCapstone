@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payment;
 use App\Models\Reservation;
 use App\Models\Viewing;
 use Illuminate\Http\Request;
@@ -9,10 +10,8 @@ use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-      public function index()
+    //Tenant side
+    public function index()
 
     {
 
@@ -22,10 +21,20 @@ class ReservationController extends Controller
 
 
         return view('booking.index', compact('viewings'));
-
     }
 
-    
+    public function ownerindex()
+
+    {
+
+        // Fetch reservations for the logged-in user
+
+        // Fetch all reservations with related listings, prospects, and photos
+        $reservations = Reservation::with(['listing.photos', 'prospect'])->get();
+
+        // Pass the reservations data to the view
+        return view('reservation.index', compact('reservations'));
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -37,7 +46,7 @@ class ReservationController extends Controller
             'viewing_date' => 'required|date',
             'viewing_time' => 'required|date_format:H:i',
         ]);
-    
+
         // Create a new viewing
         $viewing = Viewing::create([
             'listing_id' => $request->listing_id,
@@ -46,34 +55,56 @@ class ReservationController extends Controller
             'viewing_time' => $request->viewing_time,
             'viewing_status' => 'pending', // or whatever default status you want
         ]);
-    
+
         // Create a new reservation
         $reservation = Reservation::create([
             'listing_id' => $request->listing_id,
             'prospect_id' => Auth::id(), // Ensure this line is included
             'reservation_status' => 'pending', // or whatever default status you want
         ]);
-    
+
         // Redirect or return a response
         return redirect()->back()->with('success', 'Your reservation has been made successfully!');
     }
 
+public function paystore(Request $request)
+{
+    $request->validate([
+        'listing_id' => 'required|exists:listings,id',
+        'amount' => 'required|numeric',
+        'cash_advance' => 'nullable|numeric',
+        'payment_method' => 'required|in:gcash,cash',
+    ]);
+
+    // Create a new payment record
+    $payment = Payment::create([
+        'listing_id' => $request->listing_id,
+        'amount' => $request->amount,
+        'cash_advance' => $request->cash_advance,
+        'payment_method' => $request->payment_method,
+        'status' => 'pending', // Set initial status
+    ]);
+
+    // Optionally, you can update the reservation status or notify the user here
+
+    return redirect()->route('payment.success', ['payment' => $payment]);
+}
     /**
      * Display the specified resource.
      */
-    
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Reservation $reservation)
     {
-            $request->validate([
-            'listing_id'=>'required',
-            'reservation_status'=> 'required'
-            ]);
-            $request->update();
-            return ['reservations'=> $reservation];
+        $request->validate([
+            'listing_id' => 'required',
+            'reservation_status' => 'required'
+        ]);
+        $request->update();
+        return ['reservations' => $reservation];
     }
 
     /**
@@ -83,34 +114,7 @@ class ReservationController extends Controller
     {
         $reservation->delete();
 
-        return ['message'=> 'reservation was delelted'];
-    }
-    public function ownerindex()
-
-    {
-
-        // Get the authenticated user's ID
-
-        $userId = Auth::id();
-
-
-        // Fetch the viewings for listings owned by the authenticated user
-
-        $viewings = Viewing::whereHas('listing', function ($query) use ($userId) {
-
-            $query->where('owner_id', $userId);
-
-        })
-
-        ->with('listing') // Eager load the related listing
-
-        ->get();
-
-
-        // Return the view with the viewings data
-
-        return view('booking.dashindex', compact('viewings'));
-
+        return ['message' => 'reservation was delelted'];
     }
 
 
@@ -133,9 +137,15 @@ class ReservationController extends Controller
         $viewing = Viewing::findOrFail($id);
 
         return view('viewings.show', compact('viewing'));
-
     }
 
+    public function approve($id)
+{
+    $reservation = Reservation::findOrFail($id);
+    
+    // Redirect to the payment form with the reservation ID
+    return redirect()->route('payment.create', ['id' => $reservation->id]);
+}
 
     /**
 
@@ -148,47 +158,4 @@ class ReservationController extends Controller
      * @return \Illuminate\Http\Response
 
      */
-
-    public function accept($id)
-
-    {
-
-        $viewing = Viewing::findOrFail($id);
-
-        $viewing->viewing_status = 'approved';
-
-        $viewing->save();
-
-
-        return redirect()->route('payment.create')->with('success', 'Viewing request accepted successfully!');
-
-    }
-
-
-    /**
-
-     * Decline a viewing request.
-
-     *
-
-     * @param  int  $id
-
-     * @return \Illuminate\Http\Response
-
-     */
-
-    public function decline($id)
-
-    {
-
-        $viewing = Viewing::findOrFail($id);
-
-        $viewing->viewing_status = 'declined';
-
-        $viewing->save();
-
-
-        return redirect()->route('booking.owner')->with('success', 'Viewing request declined successfully!');
-
-    }
 }

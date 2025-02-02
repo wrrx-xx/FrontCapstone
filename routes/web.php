@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AmenitiesController;
+use App\Http\Controllers\BookingsController;
 use App\Http\Controllers\FlagsController;
 use App\Http\Controllers\InquiriesController;
 use App\Http\Controllers\ListingController;
@@ -59,11 +60,17 @@ Route::middleware('auth')->group(function () {
     Route::resource('/listing', ListingController::class);
     Route::resource('/reserve', ReservationController::class);
     Route::get('/listings/owner/{id}', [ListingController::class, 'myproperty'])->name('listing.myproperty');
-    Route::get('/bookings',[ReservationController::class, 'ownerindex'])->name('booking.owner');
-    Route::post('/booking/{id}/accept', [ReservationController::class, 'accept'])->name('booking.accept');
-    Route::post('/booking/{id}/decline', [ReservationController::class, 'decline'])->name('booking.decline');
+    Route::get('/bookings',[BookingsController::class, 'ownerindex'])->name('booking.owner');
+    Route::post('/booking/{id}/accept', [BookingsController::class, 'accept'])->name('booking.accept');
+    Route::post('/booking/{id}/decline', [BookingsController::class, 'decline'])->name('booking.decline');
+    Route::get('/reservations', [ReservationController::class, 'ownerindex'])->name('reservations.index');
+    Route::post('/reservation/{id}/approve', [ReservationController::class, 'approve'])->name('reservation.approve');
+    Route::resource('/book',ViewingController::class);
+    Route::resource('/payment',PaymentController::class);
+    Route::get('/owner/payment', [PaymentController::class, 'ownerIndex'])->name('payment.owner');
     Route::get('/payment/create/{id}', [PaymentController::class, 'create'])->name('payment.create');
     Route::post('/payment/store', [PaymentController::class, 'store'])->name('payment.store');
+   
 });
 
 Route::middleware('auth')->group(function () {

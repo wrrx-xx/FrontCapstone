@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Viewing;
 use App\Models\Verification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ViewingController extends Controller
 {
@@ -21,26 +22,26 @@ class ViewingController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the incoming request
-    $field = $request->validate([
-        'listing_id' => 'required|exists:listings,id', // Ensure the listing exists
-        'viewing_date' => 'required|date', // Validate date format
-        'viewing_time' => 'required|date_format:H:i', // Validate time format
-        'viewing_status' => 'required|in:approved,declined,cancelled' // Validate status
-    ]);
-
-    // Check if the user has an approved verification
-    $verification = Verification::where('user_id', $request->user()->id)
-        ->where('status', 'approved')
-        ->first();
-
-    if (!$verification) {
-        return response()->json(['error' => 'You must be verified to create a viewing.'], 403);
+        // Validate the request
+        $request->validate([
+            'listing_id' => 'required|exists:listings,id',
+            'viewing_date' => 'required|date',
+            'viewing_time' => 'required|date_format:H:i',
+        ]);
+    
+        // Create a new viewing
+        $viewing = Viewing::create([
+            'listing_id' => $request->listing_id,
+            'requested_by' => Auth::id(),
+            'viewing_date' => $request->viewing_date,
+            'viewing_time' => $request->viewing_time,
+            'viewing_status' => 'pending', // Default status
+        ]);
+    
+        // Redirect or return a response
+        return redirect()->back()->with('success', 'Your viewing has been requested successfully!');
     }
-        $view =$request->user()->viewing()->create($field);
 
-        return ['viewings' => $view];
-    }
 
     /**
      * Display the specified resource.

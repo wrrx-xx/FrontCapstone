@@ -73,6 +73,15 @@ class User extends Authenticatable
         return $this->hasMany(Messages::class,'sender_id');
 
     }
+
+    public function billings()
+    {
+        return $this->hasMany(Billings::class, 'user_id');
+    }
+
+    public function tenant(){
+        return $this->hasOne(listing::class,'tenant_id');
+    }
     public function isAdmin(){
         return $this->role=='admin';
     }

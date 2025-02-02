@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Billings;
+use App\Models\Listing;
+use App\Models\Payment;
+use App\Models\Reservation;
 use App\Models\Viewing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
@@ -14,13 +20,39 @@ class PaymentController extends Controller
     {
         //
     }
+    public function ownerIndex()
+{
+    $userId = Auth::id(); // Get the ID of the currently authenticated user
+
+    // Fetch all listings owned by the user
+    $listings = Listing::where('owner_id', $userId)->get();
+
+    // Initialize collections to hold payments and billings
+    $payments = collect();
+    $billings = collect();
+
+    // Loop through each listing to get associated payments and billings
+    foreach ($listings as $listing) {
+        // Fetch payments for the current listing and merge into the collection
+        $listingPayments = Payment::where('listing_id', $listing->id)->get();
+        $payments = $payments->merge($listingPayments);
+
+        // Fetch billings for the current listing and merge into the collection
+        $listingBillings = Billings::where('listing_id', $listing->id)->get();
+        $billings = $billings->merge($listingBillings);
+    }
+
+    // Return the view with listings, payments, and billings data
+    return view('payment.index', compact('listings', 'payments', 'billings'));
+}
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($id)
     {
-        return view('payments.create');
+        $reservation = Reservation::findOrFail($id);
+        return view('payments.create', compact('reservation'));
     }
 
     /**
@@ -28,35 +60,78 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
+        // Validate the incoming request data
         $request->validate([
-            'viewing_id' => 'required|exists:viewings,id',
-            'payment_method' => 'required|in:gcash,cash',
-            'cash_advance' => 'nullable|numeric|min:0',
+            'listing_id' => 'required|exists:listings,id',
+            'total_amount' => 'required|numeric',
+            'payment_method' => 'required|in:cash,gcash',
+            'reference_number' => 'nullable|string',
+            'screenshot' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
+            'reservation_id' => 'required|exists:reservations,id', // Ensure reservation_id is passed
         ]);
     
-        $viewing = Viewing::findOrFail($request->viewing_id);
-        $totalAmount = $viewing->listing->price + $viewing->listing->reservation_amount;
+        try {
+            // Retrieve the viewing record associated with the listing
+            $viewing = Viewing::where('listing_id', $request->listing_id)
+                ->where('viewing_status', 'approved') // Ensure the viewing is approved
+                ->first();
     
-        // Determine the amount to be paid
-        $cashAdvance = $request->cash_advance ?? 0;
-        $amountToPay = $totalAmount - $cashAdvance; // Subtract cash advance from total amount
+            if (!$viewing) {
+                return response()->json(['success' => false, 'message' => 'Viewing not found or not approved for the current user.'], 404);
+            }
     
-        // Create the payment record
-        $payment = Payment::create([
-            'viewing_id' => $viewing->id,
-            'listing_id' => $viewing->listing_id, // Link to the listing
-            'amount' => $amountToPay,
-            'payment_method' => $request->payment_method,
-            'status' => 'completed', // Set to completed or pending based on your logic
-        ]);
+            // Retrieve the associated reservation using the reservation_id from the request
+            $reservation = Reservation::findOrFail($request->reservation_id);
     
-        // Update the viewing payment status
-        $viewing->update(['payment_status' => 'completed']);
+            // Create a new payment record
+            $payment = new Payment();
+            $payment->listing_id = $request->listing_id;
+            $payment->amount = $request->total_amount; // Total amount to be paid
+            $payment->payment_method = $request->payment_method;
+            $payment->reference_number = $request->reference_number;
     
-        // Optionally, handle cash advance logic (e.g., record it separately, notify tenant, etc.)
+            // Handle file upload for the screenshot
+            if ($request->hasFile('screenshot')) {
+                $path = $request->file('screenshot')->store('screenshots', 'public');
+                $payment->screenshot = $path; // Store the path to the screenshot
+            }
     
-        return redirect()->route('listing.myproperty')->with('success', 'Payment processed successfully.');
+            // Save the payment record
+            $payment->status = 'completed'; // Set the payment status to completed
+            $payment->save();
+    
+            // Update the reservation status to approved
+            $reservation->update(['reservation_status' => 'approved']);
+    
+            // Update the listing to associate it with the tenant and close availability
+            $listing = Listing::find($request->listing_id);
+            $listing->tenant_id = $viewing->requested_by; // Set tenant_id to the requested_by from the viewing
+            $listing->availability = 'closed'; // Set availability to closed
+            $listing->reservation = 'closed'; // Set reservation to closed
+            $listing->save(); // Save the changes to the listing
+    
+            // Create a new billing record
+            $billing = new Billings();
+            $billing->user_id = $viewing->requested_by; // Assuming requested_by is the tenant
+            $billing->listing_id = $request->listing_id;
+            $billing->amount = $listing->price; // Amount to be billed
+            $billing->due_date = now()->addMonth(); // Set due date to one month from now
+            $billing->status = 'pending'; // Set initial status
+            $billing->save(); // Save the billing record
+    
+            // Return a JSON response to trigger the modal
+            return response()->json(['success' => true]);
+    
+        } catch (\Exception $e) {
+            // Log the error message for debugging
+            Log::error('Payment processing error: ' . $e->getMessage());
+    
+            // Return a JSON response with the error message
+            return response()->json(['success' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
     }
+
+   
     /**
      * Display the specified resource.
      */

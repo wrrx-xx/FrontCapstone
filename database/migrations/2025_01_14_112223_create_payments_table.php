@@ -9,24 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('viewing_id')->constrained('viewings')->cascadeOnDelete();
             $table->foreignId('listing_id')->constrained('listings')->cascadeOnDelete(); // Link to the listing
-            $table->double('amount', 10, 2); // Amount after cash advance
-            $table->double('cash_advance', 10, 2)->default(0); // Cash advance amount
-            $table->enum('payment_method', ['gcash', 'cash']);
-            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
+            $table->double('amount', 10, 2); // Total amount after cash advance
+            $table->double('cash_advance_amount', 10, 2)->nullable(); // Cash advance amount
+            $table->enum('payment_method', ['cash', 'gcash']); // Payment method
+            $table->string('reference_number')->nullable(); // Reference number for GCash payments
+            $table->string('screenshot')->nullable(); // Path to the uploaded screenshot
+            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending'); // Payment status
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('payments');
     }

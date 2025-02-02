@@ -77,7 +77,11 @@
                                     class="fas fa-fw fa-home me-2"></i>My Property</a>
                             <a class="list-group-item hover-primary-soft" href="{{ route('booking.owner') }}"><i
                                     class="fas fa-fw fa-users me-2"></i>Bookings</a>
-
+                                    <a class="list-group-item hover-primary-soft" href="{{ route('reservations.index') }}"><i
+                                        class="fas fa-fw fa-users me-2"></i>Reservations</a>
+                                       
+                                            <a class="list-group-item hover-primary-soft" href="{{ route('payment.owner') }}"><i
+                                                class="fas fa-fw fa-users me-2"></i>Payments</a>
                             {{-- <a class="list-group-item hover-primary-soft" href="agent-review.html"><i
                                     class="far fa-fw fa-comment-dots me-2"></i>Review</a> --}}
 

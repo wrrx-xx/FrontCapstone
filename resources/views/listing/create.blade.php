@@ -5,6 +5,11 @@
     <div class="container">
         <h1 class="text-center" style="margin-bottom: 20px; font-size: 2.5rem; color: #343a40;">Create a New Listing</h1>
 
+        @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -95,6 +100,16 @@
                     <div class="col-md-3">
                         <label for="reservation_amount">Reservation Amount</label>
                         <input type="number" name="reservation_amount" id="reservation_amount" class="form-control" step="0.01" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-8">
+                        <label for="maps">Map Link</label>
+                        <input type="text" name="maps" id="city" class="form-control" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="waiver">Waiver File</label>
+                        <input type="file" name="waiver" id="baranggay" class="form-control" required>
                     </div>
                 </div>
                 
