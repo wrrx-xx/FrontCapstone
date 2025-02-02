@@ -2,6 +2,11 @@
 
 @section('content')
 <div class="main-content">
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
     <div class="row">
         <div class="col-12">
             <!-- Page title -->
@@ -76,12 +81,17 @@
                                                 {{-- <a href="{{ route('listing .show', $listing->id) }}" class="btn btn-sm btn-info-soft me-1 mb-1"> --}}
                                                     <i class="fas fa-fw fa-eye"></i>
                                                 </a>
-                                                <a class="btn btn-sm btn-success-soft me-1 mb-1">
+                                                <a href="{{ route('listing.edit', $listing->id) }}" class="btn btn-sm btn-success-soft me-1 mb-1">
+                                                     
                                                     <i class="far fa-fw fa-edit"></i>
                                                 </a>
-                                                <button class="btn btn-sm btn-danger-soft mb-1">
-                                                    <i class="far fa-fw fa-trash-alt"></i>
-                                                </button>
+                                                <form action="{{ route('listing.destroy', $listing->id) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger-soft mb-1" onclick="return confirm('Are you sure you want to delete this listing?');">
+                                                        <i class="far fa-fw fa-trash-alt"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>

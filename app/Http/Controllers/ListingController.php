@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Amenities;
 use App\Models\Listing;
 use App\Models\Photos;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ListingController extends Controller
 {
@@ -108,6 +112,7 @@ class ListingController extends Controller
                 // Create a new photo record
                 Photos::create([
                     'listing_id' => $listing->id,
+
                     'photo_url' => $path,
                 ]);
             }
@@ -130,34 +135,132 @@ class ListingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Listing $listing)
-    {
-        $field = $request->validate([
-            'title' => 'required|max:255',
-            'body' => 'required',
-            'price' => 'required',
-            'address' => 'required',
-            'city' => 'required',
-            'type' => 'required',
+    public function edit($id)
+{
+    $listing = Listing::with('amenities', 'photos')->findOrFail($id);
+    return view('listing.edit', compact('listing'));
+}
+
+public function update(Request $request, $id)
+{
+    try {
+        // Validate the incoming request data
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+            'price' => 'required|numeric',
+            'address' => 'required|string|max:255',
+            'baranggay' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'type' => 'required|in:Apartment,House,Boarding house,Room',
             'availability' => 'required|in:open,closed',
             'reservation' => 'required|in:open,closed',
-            'reservation_amount' => 'required'
+            'reservation_amount' => 'required|numeric',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif', // Validate photo uploads
+            'map_link' => '|string|max:255',
+            'waiver_file' => '|mimes:pdf|max:255', // Validate PDF file for waiver_file
         ]);
 
-        $listing->update($field);
+        // Find the listing
+        $listing = Listing::findOrFail($id);
 
-        return ['listings' => $listing];
+        // Update the listing
+        $listing->update([
+            'title' => $request->title,
+            'body' => $request->body,
+            'price' => $request->price,
+            'address' => $request->address,
+            'baranggay' => $request->baranggay,
+            'city' => $request->city,
+            'type' => $request->type,
+            'availability' => $request->availability,
+            'reservation' => $request->reservation,
+            'reservation_amount' => $request->reservation_amount,
+            'map_link' => $request->maps,
+            'waiver_file' => $request->waiver,
+        ]);
+
+        // Update amenities
+        $listing->amenities->update([
+            'wifi' => $request->has('wifi') ? 1 : 0,
+            'parking' => $request->has('parking') ? 1 : 0,
+            'bathroom' => $request->has('bathroom') ? 1 : 0,
+            'kitchen' => $request->has('kitchen') ? 1 : 0,
+            'laundry' => $request->has('laundry') ? 1 : 0,
+        ]);
+
+        // Handle photo uploads
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $photo) {
+                // Store the photo and get the path
+                $path = $photo->store('photos', 'public');
+
+                // Create a new photo record
+                Photos::create([
+                    'listing_id' => $listing->id,
+                    'photo_url' => $path,
+                ]);
+            }
+        }
+
+        // Handle deletion of selected photos
+        if ($request->has('delete_photos')) {
+            foreach ($request->delete_photos as $photoId) {
+                $photo = Photos::findOrFail($photoId);
+                // Delete the photo file from storage
+                Storage::disk('public')->delete($photo->photo_url);
+                // Delete the photo record from the database
+                $photo->delete();
+            }
+        }
+
+        // Redirect or return response
+        return redirect()->route('listing.edit', $listing->id)->with('success', 'Listing updated successfully!');
+
+    } catch (ModelNotFoundException $e) {
+        // Handle the case where the listing or photo is not found
+        return redirect()->route('listing.edit', $id)->with('error', 'Listing not found.');
+    } catch (Exception $e) {
+        // Handle any other exceptions
+        Log::error('Error updating listing: ' . $e->getMessage());
+        return redirect()->route('listing.edit', $id)->with('error', 'An error occurred while updating the listing. Please try again.');
     }
-
+}
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Listing $listing)
-    {
+    public function destroy($id)
+{
+    try {
+        // Find the listing
+        $listing = Listing::with('photos')->findOrFail($id);
+
+        // Delete associated photos
+        foreach ($listing->photos as $photo) {
+            // Delete the photo file from storage
+            Storage::disk('public')->delete($photo->photo_url);
+            // Delete the photo record from the database
+            $photo->delete();
+        }
+
+        // Delete associated amenities
+        $listing->amenities()->delete();
+
+        // Delete the listing
         $listing->delete();
-        return ['message' => 'The post was deleted'];
+
+        // Redirect back with success message
+        return back()->with('success', 'Listing deleted successfully!');
+    } catch (ModelNotFoundException $e) {
+        // Handle the case where the listing is not found
+        return back()->with('error', 'Listing not found.');
+    } catch (Exception $e) {
+        // Handle any other exceptions
+        log::error('Error deleting listing: ' . $e->getMessage());
+        return back()->with('error', 'An error occurred while deleting the listing. Please try again.');
     }
+}
     public function myproperty($id)
     {
         $listings = Listing::where('owner_id', $id)->with('amenities', 'photos')->get();
