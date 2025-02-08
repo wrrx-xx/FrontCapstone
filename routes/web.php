@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/listing', ListingController::class);
     Route::resource('/reserve', ReservationController::class);
     Route::get('/listings/owner/{id}', [ListingController::class, 'myproperty'])->name('listing.myproperty');
+    Route::get('/listings/show/{id}', [ListingController::class, 'detail'])->name('listing.detail');
     Route::get('/bookings',[BookingsController::class, 'ownerindex'])->name('booking.owner');
     Route::post('/booking/{id}/accept', [BookingsController::class, 'accept'])->name('booking.accept');
     Route::post('/booking/{id}/decline', [BookingsController::class, 'decline'])->name('booking.decline');

@@ -11,18 +11,15 @@ class BookingsController extends Controller
 {
     
     public function ownerindex()
-
     {
-
         $userId = Auth::id();
-
+    
         $viewings = Viewing::whereHas('listing', function ($query) use ($userId) {
-
             $query->where('owner_id', $userId);
         })
-            ->with('listing')
-            ->get();
-
+            ->with(['listing', 'requestedBy.tenantProfile'])
+            ->paginate(10); // Paginate results (10 per page)
+    
         return view('booking.dashindex', compact('viewings'));
     }
     

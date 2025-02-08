@@ -78,7 +78,7 @@
                                             </div>
                                             <!-- Buttons -->
                                             <div class="col-md-4 align-middle pt-2 pt-md-0">
-                                                {{-- <a href="{{ route('listing .show', $listing->id) }}" class="btn btn-sm btn-info-soft me-1 mb-1"> --}}
+                                                <a href="{{ route('listing.detail', $listing->id) }}" class="btn btn-sm btn-info-soft me-1 mb-1">
                                                     <i class="fas fa-fw fa-eye"></i>
                                                 </a>
                                                 <a href="{{ route('listing.edit', $listing->id) }}" class="btn btn-sm btn-success-soft me-1 mb-1">

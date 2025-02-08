@@ -131,6 +131,14 @@ class ListingController extends Controller
         // Return the 'show' view with the listing data
         return view('listing.view', compact('listing'));
     }
+    public function detail($id)
+    {
+        // Retrieve the listing by ID, including the tenant and their profile
+        $listing = Listing::with(['tenant', 'tenant.tenantProfile', 'photos'])->findOrFail($id);
+
+        // Pass the listing data to the view
+        return view('listing.show', compact('listing'));
+    }
 
     /**
      * Update the specified resource in storage.
