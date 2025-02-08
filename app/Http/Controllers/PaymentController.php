@@ -20,6 +20,40 @@ class PaymentController extends Controller
     {
         //
     }
+    public function tenantindex(){
+        $tenant = Auth::user(); // Assuming the tenant is authenticated as a User
+
+
+        // Retrieve billings associated with the tenant
+
+        $billings = Billings::where('user_id', $tenant->id)->get();
+
+
+        // Retrieve listings associated with the tenant
+
+        $listings = Listing::where('tenant_id', $tenant->id)->pluck('id'); // Get the IDs of the listings where the tenant is assigned
+
+
+        // Retrieve payments associated with the tenant's listings
+
+        $payments = Payment::whereIn('listing_id', $listings)->get(); // Fetch payments for those listings
+
+
+
+        // Pass the data to the view
+
+        return view('Tenant.payment.index', [
+
+            'billings' => $billings,
+
+            'payments' => $payments,
+
+            'tenant' => $tenant,
+            'listings'=> $listings,
+
+        ]);
+       
+    }
     public function ownerIndex()
 {
     $userId = Auth::id(); // Get the ID of the currently authenticated user

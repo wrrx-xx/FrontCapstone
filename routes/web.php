@@ -70,7 +70,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/owner/payment', [PaymentController::class, 'ownerIndex'])->name('payment.owner');
     Route::get('/payment/create/{id}', [PaymentController::class, 'create'])->name('payment.create');
     Route::post('/payment/store', [PaymentController::class, 'store'])->name('payment.store');
-   
+    Route::get('/payment',[PaymentController::class,'tenantindex'])->name('tenant.payment.index');
 });
 
 Route::middleware('auth')->group(function () {
