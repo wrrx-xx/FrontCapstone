@@ -20,9 +20,14 @@ return new class extends Migration
             $table->string('phone_number');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['tenant', 'owner', 'admin'])->default('tenant');
+            $table->enum('role', ['tenant', 'owner', 'admin', 'caretaker'])->default('tenant');
+            $table->foreignId('owner_id')
+                ->nullable()
+                ->constrained('users')
+                ->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
+
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

@@ -19,7 +19,7 @@ class ListingSeeder extends Seeder
         for ($i = 0; $i < 10; $i++) { // Change 10 to however many listings you want to create
             // Create a sample listing
             $listing = Listing::create([
-                'owner_id' => 1, // Assuming you have a user with ID 1
+                'owner_id' => 1||2, // Assuming you have a user with ID 1
                 'title' => $faker->sentence(3),
                 'body' => $faker->paragraph(),
                 'price' => $faker->randomFloat(2, 500, 5000), // Random price between 500 and 5000

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AmenitiesController;
 use App\Http\Controllers\BookingsController;
+use App\Http\Controllers\CaretakerController;
 use App\Http\Controllers\FlagsController;
 use App\Http\Controllers\InquiriesController;
 use App\Http\Controllers\ListingController;
@@ -59,8 +60,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/listing/mylisting',[ListingController::class, 'ownerindex'])->name('owner.property');
     Route::resource('/listing', ListingController::class);
     Route::resource('/reserve', ReservationController::class);
-    Route::get('/listings/owner/{id}', [ListingController::class, 'myproperty'])->name('listing.myproperty');
+    Route::get('/listings/owner/myproperty', [ListingController::class, 'myproperty'])->name('listing.myproperty');
     Route::get('/listings/show/{id}', [ListingController::class, 'detail'])->name('listing.detail');
+    Route::resource('/owner/caretaker', CaretakerController::class);
     Route::get('/bookings',[BookingsController::class, 'ownerindex'])->name('booking.owner');
     Route::post('/booking/{id}/accept', [BookingsController::class, 'accept'])->name('booking.accept');
     Route::post('/booking/{id}/decline', [BookingsController::class, 'decline'])->name('booking.decline');

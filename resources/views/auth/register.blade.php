@@ -13,6 +13,14 @@
                         @csrf
 
                         <!-- Step 1: User Information -->
+                        <div class="mb-4">
+                            <x-input-label for="role" :value="__('Register As')" />
+                            <select id="role" name="role" class="form-control bg-light border-0 rounded-pill" required>
+                                <option value="tenant" {{ old('role') == 'tenant' ? 'selected' : '' }}>Tenant</option>
+                                <option value="owner" {{ old('role') == 'owner' ? 'selected' : '' }}>Property Owner</option>
+                            </select>
+                            <x-input-error :messages="$errors->get('role')" class="mt-2" />
+                        </div>
                         <div id="step1">
                             <h5 class="fw-bold mb-4">Step 1: User Information</h5>
                             <div class="row mb-3">
@@ -57,6 +65,8 @@
                                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                             </div>
 
+                            
+
                             <div class="d-flex justify-content-between">
                                 <button type="button" id="nextStep1" class="btn btn-primary rounded-pill px-4">
                                     {{ __('Next Step') }} <i class="fas fa-arrow-right ms-2"></i>
@@ -64,9 +74,9 @@
                             </div>
                         </div>
 
-                        <!-- Step 2: Tenant Profile Information -->
+                        <!-- Step 2: Profile Information -->
                         <div id="step2" style="display: none;">
-                            <h5 class="fw-bold mb-4">Step 2: Tenant Profile Information</h5>
+                            <h5 class="fw-bold mb-4">Step 2: Profile Information</h5>
 
                             <div class="mb-3">
                                 <x-input-label for="current_address" :value="__('Current Address')" />
@@ -134,6 +144,61 @@
                                 <button type="button" id="prevStep2" class="btn btn-secondary rounded-pill px-4">
                                     {{ __('Previous Step') }} <i class="fas fa-arrow-left ms-2"></i>
                                 </button>
+                                <button type="button" id="nextStep2" class="btn btn-primary rounded-pill px-4">
+                                    {{ __('Next Step') }} <i class="fas fa-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Owner Profile Information -->
+                        <div id="step3" style="display: none;">
+                            <h5 class="fw-bold mb-4">Step 3: Owner Profile Information</h5>
+
+                            <div class="mb-3">
+                                <x-input-label for="business_name" :value="__('Business Name')" />
+                                <x-text-input id="business_name" class="form-control bg-light border-0 rounded-pill" type="text" name="business_name" :value="old('business_name')" />
+                                <x-input-error :messages="$errors->get('business_name')" class="mt-2" />
+                            </div>
+
+                            <div class="mb-3">
+                                <x-input-label for="business_address" :value="__('Business Address')" />
+                                <x-text-input id="business_address" class="form-control bg-light border-0 rounded-pill" type="text" name="business_address" :value="old('business_address')" />
+                                <x-input-error :messages="$errors->get('business_address')" class="mt-2" />
+                            </div>
+
+                            <div class="mb-3">
+                                <x-input-label for="business_phone" :value="__('Business Phone')" />
+                                <x-text-input id="business_phone" class="form-control bg-light border-0 rounded-pill" type="text" name="business_phone" :value="old('business_phone')" />
+                                <x-input-error :messages="$errors->get('business_phone')" class="mt-2" />
+                            </div>
+
+                            <div class="mb-3">
+                                <x-input-label for="owner_id_type" :value="__('Owner ID Type')" />
+                                <select id="owner_id_type" name="owner_id_type" class="form-control bg-light border-0 rounded-pill">
+                                    <option value="" disabled selected>Select ID Type</option>
+                                    <option value="passport" {{ old('owner_id_type') == 'passport' ? 'selected' : '' }}>Passport</option>
+                                    <option value="driver_license" {{ old('owner_id_type') == 'driver_license' ? 'selected' : '' }}>Driver's License</option>
+                                    <option value="national_id" {{ old('owner_id_type') == 'national_id' ? 'selected' : '' }}>National ID</option>
+                                </select>
+                                <x-input-error :messages="$errors->get('owner_id_type')" class="mt-2" />
+                            </div>
+
+                            <div class="mb-3">
+                                <x-input-label for="owner_id_front" :value="__('Upload Owner ID Front')" />
+                                <input type="file" id="owner_id_front" class="form-control bg-light border-0 rounded-pill" name="owner_id_front" />
+                                <x-input-error :messages="$errors->get('owner_id_front')" class="mt-2" />
+                            </div>
+
+                            <div class="mb-3">
+                                <x-input-label for="owner_id_back" :value="__('Upload Owner ID Back')" />
+                                <input type="file" id="owner_id_back" class="form-control bg-light border-0 rounded-pill" name="owner_id_back" />
+                                <x-input-error :messages="$errors->get('owner_id_back')" class="mt-2" />
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <button type="button" id="prevStep3" class="btn btn-secondary rounded-pill px-4">
+                                    {{ __('Previous Step') }} <i class="fas fa-arrow-left ms-2"></i>
+                                </button>
                                 <button type="submit" class="btn btn-primary rounded-pill px-4">
                                     {{ __('Register') }} <i class="fas fa-check ms-2"></i>
                                 </button>
@@ -153,12 +218,32 @@
 <script>
     document.getElementById('nextStep1').addEventListener('click', function() {
         document.getElementById('step1').style.display = 'none';
-        document.getElementById('step2').style.display = 'block';
+        const role = document.getElementById('role').value;
+        if (role === 'owner') {
+            document.getElementById('step3').style.display = 'block';
+        } else {
+            document.getElementById('step2').style.display = 'block';
+        }
+    });
+
+    document.getElementById('nextStep2').addEventListener('click', function() {
+        document.getElementById('step2').style.display = 'none';
+        document.getElementById('step3').style.display = 'block';
     });
 
     document.getElementById('prevStep2').addEventListener('click', function() {
         document.getElementById('step2').style.display = 'none';
         document.getElementById('step1').style.display = 'block';
+    });
+
+    document.getElementById('prevStep3').addEventListener('click', function() {
+        document.getElementById('step3').style.display = 'none';
+        const role = document.getElementById('role').value;
+        if (role === 'owner') {
+            document.getElementById('step1').style.display = 'block';
+        } else {
+            document.getElementById('step2').style.display = 'block';
+        }
     });
 </script>
 @endsection

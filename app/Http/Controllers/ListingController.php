@@ -28,6 +28,7 @@ class ListingController extends Controller
     }
     public function ownerindex()
     {
+    
         return view('owner.property');
     }
 
@@ -269,11 +270,18 @@ public function update(Request $request, $id)
         return back()->with('error', 'An error occurred while deleting the listing. Please try again.');
     }
 }
-    public function myproperty($id)
-    {
-        $listings = Listing::where('owner_id', $id)->with('amenities', 'photos')->get();
-        return view('listing.myproperty', compact('listings'));
-    }
+public function myproperty()
+{
+    // Get authenticated user's ID
+    $ownerId = Auth::id();
+    
+    // Fetch listings for the authenticated owner with amenities and photos
+    $listings = Listing::where('owner_id', $ownerId)
+        ->with('amenities', 'photos')
+        ->get();
+        
+    return view('listing.myproperty', compact('listings'));
+}
     public function display()
     {
         Listing::all();

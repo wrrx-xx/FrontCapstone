@@ -75,6 +75,8 @@
                             <a class="list-group-item hover-primary-soft"
                                 href="{{ route('listing.myproperty', ['id' => auth()->user()->id]) }}"><i
                                     class="fas fa-fw fa-home me-2"></i>My Property</a>
+                                    <a class="list-group-item hover-primary-soft" href="{{ route('caretaker.index') }}"><i
+                                        class="fas fa-fw fa-user-plus me-2"></i>Caretaker</a>
                             <a class="list-group-item hover-primary-soft" href="{{ route('booking.owner') }}"><i
                                     class="fas fa-fw fa-users me-2"></i>Bookings</a>
                                     <a class="list-group-item hover-primary-soft" href="{{ route('reservations.index') }}"><i
@@ -91,6 +93,7 @@
                             <p class="text-body mt-3 mb-2">Manage Account</p>
                             <a class="list-group-item hover-primary-soft" href="#"><i
                                     class="fas fa-fw fa-user-alt me-2"></i>My Profile</a>
+                          
                                 <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                 @csrf
                                 <button type="submit" class="list-group-item hover-primary-soft"
