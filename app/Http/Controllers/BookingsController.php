@@ -12,8 +12,11 @@ class BookingsController extends Controller
     
     public function ownerindex()
     {
-        $userId = Auth::id();
+        $user = Auth::user();
     
+        // Determine owner ID based on user role
+        $userId = $user->role === 'caretaker' ? $user->owner_id : $user->id;
+        
         $viewings = Viewing::whereHas('listing', function ($query) use ($userId) {
             $query->where('owner_id', $userId);
         })
@@ -22,7 +25,7 @@ class BookingsController extends Controller
     
         return view('booking.dashindex', compact('viewings'));
     }
-    
+
     
     public function accept($id)
 

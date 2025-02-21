@@ -11,11 +11,13 @@
                         @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label text-dark">Email address *</label>
-                            <input type="email" class="form-control bg-light border-0" id="email" name="email" required autofocus>
+                            <input type="email" class="form-control bg-light border-0" id="email" name="email" value="{{ old('email') }}" required autofocus>
+                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label text-dark">Password *</label>
                             <input type="password" id="password" class="form-control bg-light border-0" name="password" required>
+                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
                             <div id="passwordHelpBlock" class="form-text">
                                 Your password must be 8 characters at least.
                             </div>

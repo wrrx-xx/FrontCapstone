@@ -73,5 +73,29 @@ class UsersTableSeeder extends Seeder
             'updated_at' => now(),
         ]);
         
+        User::create([
+            'fname' => 'shin',
+            'mname' => 'A.',
+            'lname' => 'tene',
+            'email' => 'caretaker1@c',
+            'phone_number' => '0987654321',
+            'password' => Hash::make('123'), // Use a secure password
+            'role' => 'caretaker',
+            'owner_id' => '1',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        User::create([
+            'fname' => 'jomar',
+            'mname' => 'A.',
+            'lname' => 'myr',
+            'email' => 'caretaker2@c',
+            'phone_number' => '0987654321',
+            'password' => Hash::make('123'), // Use a secure password
+            'role' => 'caretaker',
+            'owner_id' => '2',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }

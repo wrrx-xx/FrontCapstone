@@ -48,9 +48,9 @@ Route::get('/tenant/home', function () {
     return view('listing.display', ['listings' => $listings]);
 })->middleware(['auth', 'verified','tenant'])->name('tenant.home');
 
-Route::get('/staff/dashboard', function () {
-    return view('staff.dashboard');
-})->middleware(['auth', 'verified','staff'])->name('staff.dashboard');
+Route::get('/caretaker/dashboard', function () {
+    return view('caretaker.dashboard');
+})->middleware(['auth', 'verified','staff'])->name('caretaker.dashboard');
 
 Route::get('/listings', [ListingController::class, 'index'])->name('listing.display');
 Route::get('/listings/{id}', [ListingController::class, 'show'])->name('listings.show');
@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/listing/mylisting',[ListingController::class, 'ownerindex'])->name('owner.property');
     Route::resource('/listing', ListingController::class);
     Route::resource('/reserve', ReservationController::class);
-    Route::get('/listings/owner/myproperty', [ListingController::class, 'myproperty'])->name('listing.myproperty');
+    Route::get('/listings/owner/myproperty', [ListingController::class, 'myp\roperty'])->name('listing.myproperty');
     Route::get('/listings/show/{id}', [ListingController::class, 'detail'])->name('listing.detail');
     Route::resource('/owner/caretaker', CaretakerController::class);
     Route::get('/bookings',[BookingsController::class, 'ownerindex'])->name('booking.owner');

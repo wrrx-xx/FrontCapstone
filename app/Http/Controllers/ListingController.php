@@ -272,10 +272,13 @@ public function update(Request $request, $id)
 }
 public function myproperty()
 {
-    // Get authenticated user's ID
-    $ownerId = Auth::id();
+    // Get authenticated user
+    $user = Auth::user();
     
-    // Fetch listings for the authenticated owner with amenities and photos
+    // Determine owner ID based on user role
+    $ownerId = $user->role === 'caretaker' ? $user->owner_id : $user->id;
+    
+    // Fetch listings for the owner (or owner associated with caretaker) with amenities and photos
     $listings = Listing::where('owner_id', $ownerId)
         ->with('amenities', 'photos')
         ->get();

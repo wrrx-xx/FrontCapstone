@@ -27,7 +27,7 @@ class Staff
         switch ($role) {
             case 'owner':
                 return redirect()->route('owner.dashboard');
-            case 'staff':
+            case 'caretaker':
                 return $next($request);
             case 'tenant':
                 return redirect()->route('tenant.dashboard');

@@ -163,7 +163,7 @@ class RegisteredUserController extends Controller
     
             // Redirect to the dashboard
     
-            return redirect()->route('/'); // Ensure this returns a RedirectResponse
+            return redirect()->route($request->role === 'owner' ? 'owner.dashboard' : '/'); // Redirect based on role
     
     
         } catch (Exception $e) {

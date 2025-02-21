@@ -37,7 +37,10 @@
             @include('layouts.owner-navigation')
         @elseif (Auth::user()->isTenant())
             @include('layouts.tenant-navigation')
-        @else
+
+        @elseif (Auth::user()->isCaretaker())
+        @include('layouts.caretaker-navigation')
+    @else
             @include('layouts.guest-navigation')
         @endif
     @else
