@@ -48,6 +48,12 @@ class ListingController extends Controller
 
     public function store(Request $request)
     {
+        // Check if owner is approved
+        $ownerProfile = Auth::user()->ownerProfile;
+        if (!$ownerProfile || !$ownerProfile->approved) {
+            return redirect()->back()->with('error', 'Your account is not yet approved to create listings.');
+        }
+
         // Validate the incoming request data
         $request->validate([
             'title' => 'required|string|max:255',

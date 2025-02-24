@@ -18,7 +18,8 @@ class OwnerProfile extends Model
         'owner_id_type',
         'owner_id_front_path',
         'owner_id_back_path',
-        'additional_info'
+        'additional_info',
+        'approved'
     ];
 
     public function user()

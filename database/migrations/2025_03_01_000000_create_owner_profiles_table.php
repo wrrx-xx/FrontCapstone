@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('owner_profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->boolean('approved')->default(false);
             $table->string('business_name')->nullable();
             $table->string('business_address')->nullable();
             $table->string('business_phone')->nullable();

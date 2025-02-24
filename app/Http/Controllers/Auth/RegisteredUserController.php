@@ -13,8 +13,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Notifications\NewOwnerRegistered;
 
 class RegisteredUserController extends Controller
 {
@@ -76,10 +78,8 @@ class RegisteredUserController extends Controller
             }
 
             $request->validate($validationRules);
-    
-    
+
             // Create the user
-    
             $user = User::create([
                 'fname' => $request->fname,
                 'mname' => $request->mname,
@@ -89,49 +89,8 @@ class RegisteredUserController extends Controller
                 'password' => Hash::make($request->password),
                 'role' => $request->role,
             ]);
-    
-    
-            // Handle ID file uploads
-    
-            $validIdFrontPath = null;
-    
-            $validIdBackPath = null;
-    
-    
-            if ($request->hasFile('valid_id_front')) {
-    
-                $validIdFrontPath = $request->file('valid_id_front')->store('tenant_ids/front', 'public');
-    
-            }
-    
-    
-            if ($request->hasFile('valid_id_back')) {
-    
-                $validIdBackPath = $request->file('valid_id_back')->store('tenant_ids/back', 'public');
-    
-            }
-    
-    
-            if ($request->role === 'tenant') {
-                // Handle tenant ID file uploads
-                $validIdFrontPath = $request->file('valid_id_front') ? 
-                    $request->file('valid_id_front')->store('tenant_ids/front', 'public') : null;
-                $validIdBackPath = $request->file('valid_id_back') ? 
-                    $request->file('valid_id_back')->store('tenant_ids/back', 'public') : null;
 
-                // Create the tenant profile
-                TenantProfile::create([
-                    'user_id' => $user->id,
-                    'current_address' => $request->current_address,
-                    'employment_status' => $request->employment_status,
-                    'monthly_income' => $request->monthly_income,
-                    'emergency_contact_name' => $request->emergency_contact_name,
-                    'emergency_contact_phone' => $request->emergency_contact_phone,
-                    'valid_id_type' => $request->valid_id_type,
-                    'valid_id_front_path' => $validIdFrontPath,
-                    'valid_id_back_path' => $validIdBackPath,
-                ]);
-            } elseif ($request->role === 'owner') {
+            if ($request->role === 'owner') {
                 // Handle owner ID file uploads
                 $ownerIdFrontPath = $request->file('owner_id_front') ?
                     $request->file('owner_id_front')->store('owner_ids/front', 'public') : null;
@@ -148,7 +107,12 @@ class RegisteredUserController extends Controller
                     'owner_id_front_path' => $ownerIdFrontPath,
                     'owner_id_back_path' => $ownerIdBackPath,
                 ]);
+
+                // Notify admins about new owner registration
+                $admins = User::where('role', 'admin')->get();
+                Notification::send($admins, new NewOwnerRegistered($user));
             }
+
     
     
             // Trigger the Registered event

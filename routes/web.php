@@ -5,31 +5,31 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AmenitiesController;
 use App\Http\Controllers\BookingsController;
 use App\Http\Controllers\CaretakerController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\FlagsController;
 use App\Http\Controllers\InquiriesController;
 use App\Http\Controllers\ListingController;
-use App\Http\Controllers\Owner;
-use App\Http\Controllers\Payment;
+use App\Http\Controllers\MessagesController;
+use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PhotosController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\SupportMessagesController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\ViewingController;
+use App\Http\Controllers\Admin\ApprovalController;
+
 use App\Models\Listing;
 use Illuminate\Http\Request;
 use Illuminate\Routing\ViewController;
 use Illuminate\Support\Facades\Route;
 
-
 Route::get('/', function () {
-    // Fetch 6 random listings with 'open' availability
     $listings = Listing::where('availability', 'open')->inRandomOrder()->limit(6)->get();
-
-    // Pass the listings to the view
     return view('home', ['listings' => $listings]);
 });
 
@@ -42,9 +42,7 @@ Route::get('/owner/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('owner.dashboard');
 
 Route::get('/tenant/home', function () {
-    $listings = Listing::paginate(10); // Adjust the number per page as needed
-
-    // Pass the listings to the view
+    $listings = Listing::paginate(10);
     return view('listing.display', ['listings' => $listings]);
 })->middleware(['auth', 'verified','tenant'])->name('tenant.home');
 
@@ -56,12 +54,11 @@ Route::get('/listings', [ListingController::class, 'index'])->name('listing.disp
 Route::get('/listings/{id}', [ListingController::class, 'show'])->name('listings.show');
 
 Route::middleware('auth')->group(function () {
-   
     Route::get('/listing/mylisting',[ListingController::class, 'ownerindex'])->name('owner.property');
     Route::resource('/listing', ListingController::class);
     Route::resource('/reserve', ReservationController::class);
-    Route::get('/listings/owner/myproperty', [ListingController::class, 'myp\roperty'])->name('listing.myproperty');
-    Route::get('/listings/show/{id}', [ListingController::class, 'detail'])->name('listing.detail');
+    Route::get('/listings/owner/myproperty', [ListingController::class, 'myproperty'])->name('listing.myproperty');
+    Route::get('/listings/show/{id', [ListingController::class, 'detail'])->name('listing.detail');
     Route::resource('/owner/caretaker', CaretakerController::class);
     Route::get('/bookings',[BookingsController::class, 'ownerindex'])->name('booking.owner');
     Route::post('/booking/{id}/accept', [BookingsController::class, 'accept'])->name('booking.accept');
@@ -83,3 +80,10 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// Admin approval routes
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/approvals', [ApprovalController::class, 'index'])->name('admin.approvals.index');
+    Route::post('/admin/approvals/{id}/approve', [ApprovalController::class, 'approve'])->name('admin.approvals.approve');
+    Route::delete('/admin/approvals/{id}/reject', [ApprovalController::class, 'reject'])->name('admin.approvals.reject');
+});

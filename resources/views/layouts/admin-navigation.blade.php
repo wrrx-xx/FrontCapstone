@@ -77,6 +77,10 @@
                             <a class="list-group-item hover-primary-soft" href="agent-review.html"><i
                                     class="far fa-fw fa-comment-dots me-2"></i>Review</a>
 
+                            <p class="text-body mt-3 mb-2">Manage Users</p>
+                            <a class="list-group-item hover-primary-soft" href="{{ route('admin.approvals.index') }}"><i
+                                    class="fas fa-fw fa-user-check me-2"></i>Pending Approvals</a>
+
                             <p class="text-body mt-3 mb-2">Messages</p>
                             {{-- <a class="list-group-item hover-primary-soft" href="{{ route('suppmess.index') }}"><i class="fas fa-fw fa-envelope me-2"></i>Message</a> --}}
 

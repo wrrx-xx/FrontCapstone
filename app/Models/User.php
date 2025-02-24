@@ -86,6 +86,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(TenantProfile::class, 'user_id');
     }
+    public function ownerProfile()
+    {
+        return $this->hasOne(OwnerProfile::class, 'user_id');
+    }
     public function isAdmin(){
         return $this->role=='admin';
     }

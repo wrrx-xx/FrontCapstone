@@ -56,8 +56,11 @@ class PaymentController extends Controller
     }
     public function ownerIndex()
 {
-    $userId = Auth::id(); // Get the ID of the currently authenticated user
-
+    $user = Auth::user();
+    
+    // Determine owner ID based on user role
+    $userId = $user->role === 'caretaker' ? $user->owner_id : $user->id;
+    
     // Fetch all listings owned by the user
     $listings = Listing::where('owner_id', $userId)->get();
 
