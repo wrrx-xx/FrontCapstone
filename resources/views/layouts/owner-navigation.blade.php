@@ -66,24 +66,57 @@
                         <!-- Sidebar menu -->
                         <div class="list-group list-group-borderless p-3 p-md-4">
                             <p class="text-body mb-2">Main</p>
+                           
                             <a class="list-group-item hover-primary-soft" href="{{ route('owner.dashboard') }}"><i
                                     class="fas fa-fw fa-tachometer-alt me-2"></i>Dashboard</a>
 
                             <p class="text-body mt-3 mb-2">Manage Listing</p>
-                            <a class="list-group-item hover-primary-soft" href="{{ route('listing.create') }}"><i
-                                    class="bi fa-fw bi-bookmark-plus-fill me-2"></i>Add Property</a>
+                            <div class="approval-status">
+                                @if(Auth::user()->ownerProfile && Auth::user()->ownerProfile->approved)
+                                    <span class="text-success">✓ Approved</span>
+                                @else
+                                    <span class="text-danger">✗ Pending Approval</span>
+                                @endif
+                            </div>
+                            @if(Auth::user()->ownerProfile && Auth::user()->ownerProfile->approved)
+                                <a class="list-group-item hover-primary-soft" href="{{ route('listing.create') }}"><i
+                                        class="bi fa-fw bi-bookmark-plus-fill me-2"></i>Add Property</a>
+                            @else
+                                <div class="list-group-item text-muted" style="opacity: 0.6;"><i
+                                        class="bi fa-fw bi-bookmark-plus-fill me-2"></i>Add Property</div>
+                            @endif
                             <a class="list-group-item hover-primary-soft"
                                 href="{{ route('listing.myproperty', ['id' => auth()->user()->id]) }}"><i
                                     class="fas fa-fw fa-home me-2"></i>My Property</a>
-                                    <a class="list-group-item hover-primary-soft" href="{{ route('caretaker.index') }}"><i
-                                        class="fas fa-fw fa-user-plus me-2"></i>Caretaker</a>
-                            <a class="list-group-item hover-primary-soft" href="{{ route('booking.owner') }}"><i
-                                    class="fas fa-fw fa-users me-2"></i>Bookings</a>
-                                    <a class="list-group-item hover-primary-soft" href="{{ route('reservations.index') }}"><i
-                                        class="fas fa-fw fa-users me-2"></i>Reservations</a>
+                                    @if(Auth::user()->ownerProfile && Auth::user()->ownerProfile->approved)
+                                        <a class="list-group-item hover-primary-soft" href="{{ route('caretaker.index') }}"><i
+                                            class="fas fa-fw fa-user-plus me-2"></i>Caretaker</a>
+                                    @else
+                                        <div class="list-group-item text-muted" style="opacity: 0.6;"><i
+                                            class="fas fa-fw fa-user-plus me-2"></i>Caretaker</div>
+                                    @endif
+                            @if(Auth::user()->ownerProfile && Auth::user()->ownerProfile->approved)
+                                <a class="list-group-item hover-primary-soft" href="{{ route('booking.owner') }}"><i
+                                        class="fas fa-fw fa-users me-2"></i>Bookings</a>
+                            @else
+                                <div class="list-group-item text-muted" style="opacity: 0.6;"><i
+                                        class="fas fa-fw fa-users me-2"></i>Bookings</div>
+                            @endif
+                                    @if(Auth::user()->ownerProfile && Auth::user()->ownerProfile->approved)
+                                        <a class="list-group-item hover-primary-soft" href="{{ route('reservations.index') }}"><i
+                                            class="fas fa-fw fa-users me-2"></i>Reservations</a>
+                                    @else
+                                        <div class="list-group-item text-muted" style="opacity: 0.6;"><i
+                                            class="fas fa-fw fa-users me-2"></i>Reservations</div>
+                                    @endif
                                        
-                                            <a class="list-group-item hover-primary-soft" href="{{ route('payment.owner') }}"><i
-                                                class="fas fa-fw fa-users me-2"></i>Payments</a>
+                                            @if(Auth::user()->ownerProfile && Auth::user()->ownerProfile->approved)
+                                                <a class="list-group-item hover-primary-soft" href="{{ route('payment.owner') }}"><i
+                                                    class="fas fa-fw fa-users me-2"></i>Payments</a>
+                                            @else
+                                                <div class="list-group-item text-muted" style="opacity: 0.6;"><i
+                                                    class="fas fa-fw fa-users me-2"></i>Payments</div>
+                                            @endif
                             {{-- <a class="list-group-item hover-primary-soft" href="agent-review.html"><i
                                     class="far fa-fw fa-comment-dots me-2"></i>Review</a> --}}
 

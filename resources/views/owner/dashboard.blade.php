@@ -7,6 +7,17 @@
 						<!-- Page title -->
 						<div class="my-5">
 							<h3>Dashboard</h3>
+							<div class="card mb-4">
+								<div class="card-body">
+									<h5 class="card-title">Account Status</h5>
+									@if(Auth::user()->ownerProfile && Auth::user()->ownerProfile->approved)
+										<p class="text-success">Your account is approved. You can create listings.</p>
+									@else
+										<p class="text-danger">Your account is pending approval. You cannot create listings yet.</p>
+										<p>Please wait for admin approval or contact support for more information.</p>
+									@endif
+								</div>
+							</div>
 							<hr>
 						</div>
 						<div class="row">

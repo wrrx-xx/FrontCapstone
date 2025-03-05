@@ -4,12 +4,21 @@
     <div class="main-content">
     <div class="container">
         <h1 class="text-center" style="margin-bottom: 20px; font-size: 2.5rem; color: #343a40;">Create a New Listing</h1>
-
+        
         @if (session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
         @endif
+        @if ($errors->any())
+    <div class="alert alert-danger" style="margin: 20px 0;">
+        <ul style="margin-bottom: 0;">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
