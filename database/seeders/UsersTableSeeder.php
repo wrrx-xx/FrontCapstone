@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\OwnerProfile;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,7 +15,7 @@ class UsersTableSeeder extends Seeder
     public function run(): void
     {
         // Create an owner user
-        User::create([
+        $owner1 = User::create([
             'fname' => 'John',
             'mname' => 'Doe',
             'lname' => 'Smith',
@@ -26,7 +27,17 @@ class UsersTableSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        User::create([
+        OwnerProfile::create([
+            'user_id' => $owner1->id,
+            'business_name' => 'John\'s Properties',
+            'business_address' => '123 Main St',
+            'business_phone' => '1234567890',
+            'business_email' => 'john@properties.com',
+            'owner_id_type' => 'Driver\'s License',
+            'approved' => false,
+        ]);
+
+        $owner2 = User::create([
             'fname' => 'Shin',
             'mname' => 'Doe',
             'lname' => 'Tense',
@@ -36,6 +47,16 @@ class UsersTableSeeder extends Seeder
             'role' => 'owner',
             'created_at' => now(),
             'updated_at' => now(),
+        ]);
+
+        OwnerProfile::create([
+            'user_id' => $owner2->id,
+            'business_name' => 'Shin\'s Rentals',
+            'business_address' => '456 Elm St',
+            'business_phone' => '0987654321',
+            'business_email' => 'shin@rentals.com',
+            'owner_id_type' => 'Passport',
+            'approved' => true,
         ]);
         // Create an admin user
         User::create([
