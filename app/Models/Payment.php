@@ -10,13 +10,15 @@ class Payment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'viewing_id', 
         'listing_id',
         'amount',
-        'cash_advance',
         'payment_method',
+        'reference_number',
+        'screenshot',
         'status',
+        'processed_by', // Added to track who processed the payment
     ];
+
 
     // Cast dates to Carbon instances
     protected $casts = [
@@ -34,4 +36,9 @@ class Payment extends Model
     {
         return $this->belongsTo(Viewing::class);
     }
+
+    public function processed_by(){
+        return $this->belongsTo(User::class, 'processed_by');
+    }
+
 }

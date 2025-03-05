@@ -105,6 +105,7 @@ class PaymentController extends Controller
             'reference_number' => 'nullable|string',
             'screenshot' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
             'reservation_id' => 'required|exists:reservations,id', // Ensure reservation_id is passed
+            'cash_advance_amount' => 'nullable|numeric', // Validate cash advance amount
         ]);
     
         try {
@@ -120,10 +121,12 @@ class PaymentController extends Controller
             // Retrieve the associated reservation using the reservation_id from the request
             $reservation = Reservation::findOrFail($request->reservation_id);
     
-            // Create a new payment record
+            // Create a new payment record and set the processor
             $payment = new Payment();
+            $payment->processed_by = Auth::id(); // Set the user ID of the processor
             $payment->listing_id = $request->listing_id;
             $payment->amount = $request->total_amount; // Total amount to be paid
+            $payment->cash_advance_amount = $request->cash_advance_amount; // Set cash advance amount
             $payment->payment_method = $request->payment_method;
             $payment->reference_number = $request->reference_number;
     
@@ -135,7 +138,7 @@ class PaymentController extends Controller
     
             // Save the payment record
             $payment->status = 'completed'; // Set the payment status to completed
-            $payment->save();
+            $payment->save(); // Save the payment record
     
             // Update the reservation status to approved
             $reservation->update(['reservation_status' => 'approved']);

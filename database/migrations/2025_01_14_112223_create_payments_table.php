@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('reference_number')->nullable(); // Reference number for GCash payments
             $table->string('screenshot')->nullable(); // Path to the uploaded screenshot
             $table->enum('status', ['pending', 'completed', 'failed'])->default('pending'); // Payment status
+            $table->unsignedInteger('processed_by')->nullable();
             $table->timestamps();
         });
     }
