@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Billings;
 use App\Models\Listing;
 use App\Models\Payment;
@@ -170,6 +170,28 @@ class PaymentController extends Controller
             return response()->json(['success' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
         }
     }
+    public function downloadReceipt($id)
+    {
+        $payment = Payment::with(['listing.tenant', 'listing.user', 'processed_by'])->findOrFail($id);
+        $data['owner'] = $payment->listing->user; // Get owner details
+        $data['processed_by'] = $payment->processed_by; // Get the user who processed the payment
+    
+        $data = [
+            'payment' => $payment,
+            'listing' => $payment->listing,
+            'reservation' => $payment->reservation,
+            'tenant' => $payment->listing->tenant, // Get tenant details
+            'owner' => $data['owner'], // Get owner details
+            'processed_by' => $data['processed_by'], // Get the user who processed the payment
+            
+        ];
+    
+        // Load PDF view and pass data
+        $pdf = Pdf::loadView('payments.receipt', $data);
+    
+        return $pdf->download('payment_receipt_' . $payment->id . '.pdf');
+    }
+    
 
    
     /**
