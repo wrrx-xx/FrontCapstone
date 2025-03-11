@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Billings</h2>
+    <h2>Billings and Services</h2>
     <div class="mt-4">
         <h3>Payment Summary</h3>
         <div class="row justify-content-between"> <!-- Space cards evenly -->
@@ -10,6 +10,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Total Amount Paid</h5>
+                        <a href="{{ route('tenant.services') }}" class="btn btn-primary mt-2">Access Services</a>
                         <p class="card-text">${{ number_format($payments->sum('amount'), 2) }}</p>
                     </div>
                 </div>
@@ -18,6 +19,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Total Cash Advance</h5>
+                        <a href="{{ route('tenant.services') }}" class="btn btn-primary mt-2">Access Services</a>
                         <p class="card-text">${{ number_format($payments->sum('cash_advance_amount'), 2) }}</p>
                     </div>
                 </div>
@@ -26,6 +28,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Pending Payments</h5>
+                        <a href="{{ route('tenant.services') }}" class="btn btn-primary mt-2">Access Services</a>
                         <p class="card-text">{{ $billings->where('status', 'pending')->count() }}</p>
                     </div>
                 </div>
@@ -64,7 +67,7 @@
 
     <!-- Payments Table -->
     <div class="mt-4">
-        <h2>Payments</h2>
+        <h2>Payments and Services</h2>
         <div class="table-responsive" style="max-height: 300px; overflow-y: auto;"> <!-- Scrollable container -->
             <table class="table table-striped table-bordered">
                 <thead>

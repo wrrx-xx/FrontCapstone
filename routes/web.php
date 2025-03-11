@@ -71,6 +71,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/payment/create/{id}', [PaymentController::class, 'create'])->name('payment.create');
     Route::post('/payment/store', [PaymentController::class, 'store'])->name('payment.store');
     Route::get('/payment',[PaymentController::class,'tenantindex'])->name('tenant.payment.index');
+    Route::get('/receipt/download/{id}', [PaymentController::class, 'downloadReceipt'])->name('receipt.download');
+
 });
 
 Route::middleware('auth')->group(function () {

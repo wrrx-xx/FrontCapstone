@@ -87,6 +87,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <a href="{{ route('booking.owner') }}" class="btn btn-primary">Return to Home</a>
+                    <a href="{{ route('receipt.download', $reservation->id) }}" class="btn btn-success">Download Receipt</a>
                 </div>
             </div>
         </div>
