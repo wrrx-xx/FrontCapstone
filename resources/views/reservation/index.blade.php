@@ -2,6 +2,20 @@
 
 @section('content')
 <div class="main-content">
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
+        @if ($errors->any())
+    <div class="alert alert-danger" style="margin: 20px 0;">
+        <ul style="margin-bottom: 0;">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
     <div class="row">
         <div class="col-12">
             <div class="row">
@@ -71,18 +85,20 @@
                                             </div>
                                             <!-- Action Buttons -->
                                             <div class="col-md-4 align-middle pt-2 pt-md-0">
-                                                <form action="{{ route('reservation.approve', $reservation->id) }}" method="POST" class="d-inline">
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-sm btn-success-soft me-1 mb-1">
-                                                        Approve
-                                                    </button>
-                                                </form>
-                                                {{-- <form action="{{ route('reservation.decline', $reservation->id) }}" method="POST" class="d-inline"> --}}
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-sm btn-danger-soft mb-1">
-                                                        Decline
-                                                    </button>
-                                                </form>
+                                                @if($reservation->reservation_status != 'approved' && $reservation->reservation_status != 'declined')
+                                                    <form action="{{ route('reservation.approve', $reservation->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-success-soft me-1 mb-1">
+                                                            Approve
+                                                        </button>
+                                                    </form>
+                                                    <form action="{{ route('reservation.decline', $reservation->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-danger-soft mb-1">
+                                                            Decline
+                                                        </button>
+                                                    </form>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>

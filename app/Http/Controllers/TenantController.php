@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 class TenantController extends Controller
 {
     public function index(){
-        return view('dashboard');
+        return view('Tenant.dashboard');
     }
-    public function outindex(){
-        return view('dashboard');
+    public function paymentindex(){
+        return view('Tenant.payment');
     }
 }

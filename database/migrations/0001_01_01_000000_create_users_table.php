@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('phone_number');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['tenant', 'owner', 'admin', 'caretaker'])->default('tenant');
+            $table->enum('role', ['guest','tenant', 'owner', 'admin', 'caretaker'])->default('guest');
             $table->foreignId('owner_id')
                 ->nullable()
                 ->constrained('users')

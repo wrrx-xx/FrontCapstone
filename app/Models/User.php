@@ -17,7 +17,7 @@ class User extends Authenticatable
         'lname',
         'email',
         'password',
-        'phone_number',
+        'phone_number',     
         'role',
         'owner_id'
     ];
@@ -87,8 +87,12 @@ class User extends Authenticatable
         return $this->hasOne(TenantProfile::class, 'user_id');
     }
     public function ownerProfile()
-    {
+    {   
         return $this->hasOne(OwnerProfile::class, 'user_id');
+    }
+    public function processed()
+    {
+        return $this->hasMany(Payment::class, 'processed_by');
     }
     public function isAdmin(){
         return $this->role=='admin';
@@ -102,6 +106,9 @@ class User extends Authenticatable
 
     public function isCaretaker(){
         return $this->role=='caretaker';
+    }
+    public function isGuest(){
+        return $this->role=='guest';
     }
    
 }

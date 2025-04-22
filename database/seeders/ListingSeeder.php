@@ -19,7 +19,7 @@ class ListingSeeder extends Seeder
         for ($i = 0; $i < 10; $i++) { // Change 10 to however many listings you want to create
             // Create a sample listing
             $listing = Listing::create([
-                'owner_id' => 1||2, // Assuming you have a user with ID 1
+                'owner_id' => 1, // Set owner_id to 1
                 'title' => $faker->sentence(3),
                 'body' => $faker->paragraph(),
                 'price' => $faker->randomFloat(2, 500, 5000), // Random price between 500 and 5000
@@ -55,9 +55,17 @@ class ListingSeeder extends Seeder
 
             // Create sample photos for the listing
             for ($j = 0; $j < 3; $j++) { // Change 3 to however many photos you want per listing
+                $photoIndex = rand(1, 7); // For example 1
+                if ($i % 4 == 1) {
+                    $photoIndex = rand(21, 23); // For example 2
+                } elseif ($i % 4 == 2) {
+                    $photoIndex = rand(31, 36); // For example 3
+                } elseif ($i % 4 == 3) {
+                    $photoIndex = rand(41, 43); // For example 4
+                }
                 Photos::create([
                     'listing_id' => $listing->id,
-                    'photo_url' => 'photos/photo' . rand(1, 10) . '.jpg', // Random photo path
+                    'photo_url' => 'photos/photo' . $photoIndex . '.jpg', // Updated photo path
                 ]);
             }
         }

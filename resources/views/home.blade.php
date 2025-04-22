@@ -488,61 +488,66 @@ Property START -->
             <!-- Property START -->
             <div class="col-sm-6 col-lg-4">
                 <div class="card mb-4">
-                    <div class="position-relative overflow-hidden">
-                        <!-- Image -->
-                        @if ($listing->photos->isNotEmpty())
-                            <img class="card-img" src="{{ Storage::url($listing->photos->first()->photo_url) }}" alt="Property image">
-                        @else
-                            <img class="card-img" src="path_to_default_image.jpg" alt="No image available">
-                        @endif
-                        <!-- Image overlay -->
-                        <div class="card-img-overlay">
-                            <div class="text-end">
-                                <a href="#" class="badge bg-dark text-light me-2"><i class="fas fa-video pe-2"></i><span>2</span></a>
-                                <a href="#" class="badge bg-dark text-light"><i class="fas fa-camera pe-2"></i><span>2</span></a>
-                            </div>
-                        </div>    
-                    </div>
-                    <!-- Card body START -->
-                    <div class="card-body px-2 pt-3">
-                        <!-- Badge and icon -->
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <a href="#" class="badge bg-primary-soft text-primary"><i class="fas fa-user-friends pe-1"></i>Family</a>
-                                <a href="#" class="badge bg-danger-soft text-danger"><i class="fas fa-rupee-sign pe-1"></i>{{ $listing->type }}</a>
-                            </div>
-                            <a href="#"><i class="fas fa-heart fa-fw text-danger ms-auto"></i></a>
-                        </div>
-                        <!-- Title -->
-                        <h4 class="card-title mt-3">
-                            <a href="#">{{ $listing->title }}</a>
-                        </h4>
-                        <!-- Info -->
-                        <ul class="nav nav-divider align-items-center text-uppercase small mt-3">
-                            <li class="nav-item me-4">
-                                <i class="fas fa-bed pe-1"></i> <span>{{ $listing->bedrooms }}</span>
-                            </li>
-                            <li class="nav-item me-4">
-                                <i class="fas fa-bath pe-1"></i> <span>{{ $listing->bathrooms }}</span>
-                            </li>
-                            <li class="nav-item me-4">
-                                <i class="fas fa-user pe-1"></i> <span>{{ $listing->occupancy }}</span>
-                            </li>
-                            <li class="nav-item me-4">
-                                <i class="fas fa-square pe-1"></i> <span>{{ $listing->area }}<sup class="text-lowercase">m2</sup></span>
-                            </li>
-                        </ul>
-                        <!-- Price -->
-                        <div class="mt-3 d-flex justify-content-between align-items-center">
-                            <div>
-                                
-                                <h3 class="text-success mb-0">₱{{ $listing->price }}</h3>
-                            </div>
-                            <a class="btn btn-dark btn-sm" href="{{ route('listings.show', $listing->id) }}">View details</a>
-                        </div>
-                    </div>
-                    <!-- Card body END -->
-                </div>
+					<div class="position-relative overflow-hidden">
+						<!-- Image -->
+						@if ($listing->photos->isNotEmpty())
+							<img class="card-img" 
+								 src="{{ Storage::url($listing->photos->first()->photo_url) }}" 
+								 alt="Property image" 
+								 style="width: 100%; height: 200px; object-fit: cover;">
+						@else
+							<img class="card-img" 
+								 src="path_to_default_image.jpg" 
+								 alt="No image available" 
+								 style="width: 100%; height: 200px; object-fit: cover;">
+						@endif
+						<!-- Image overlay -->
+						<div class="card-img-overlay">
+							<div class="text-end">
+								<a href="#" class="badge bg-dark text-light me-2"><i class="fas fa-video pe-2"></i><span>2</span></a>
+								<a href="#" class="badge bg-dark text-light"><i class="fas fa-camera pe-2"></i><span>2</span></a>
+							</div>
+						</div>    
+					</div>
+					<!-- Card body START -->
+					<div class="card-body px-2 pt-3">
+						<!-- Badge and icon -->
+						<div class="d-flex justify-content-between">
+							<div>
+								<a href="#" class="badge bg-primary-soft text-primary"><i class="fas fa-user-friends pe-1"></i>Family</a>
+								<a href="#" class="badge bg-danger-soft text-danger"><i class="fas fa-rupee-sign pe-1"></i>{{ $listing->type }}</a>
+							</div>
+							<a href="#"><i class="fas fa-heart fa-fw text-danger ms-auto"></i></a>
+						</div>
+						<!-- Title -->
+						<h4 class="card-title mt-3">
+							<a href="{{ route('listings.show', $listing->id)}}">{{ $listing->title }}</a>
+						</h4>
+						<!-- Info -->
+						<ul class="nav nav-divider align-items-center text-uppercase small mt-3">
+							<li class="nav-item me-4">
+								<i class="fas fa-bed pe-1"></i> <span>{{ $listing->bedrooms }}</span>
+							</li>
+							<li class="nav-item me-4">
+								<i class="fas fa-bath pe-1"></i> <span>{{ $listing->bathrooms }}</span>
+							</li>
+							<li class="nav-item me-4">
+								<i class="fas fa-user pe-1"></i> <span>{{ $listing->occupancy }}</span>
+							</li>
+							<li class="nav-item me-4">
+								<i class="fas fa-square pe-1"></i> <span>{{ $listing->area }}<sup class="text-lowercase">m2</sup></span>
+							</li>
+						</ul>
+						<!-- Price -->
+						<div class="mt-3 d-flex justify-content-between align-items-center">
+							<div>
+								<h3 class="text-success mb-0">₱{{ $listing->price }}</h3>
+							</div>
+							<a class="btn btn-dark btn-sm" href="{{ route('listings.show', $listing->id) }}">View details</a>
+						</div>
+					</div>
+					<!-- Card body END -->
+				</div>
             </div>
             <!-- Property END -->
             @endforeach

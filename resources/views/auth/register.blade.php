@@ -144,15 +144,16 @@
                                 <button type="button" id="prevStep2" class="btn btn-secondary rounded-pill px-4">
                                     {{ __('Previous Step') }} <i class="fas fa-arrow-left ms-2"></i>
                                 </button>
-                                <button type="button" id="nextStep2" class="btn btn-primary rounded-pill px-4">
-                                    {{ __('Next Step') }} <i class="fas fa-arrow-right ms-2"></i>
+                                <button type="submit" class="btn btn-primary rounded-pill px-4">
+                                    {{ __('Register') }} <i class="fas fa-check ms-2"></i>
                                 </button>
+                                
                             </div>
                         </div>
 
                         <!-- Step 3: Owner Profile Information -->
                         <div id="step3" style="display: none;">
-                            <h5 class="fw-bold mb-4">Step 3: Owner Profile Information</h5>
+                            <h5 class="fw-bold mb-4">Step 2: Owner Profile Information</h5>
 
                             <div class="mb-3">
                                 <x-input-label for="business_name" :value="__('Business Name')" />
@@ -216,33 +217,71 @@
 </main>
 
 <script>
-    document.getElementById('nextStep1').addEventListener('click', function() {
-        document.getElementById('step1').style.display = 'none';
-        const role = document.getElementById('role').value;
-        if (role === 'owner') {
-            document.getElementById('step3').style.display = 'block';
-        } else {
-            document.getElementById('step2').style.display = 'block';
+    document.addEventListener('DOMContentLoaded', function () {
+        const roleSelect = document.getElementById('role');
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+        const nextStep1Btn = document.getElementById('nextStep1');
+        const prevStep2Btn = document.getElementById('prevStep2');
+        const nextStep2Btn = document.getElementById('nextStep2');
+        const prevStep3Btn = document.getElementById('prevStep3');
+
+        // Hide nextStep2 for tenant since we want register button on step 2
+        if (nextStep2Btn) nextStep2Btn.style.display = 'none';
+
+        function toggleSteps() {
+            const role = roleSelect.value;
+            if (role === 'tenant') {
+                step2.querySelector('button[type="submit"]').style.display = 'inline-block';
+                if (nextStep2Btn) nextStep2Btn.style.display = 'none';
+            } else {
+                step2.querySelector('button[type="submit"]').style.display = 'none';
+                if (nextStep2Btn) nextStep2Btn.style.display = 'inline-block';
+            }
         }
-    });
 
-    document.getElementById('nextStep2').addEventListener('click', function() {
-        document.getElementById('step2').style.display = 'none';
-        document.getElementById('step3').style.display = 'block';
-    });
+        toggleSteps(); // run on load
 
-    document.getElementById('prevStep2').addEventListener('click', function() {
-        document.getElementById('step2').style.display = 'none';
-        document.getElementById('step1').style.display = 'block';
-    });
+        roleSelect.addEventListener('change', toggleSteps);
 
-    document.getElementById('prevStep3').addEventListener('click', function() {
-        document.getElementById('step3').style.display = 'none';
-        const role = document.getElementById('role').value;
-        if (role === 'owner') {
-            document.getElementById('step1').style.display = 'block';
-        } else {
-            document.getElementById('step2').style.display = 'block';
+        nextStep1Btn.addEventListener('click', function () {
+            const role = roleSelect.value;
+            step1.style.display = 'none';
+            if (role === 'tenant') {
+                step2.style.display = 'block';
+                step3.style.display = 'none';
+            } else {
+                step2.style.display = 'none';
+                step3.style.display = 'block';
+            }
+        });
+
+        if (prevStep2Btn) {
+            prevStep2Btn.addEventListener('click', function () {
+                step1.style.display = 'block';
+                step2.style.display = 'none';
+            });
+        }
+
+        if (nextStep2Btn) {
+            nextStep2Btn.addEventListener('click', function () {
+                step2.style.display = 'none';
+                step3.style.display = 'block';
+            });
+        }
+
+        if (prevStep3Btn) {
+            prevStep3Btn.addEventListener('click', function () {
+                const role = roleSelect.value;
+                if (role === 'tenant') {
+                    step2.style.display = 'block';
+                    step3.style.display = 'none';
+                } else {
+                    step1.style.display = 'block';
+                    step3.style.display = 'none';
+                }
+            });
         }
     });
 </script>

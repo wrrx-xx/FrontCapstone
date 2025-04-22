@@ -351,8 +351,7 @@
                                             <li class="list-group-item text-body">
                                                 <i
                                                     class="fas fa-fw fa-{{ $listing->amenities->school
-                                                        ? 'check ```blade
-                                                                                                text-success'
+                                                        ? 'check text-success'
                                                         : 'times text-danger' }}"></i>
                                                 School:
                                             </li>
@@ -375,325 +374,10 @@
                                     </div>
                                 </div>
                             </div>
+                            
                         </div>
 
-                        {{-- <div class="row g-0 mt-5" id="nearby">
-                        <div class="col-md-12 border rounded p-4">
-                            <div class="mb-4">
-                                <h3>What's Nearby</h3>
-                            </div>
-                            <ul class="nav nav-tabs nav-justified flex-column flex-sm-row">
-                                <li class="nav-item mb-2 mb-sm-0"> <a class="nav-link active" data-bs-toggle="tab" href="#tab-1-1">Hospital </a> </li>
-                                <li class="nav-item mb-2 mb-sm-0"> <a class="nav-link" data-bs-toggle="tab" href="#tab-1-4">Shopping</a> </li>
-                                <li class="nav-item mb-2 mb-sm-0"> <a class="nav-link" data-bs-toggle="tab" href="#tab-1-3">Education </a></li>
-                                <li class="nav-item mb-2 mb-sm-0"> <a class="nav-link" data-bs-toggle="tab" href="#tab-1-5">Restaurant </a> </li>
-                            </ul>
-                            <div class="tab-content mt-4 mb-0">
-                                <div class="tab-pane show active" id="tab-1-1">
-                                    @foreach ($listing->nearbyHospitals as $hospital)
-                                        <div class="card mb-3">
-                                            <div class="row g-3 align-items-center">
-                                                <div class="col-sm-2 mt-2 mt-sm-0">
-                                                    <img class="rounded" src="{{ asset($hospital->image) }}" alt="">
-                                                </div>
-                                                <div class="col-sm-7 mt-2 mt-sm-0">
-                                                    <h6>{{ $hospital->name }}<span class="font-base ms-2 text-secondary small">({{ $hospital->distance }}km)</span></h6>
-                                                    <p class="small mb-0"><i class="fas fa-map-marker-alt pe-2 text-primary"></i>{{ $hospital->address }}</p>
-                                                </div>
-                                                <div class="col-sm-3 mt-2 mt-sm-0">
-                                                    <p class="mb-0 small">Review</p>
-                                                    <ul class="list-inline">
-                                                        @for ($i = 0; $i < 5; $i++)
-                                                            <li class="list-inline-item me-0 small"><i class="fas fa-star {{ $i < $hospital->rating ? 'text-warning' : '' }}"></i></li>
-                                                        @endfor
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                        </div>
-                                    @endforeach
-                                </div>
-
-                                <div class="tab-pane" id ```blade
-                                <div class="tab-pane" id="tab-1-4">
-                                    @foreach ($listing->nearbyShops as $shop)
-                                        <div class="card mb-3">
-                                            <div class="row g-3 align-items-center">
-                                                <div class="col-sm-2 mt-2 mt-sm-0">
-                                                    <img class="rounded" src="{{ asset($shop->image) }}" alt="">
-                                                </div>
-                                                <div class="col-sm-7 mt-2 mt-sm-0">
-                                                    <h6>{{ $shop->name }}<span class="font-base ms-2 text-secondary small">({{ $shop->distance }}km)</span></h6>
-                                                    <p class="small mb-0"><i class="fas fa-map-marker-alt pe-2 text-primary"></i>{{ $shop->address }}</p>
-                                                </div>
-                                                <div class="col-sm-3 mt-2 mt-sm-0">
-                                                    <p class="mb-0 small">Review</p>
-                                                    <ul class="list-inline">
-                                                        @for ($i = 0; $i < 5; $i++)
-                                                            <li class="list-inline-item me-0 small"><i class="fas fa-star {{ $i < $shop->rating ? 'text-warning' : '' }}"></i></li>
-                                                        @endfor
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                        </div>
-                                    @endforeach
-                                </div>
-
-                                <div class="tab-pane" id="tab-1-3">
-                                    @foreach ($listing->nearbySchools as $school)
-                                        <div class="card mb-3">
-                                            <div class="row g-3 align-items-center">
-                                                <div class="col-sm-2 mt-2 mt-sm-0">
-                                                    <img class="rounded" src="{{ asset($school->image) }}" alt="">
-                                                </div>
-                                                <div class="col-sm-7 mt-2 mt-sm-0">
-                                                    <h6>{{ $school->name }}<span class="font-base ms-2 text-secondary small">({{ $school->distance }}km)</span></h6>
-                                                    <p class="small mb-0"><i class="fas fa-map-marker-alt pe-2 text-primary"></i>{{ $school->address }}</p>
-                                                </div>
-                                                <div class="col-sm-3 mt-2 mt-sm-0">
-                                                    <p class="mb-0 small">Review</p>
-                                                    <ul class="list-inline">
-                                                        @for ($i = 0; $i < 5; $i++)
-                                                            <li class="list-inline-item me-0 small"><i class="fas fa-star {{ $i < $school->rating ? 'text-warning' : '' }}"></i></li>
-                                                        @endfor
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                        </div>
-                                    @endforeach
-                                </div>
-
-                                <div class="tab-pane" id="tab-1-5">
-                                    @foreach ($listing->nearbyRestaurants as $restaurant)
-                                        <div class="card mb-3">
-                                            <div class="row g-3 align-items-center">
-                                                <div class="col-sm-2 mt-2 mt-sm-0">
-                                                    <img class="rounded" src="{{ asset($restaurant->image) }}" alt="">
-                                                </div>
-                                                <div class="col-sm-7 mt-2 mt-sm-0">
-                                                    <h6>{{ $restaurant->name }}<span class="font-base ms-2 text-secondary small">({{ $restaurant->distance }}km)</span></h6>
-                                                    <p class="small mb-0"><i class="fas fa-map-marker-alt pe-2 text-primary"></i>{{ $restaurant->address }}</p>
-                                                </div>
-                                                <div class="col-sm-3 mt-2 mt-sm-0">
-                                                    <p class="mb-0 small">Review</p>
-                                                    <ul class="list-inline">
-                                                        @for ($i = 0; $i < 5; $i++)
-                                                            <li class="list-inline-item me-0 small"><i class="fas fa-star {{ $i < $restaurant->rating ? 'text-warning' : '' }}"></i></li>
-                                                        @endfor
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
-
-                        {{-- <div class="row g-0 mt-5" id="review">
-                        <div class="col-12 border rounded p-4">
-                            <div class="row">
-                                <div class="mb-4">
-                                    <h3 ```blade
-                                    <h3>Review</h3>
-                                </div>
-                                <div class="col-md-4 pt-3 pt-xl-0">
-                                    <div class="bg-primary-soft rounded text-center p-4">
-                                        <h2>{{ $listing->average_rating }}</h2>
-                                        <div class="rating">
-                                            <p class="mb-0">Out of 5.0</p>
-                                            <ul class="list-inline">
-                                                @for ($i = 0; $i < 5; $i++)
-                                                    <li class="list-inline-item me-0"><i class="fas fa-star {{ $i < $listing->average_rating ? 'text-warning' : '' }}"></i></li>
-                                                @endfor
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-8 my-auto">
-                                    <div class="row mt-4 mt-md-0">
-                                        <div class="col-6">
-                                            <div class="pb-3">
-                                                <h6 class="Font-base">Services</h6>
-                                                <div class="progress bg-success-soft" style="height: 4px;">
-                                                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ $listing->service_rating }}%;" aria-valuenow="{{ $listing->service_rating }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="pb-3">
-                                                <h6 class="Font-base">Hospitality</h6>
-                                                <div class="progress bg-success-soft" style="height: 4px;">
-                                                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ $listing->hospitality_rating }}%;" aria-valuenow="{{ $listing->hospitality_rating }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="pb-3">
-                                                <h6 class="Font-base">Location</h6>
-                                                <div class="progress bg-warning-soft" style="height: 4px;">
-                                                    <div class="progress-bar bg-warning" role="progressbar" style="width: {{ $listing->location_rating }}%;" aria-valuenow="{{ $listing->location_rating }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="pb-3">
-                                                <h6 class="Font-base">Quality</h6>
-                                                <div class="progress bg-danger-soft" style="height: 4px;">
-                                                    <div class="progress-bar bg-danger" role="progressbar" style="width: {{ $listing->quality_rating }}%;" aria-valuenow="{{ $listing->quality_rating }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mt-5">
-                                    <div class="d-flex justify-content-between">
-                                        <h4 class="me-2">{{ $listing->reviews_count }} Reviews</h4>
-                                        <div>
-                                            <ul class="list-inline">
-                                                @for ($i = 0; $i < 5; $i++)
-                                                    <li class="list-inline-item me-0"><i class="fas fa-star {{ $i < $listing->average_rating ? 'text-warning' : '' }}"></i></li>
-                                                @endfor
-                                            </ul>
-                                            <p class="mb-0">({{ $listing->average_rating }} out of 5.0)</p>
-                                        </div>
-                                    </div>
-
-                                    @foreach ($listing->reviews as $review)
-                                        <div class="d-md-flex align-items-center mt-4">
-                                            <div>
-                                                <div class="avatar avatar-xxl me-4">
-                                                    <img class="avatar-img rounded-circle" src="{{ asset($review->user->avatar) }}" alt="avatar">
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div class="d-sm-flex mt-1 mt-md-0">
-                                                    <h5 class="me-3 mb-0">{{ $review->user->name }}</h5>
-                                                    <ul class="list-inline">
-                                                        @for ($i = 0; $i < 5; $i++)
-                                                            <li class="list-inline-item me-0"><i class="fas fa-star {{ $i < $review->rating ? 'text-warning ' : '' }}"></i></li>
-                                                        @endfor
-                                                    </ul>
-                                                </div>
-                                                <p class="small mb-2">{{ $review->created_at->format('F j, Y') }}</p>
-                                                <p>{{ $review->comment }}</p>
-                                            </div>	
-                                        </div>
-                                        <hr>
-                                    @endforeach
-
-                                    <div class="mt-2 mt-md-4">
-                                        <p>
-                                            <input type="checkbox" class="btn-check" id="btn-check-outlined">
-                                            <label class="btn btn-outline-primary" for="btn-check-outlined" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-controls="collapseExample">
-                                                Write a review
-                                            </label>
-                                        </p>
-                                        <div class="collapse" id="collapseExample">
-                                            <div class="card card-body p-0">
-                                                <h4 class="font-base">Give your honest review</h4>
-                                                <form class="row g-3">
-                                                    <div class="col-md-6">
-                                                        <label for="inputtext" class="form-label">Your Name *</label>
-                                                        <input type="text" class="form-control" id="inputtext" aria-label="First name">
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="inputEmail4" class="form-label">Email *</label>
-                                                        <input type="email" class="form-control" id="inputEmail4">
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="inputState1" class="form-label">Select *</label>
-                                                        <select id="inputState1" class="form-select">
-                                                            <option selected="">Quality</option>
-                                                            <option>Hospitality</option>
-                                                            <option>Services</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="inputState2" class="form-label">Give Rating *</label>
-                                                        <select id="inputState2" class="form-select">
-                                                            <option selected="">★★★★★ (5/5)</option>
-                                                            <option>★★★★☆ (4/5)</option>
-                                                            <option>★★★☆☆ (3/5)</option>
-                                                            <option>★★☆☆☆ (2/5)</option>
-                                                            <option>★☆☆☆☆ (1/5)</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <label for="exampleFormControlTextarea1" class="form-label">Message</label>
-                                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="gridCheck">
-                                                            <label class="form-check-label" for="gridCheck">
-                                                                Save my name, email, and website in this browser for the next time I comment.
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <button type="submit" class="btn btn-primary">Post Review</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>	
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
-
-                        {{-- <div class="row mt-5">
-                        <div class="mb-4">
-                            <h3>Similar Property</h3>
-                        </div>
-                        <div class="tiny-slider dots-creative arrow-round">
-                            <div class="tiny-slider-inner" data-autoplay="false" data-arrow="true" data-dots="false" data-items="2" data-items-xs="1">
-                                @foreach ($similarListings as $similar)
-                                    <div class="col-md-12 col-lg-6">
-                                        <div class="card mb-4">
-                                            <div class="position-relative overflow-hidden">
-                                                <img class="card-img" src="{{ asset($similar->photos->first()->photo_url) }}" alt="Card image">
-                                                <div class="card-img-overlay">
-                                                    <div class="text-end">
-                                                        <a href="#" class="badge bg-light-soft text-light me-2"><i class="fas fa-video pe-2"></i><span>2</span></a>
-                                                        <a href="#" class="badge bg-light-soft text-light"><i class="fas fa-camera pe-2"></i><span>2</span></a>
-                                                    </div>
-                                                </div>	
-                                            </div>
-                                            <div class="card-body px-2 pt-3">
-                                                <div class="d-flex justify-content-between">
-                                                    <div>
-                                                        <a href="#" class="badge bg-primary-soft text-primary"><i class="fas fa-user-friends pe-1"></i>Family</a>
-                                                        <a href="#" class="badge bg-danger-soft text-danger"><i class="fas fa-rupee-sign pe-1"></i>Sale</a>
-                                                    </div>
-                                                    <a href="#"><i class="fas fa-heart fa-fw text-danger ms-auto"></i></a>
-                                                </div>
-                                                <h4 class="card-title mt-3">
-                                                    <a href="#">{{ $similar->title }}</a>
-                                                </h4>
-                                                <ul class="nav nav-divider align-items-center text-uppercase small mt-3">
-                                                    <li class="nav-item me-4"> <i class="fas fa-bed pe-1"></i> <span>{{ $similar->amenities->bedroom }}</span> </li>
-                                                    <li class="nav-item me-4"> <i class="fas fa-bath pe-1"></i> <span>{{ $similar->amenities->bathroom }}</span> </li>
-                                                    <li class="nav-item me-4"> <i class="fas fa-user pe-1"></i> <span>{{ $similar->person_capacity }}</span> </li>
-                                                    <li class="nav-item me-4"> <i class="fas fa-square pe-1"></i> <span>{{ $similar->size }}<sup class="text-lowercase">m2</sup></span> </li>
-                                                </ul>
-                                                <div class="mt-3 d-flex justify-content-between align-items-center">
-                                                    <h3 class="text-success">{{ $similar->price }}</h3>
-                                                    <a class="btn btn-dark btn-sm" href="#">View details</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div> --}}
+                       
                     </div>
 
                     <div class="col-lg-4 pt-5 pt-lg-0">
@@ -741,11 +425,12 @@
                                                             id="visitTime" required>
                                                     </div>
                                                     <div class="d-grid gap-2 mt-2">
-                                                        <button type="submit" class="btn btn-primary">Reserve
+                                                        <button type="submit" class="btn btn-primary" id="reserveButton" onclick="handleReserveClick(this.form)">Reserve
                                                             Now</button>
                                                     </div>
                                                     
                                                 </form>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -759,8 +444,17 @@
     </main>
 @endsection
 
+<script>
+    function handleReserveClick(form) {
+        form.submit(); // Submit the form
+        var button = document.getElementById('reserveButton');
+        button.disabled = true; // Disable the button
+        setTimeout(function() {
+            button.disabled = false; // Re-enable the button after 15 seconds
+        }, 15000); // 15000 milliseconds = 15 seconds
+    }
+</script>
 <script src="{{ asset('assets/vendor/tiny-slider/tiny-slider.js') }}"></script>
 <script src="{{ asset('assets/vendor/sticky-js/sticky.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/glightbox/js/glightbox.js') }}"></script>
 <script src="{{ asset('assets/vendor/splide-master/dist/js/splide.min.js') }}"></script>
-<script src="{{ asset('https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js') }}"></script>

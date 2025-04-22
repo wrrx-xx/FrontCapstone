@@ -3,7 +3,7 @@
         <div class="container">
             <!-- Logo START -->
             <a class="navbar-brand" href="{{ url('/') }}">
-                <img class="navbar-brand-item" src="{{ asset('assets/images/logo.svg<!-- Separate Home Link') }}" alt="logo">
+                <img class="navbar-brand-item" src="{{ asset('assets/images/logo.svg') }}" alt="logo">
             </a>
             <!-- Logo END -->
 
@@ -30,24 +30,44 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('listing.display') }}">Listings</a>
                     </li>
+
+                    @if (Auth::check())
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">Login</a>
+                        <a class="nav-link" href="{{ route('reserve.index') }}" >Bookings</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}">Sign Up</a>
+                        <a class="nav-link" href="#">Profile</a>
                     </li>
+                        <li class="nav-item">
+                            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="nav-link btn btn-link" style="border: none; background: none; padding: 0;">
+                                    Logout
+                                </button>
+                            </form>
+                        </li>
+                        
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register') }}">Sign Up</a>
+                        </li>
+                        
+                   
 
                     <!-- Add more items as needed -->
                 </ul>
             </div>
-            <!-- Main navbar END -->
-
-            <!-- Add listing button -->
             <div class="ms-5 ms-lg-0">
                 <a href="#" class="btn btn-sm btn-dark-soft"><i class="fas fa-plus me-2"></i>Add listing</a>
             </div>
+            <!-- Main navbar END -->
+            @endif
+            <!-- Add listing button -->
+           
 
         </div>
     </nav>
 </header>
-<!-- ======================= Header END -->

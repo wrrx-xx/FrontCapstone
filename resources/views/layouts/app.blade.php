@@ -37,9 +37,9 @@
             @include('layouts.owner-navigation')
         @elseif (Auth::user()->isTenant())
             @include('layouts.tenant-navigation')
-
         @elseif (Auth::user()->isCaretaker())
         @include('layouts.caretaker-navigation')
+        
     @else
             @include('layouts.guest-navigation')
         @endif
@@ -55,7 +55,7 @@
         <i class="bi bi-arrow-up-short position-absolute top-50 start-50 translate-middle"></i>
     </div>
     <!-- Back to top -->
-    @if (!Auth::check() || (Auth::user()->isTenant() ))
+    @if (!Auth::check() || (Auth::user()->isGuest() ))
     @include('partials.footer')
 @endif
 

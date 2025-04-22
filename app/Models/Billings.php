@@ -49,5 +49,12 @@ class Billings extends Model
         return $this->belongsTo(Listing::class, 'listing_id');
 
     }
-
+    public function utility(){
+        return $this->hasMany(UtilityBill::class,'billing_id');
+    }
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class);
+    }
+    
 }

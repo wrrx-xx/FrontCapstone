@@ -22,7 +22,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\ViewingController;
 use App\Http\Controllers\Admin\ApprovalController;
-
+use App\Http\Controllers\BillingsController;
 use App\Models\Listing;
 use Illuminate\Http\Request;
 use Illuminate\Routing\ViewController;
@@ -41,10 +41,19 @@ Route::get('/owner/dashboard', function () {
     return view('owner.dashboard');
 })->middleware(['auth', 'verified'])->name('owner.dashboard');
 
-Route::get('/tenant/home', function () {
+
+Route::middleware(['auth','verified'])->group(function () {
+    Route::get('/tenant/dashboard',[TenantController::class,'index'])->name('tenant.dashboard');
+    Route::get('/tenant/payment',[TenantController::class,'paymentindex'])->name('tenant.payment');
+    Route::get('/tenant/payment/create/{id}',[PaymentController::class,'createpay'])->name('tenant.payment.create');
+    Route::post('/tenant/payment/store',[PaymentController::class,'paystore'])->name('tenant.payment.store');
+});
+
+Route::get('/listing', function () {
     $listings = Listing::paginate(10);
     return view('listing.display', ['listings' => $listings]);
-})->middleware(['auth', 'verified','tenant'])->name('tenant.home');
+})->middleware(['auth', 'verified'])->name('guest.home');
+
 
 Route::get('/caretaker/dashboard', function () {
     return view('caretaker.dashboard');
@@ -65,6 +74,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/booking/{id}/decline', [BookingsController::class, 'decline'])->name('booking.decline');
     Route::get('/reservations', [ReservationController::class, 'ownerindex'])->name('reservations.index');
     Route::post('/reservation/{id}/approve', [ReservationController::class, 'approve'])->name('reservation.approve');
+    Route::post('/reservation/{id}/decline', [ReservationController::class, 'decline'])->name('reservation.decline');
     Route::resource('/book',ViewingController::class);
     Route::resource('/payment',PaymentController::class);
     Route::get('/owner/payment', [PaymentController::class, 'ownerIndex'])->name('payment.owner');
@@ -72,7 +82,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/payment/store', [PaymentController::class, 'store'])->name('payment.store');
     Route::get('/payment',[PaymentController::class,'tenantindex'])->name('tenant.payment.index');
     Route::get('/receipt/download/{id}', [PaymentController::class, 'downloadReceipt'])->name('receipt.download');
-
+    Route::post('/billing/{id}/approve', [BillingsController::class, 'approve'])->name('billing.approve');
+    Route::post('/billing/{id}/decline', [BillingsController::class, 'decline'])->name('billing.decline');
 });
 
 Route::middleware('auth')->group(function () {

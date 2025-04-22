@@ -30,7 +30,7 @@ class ReservationController extends Controller
         // Fetch reservations for the logged-in user
 
         // Fetch all reservations with related listings, prospects, and photos
-        $reservations = Reservation::with(['listing.photos', 'prospect'])->get();
+        $reservations = Reservation::with(['listing.photos', 'prospect'])->orderBy('reservation_status', 'desc')->get();
 
         // Pass the reservations data to the view
         return view('reservation.index', compact('reservations'));
@@ -146,16 +146,13 @@ public function paystore(Request $request)
     // Redirect to the payment form with the reservation ID
     return redirect()->route('payment.create', ['id' => $reservation->id]);
 }
+public function decline($id)
+{
+    $reservation = Reservation::findOrFail($id);
+    $reservation -> reservation_status = 'declined';
+    $reservation ->save();
+    // Redirect to the payment form with the reservation ID
+    return redirect()->route('reservations.index', ['id' => $reservation->id])->with('success', 'Reservation request declined successfully!');
+}
 
-    /**
-
-     * Accept a viewing request.
-
-     *
-
-     * @param  int  $id
-
-     * @return \Illuminate\Http\Response
-
-     */
 }

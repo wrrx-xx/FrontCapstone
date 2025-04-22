@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Owner;
 use App\Http\Middleware\Admin;
+use App\Http\Middleware\Guest;
 use App\Http\Middleware\Staff;
 use App\Http\Middleware\Tenant;
 use Illuminate\Foundation\Application;
@@ -20,7 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => Admin::class,
             'owner'=> Owner::class,
             'staff'=> Staff::class,
-            'tenant'=> Tenant::class
+            'tenant'=> Tenant::class,
+            'guest'=> Guest::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

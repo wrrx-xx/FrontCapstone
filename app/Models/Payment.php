@@ -11,8 +11,10 @@ class Payment extends Model
 
     protected $fillable = [
         'listing_id',
+        'billing_id',
         'amount',
         'payment_method',
+        'cash_advance_amount',
         'reference_number',
         'screenshot',
         'status',
@@ -37,8 +39,29 @@ class Payment extends Model
         return $this->belongsTo(Viewing::class);
     }
 
-    public function processed_by(){
+    public function processor()
+    {
         return $this->belongsTo(User::class, 'processed_by');
     }
+    
+    
+    // Define the relationship with the Reservation model
+    // Since there's no direct foreign key, we'll use the listing_id to find the associated reservation
+    public function reservation()
+    {
+        // Assuming a listing can have only one active reservation
+        return $this->hasOneThrough(
+            Reservation::class,
+            Listing::class,
+            'id', // Foreign key on listings table
+            'listing_id', // Foreign key on reservations table
+            'listing_id', // Local key on payments table
+            'id' // Local key on listings table
+        );
+    }
+    public function billing()
+{
+    return $this->hasOne(Billings::class);
+}
 
 }

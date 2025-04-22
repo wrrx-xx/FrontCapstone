@@ -1,65 +1,97 @@
-<header class="navbar-light navbar-sticky header-static">
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <!-- Logo START -->
-            <a class="navbar-brand" href="{{ url('/') }}">
-                <img class="navbar-brand-item" src="{{ asset('assets/images/logo.svg') }}" alt="logo">
-            </a>
-            <!-- Logo END -->
+<!-- **************** MAIN CONTENT START **************** -->
+<!-- Navbar top START -->
+<div class="dashboard-topbar navbar-dark bg-dark px-3 px-sm-4 px-md-5">
+    <div class="d-flex justify-content-between align-items-center">
+        <!-- Logo -->
+        <a class="navbar-brand d-flex align-items-center py-2" href="{{route('tenant.dashboard') }}">
+            <img class="navbar-brand-item" src="{{ asset('assets/images/logo-light.svg') }}" alt="logo">
+        </a>
 
-            <!-- Responsive navbar toggler -->
-            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- Main navbar START -->
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav navbar-nav-scroll mx-auto">
-                    <!-- Separate Home Link -->
-                </ul>
-
-                <!-- Tenant Navigation Items -->
-                <ul class="navbar-nav navbar-nav-scroll mx-auto">
-                    <li class="nav-item">
-                        <a class="nav-link navbar-primary-soft-hover" href="{{ url('/') }}" id="homeMenu">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('listing.display') }}">Listings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('reserve.index') }}" >Bookings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('tenant.payment.index') }}">Payments</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Support</a>
-                    </li>
-                    <li class="nav-item">
-                        
-                    </li>
-
-                    <!-- Add more items as needed -->
-                </ul>
-            </div>
-            <!-- Main navbar END -->
-
-            <!-- Optional Add listing button (if applicable) -->
-            <div class="ms-5 ms-lg-0">
-                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                    @csrf
-                    <button type="submit" class="nav-link btn btn-link" style="border: none; background: none; padding: 0;">
-                        Logout
-                    </button>
+        <!-- Navbar right -->
+        <ul class="list-inline m-0 text-primary-hover">
+            <!-- Search bar -->
+            <li class="d-none d-md-inline-block list-inline-item text-white me-3">
+                <form class="align-self-center position-relative" role="search" action="#">
+                    <input type="text" class="form-control bg-secondary-soft text-white border-0"
+                        placeholder="Search here...">
+                    <button type="submit" id="search-submit"
+                        class="btn position-absolute top-50 end-0 translate-middle-y"><i
+                            class="fa fa-search text-secondary"></i></button>
                 </form>
-            </div>
+            </li>
+            <!-- Icon -->
+            <li class="list-inline-item me-2 me-sm-3"> <a href="#" class="text-white"><i
+                        class="far fa-envelope"></i></a></li>
+            <li class="list-inline-item me-2 me-sm-3">
+                <a href="#" class="text-white position-relative">
+                    <i class="far fa-bell"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger p-1">
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                </a>
+            </li>`
+            <!-- Dropdown avatar -->
+            <li class="list-inline-item">
+                <a href="#" class="btn-link" role="button" id="dropdownAvatar" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <img class="box-sm rounded-circle" src="assets/images/avatar/2.jpg" alt="Profile picture">
+                </a>
+                <!-- Dropdown list -->
+                <ul class="dropdown-menu min-w-auto" aria-labelledby="dropdownAvatar">
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="#">Setting</a></li>
+                    <li><a class="dropdown-item" href="#">My Wallet</a></li>
+                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+            </li>
+            <!-- Toggle button -->
+            <li class="list-inline-item d-md-inline-block d-lg-none">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardNav"
+                    aria-controls="dashboardNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+<!--Navbar top END -->
 
-        </div>
-    </nav>
-</header>
-<!-- ======================= Header END -->
+<div class="container-fluid px-0">
+    <div class="page-wrapper">
+        <!-- Left sidebar START -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
+            <div class="collapse navbar-collapse" id="dashboardNav">
+                <div class="dashboard-sidebar bg-light">
+                    <div class="content mt-3">
+                        <!-- Sidebar menu -->
+                        <div class="list-group list-group-borderless p-3 p-md-4">
+                            <p class="text-body mb-2">Main</p>
+                            
+                            <a class="list-group-item hover-primary-soft" href="{{ route('tenant.dashboard') }}"><i
+                                    class="fas fa-fw fa-tachometer-alt me-2"></i>Dashboard</a>
+                            
+                            
+                            <p class="text-body mt-3 mb-2">Tenant Services</p>
+                            <a class="list-group-item hover-primary-soft" href="#"><i class="fas fa-fw fa-home me-2"></i>My Rentals</a>
+                            <a class="list-group-item hover-primary-soft" href="{{ route('tenant.payment.index') }}"><i class="fas fa-fw fa-file-invoice-dollar me-2"></i>Payment History</a>
+                            <a class="list-group-item hover-primary-soft" href="#"><i class="fas fa-fw fa-tools me-2"></i>Maintenance Requests</a>
+                            <a class="list-group-item hover-primary-soft" href="#"><i class="fas fa-fw fa-life-ring me-2"></i>Support</a>
+
+                            <p class="text-body mt-3 mb-2">Manage Account</p>
+                            <a class="list-group-item hover-primary-soft" href="#"><i
+                                    class="fas fa-fw fa-user-alt me-2"></i>My Profile</a>
+                            
+                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="list-group-item hover-primary-soft"
+                                    style="border: none; background: none; cursor: pointer;">
+                                    <i class="fas fa-fw fa-sign-out-alt me-2"></i>Log Out
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>

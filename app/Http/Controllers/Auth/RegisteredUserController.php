@@ -52,7 +52,7 @@ class RegisteredUserController extends Controller
             ];
 
             // Add tenant-specific validation if role is tenant
-            if ($request->role === 'tenant') {
+            if ($request->role === 'guest') {
                 $validationRules += [
                     'current_address' => 'nullable|string|max:255',
                     'employment_status' => 'nullable|string|max:255',

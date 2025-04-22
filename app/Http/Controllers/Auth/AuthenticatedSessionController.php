@@ -36,7 +36,9 @@ class AuthenticatedSessionController extends Controller
             case 'caretaker':
                 return redirect()->route('caretaker.dashboard');
             case 'tenant':
-                return redirect()->route('tenant.home');
+                return redirect()->route('tenant.dashboard');
+             case 'guest':
+                 return redirect()->route('listing.display');
             default:
                 // Handle unexpected roles
                 return redirect()->route('login')->with('error', 'Unauthorized role.');

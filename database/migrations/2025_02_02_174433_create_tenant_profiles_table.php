@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('valid_id_front_path')->nullable(); // Path to the uploaded front of the ID
             $table->string('valid_id_back_path')->nullable(); // Path to the uploaded back of the ID
         
+        
             $table->timestamps();
         });
     }
