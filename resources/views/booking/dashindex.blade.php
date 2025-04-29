@@ -196,17 +196,24 @@
                                         </tr>
                                     @endforeach
 
-                                </tbody>
-                            </table>
-                        </div>
-
-                        @if ($viewings->isEmpty())
-                            <p class="text-center">You have no viewings at this time.</p>
-                        @endif
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
+
+
+
+                @if ($viewings->isEmpty())
+                    <p class="text-center">You have no viewings at this time.</p>
+                @endif
             </div>
         </div>
+        <div class="d-flex justify-content-center mt-3">
+            {{ $viewings->links('pagination::bootstrap-5') }}
+
+        </div>
+    </div>
+<!-- Bootstrap 5 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
         <style>
             .table-responsive {
