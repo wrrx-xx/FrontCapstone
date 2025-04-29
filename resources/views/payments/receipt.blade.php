@@ -98,6 +98,26 @@
             color: #666;
             margin-bottom: 30px;
         }
+        .status-badge {
+    padding: 0.25em 0.5em;
+    border-radius: 0.25rem;
+    color: white;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.status-badge.pending {
+    background-color: #ffc107; /* Bootstrap warning color */
+}
+
+.status-badge.completed {
+    background-color: #28a745; /* Bootstrap success color */
+}
+
+.status-badge.failed {
+    background-color: #dc3545; /* Bootstrap danger color */
+}
+
     </style>
 </head>
 <body>
@@ -105,7 +125,7 @@
         <div class="header">
             <div class="logo">
                 <!-- Logo placeholder - you can replace with your actual logo -->
-                <h1>ROOMRENTAL</h1>
+                <img src="assets/images/logo-dark.svg" alt="logo">
             </div>
             <div class="receipt-title">PAYMENT RECEIPT</div>
             <div class="receipt-id">Receipt #{{ $payment->id }}</div>
@@ -127,18 +147,28 @@
                     <strong>processed by:</strong>{{ $payment->processor->fname ?? '' }} {{ $payment->processor->mname ?? '' }} {{ $payment->processor->lname ?? '' }}
                     <br>
                     <Br></Br>
-                    <strong>Status:</strong> <span class="status-badge">{{ $payment->status }}</span><br>
-                   
+                    @php
+                    $statusClass = strtolower($payment->status);
+                @endphp
+                
+                <strong>Status:</strong> 
+                <span class="status-badge {{ $statusClass }}">
+                    {{ ucfirst($payment->status) }}
+                </span>
+                <br>
+                
                 </div>
             </div>
         </div>
 
-        <table>
+                <table>
             <thead>
                 <tr>
                     <th>Description</th>
                     <th>Unit Price</th>
-                    <th>Reservation Fee</th>
+                @if(isset($reservation_amount) && $reservation_amount > 0)
+                <th>Reservation Fee</th>
+                @endif
                     <th>Cash Advance</th>
                     <th>Total</th>
                 </tr>
@@ -146,10 +176,15 @@
             <tbody>
                 <tr>
                     <td>{{ $payment->listing->title }}</td>
-                    <td>₱{{ number_format($payment->listing->price, 2) }}</td>
-                    <td>₱{{ number_format($payment->listing->reservation_amount, 2) }}</td>
-                    <td>₱{{ number_format($payment->cash_advance_amount ?? 0, 2) }}</td>
-                    <td>₱{{ number_format(($payment->listing->price + $payment->listing->reservation_amount + ($payment->cash_advance_amount ?? 0)), 2) }}</td>
+                    <td>{{ number_format($payment->listing->price, 2) }}</td>
+                @if(isset($reservation_amount) && $reservation_amount > 0)
+                <td>{{ number_format($reservation_amount, 2) }}</td>
+                <td>{{ number_format($payment->cash_advance_amount ?? 0, 2) }}</td>
+                <td>{{ number_format(($payment->listing->price + ($reservation_amount ?? 0) + ($payment->cash_advance_amount ?? 0)), 2) }}</td>
+                @else
+                <td>{{ number_format($payment->cash_advance_amount ?? 0, 2) }}</td>
+                <td>{{ number_format(($payment->listing->price + ($payment->cash_advance_amount ?? 0)), 2) }}</td>
+                @endif
                 </tr>
             </tbody>
         </table>

@@ -94,6 +94,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Payment::class, 'processed_by');
     }
+    public function request(){
+        return $this->hasMany(MaintenanceRequest::class, 'tenant_id');
+    }
     public function isAdmin(){
         return $this->role=='admin';
     }

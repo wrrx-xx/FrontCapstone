@@ -48,7 +48,7 @@ class RegisteredUserController extends Controller
                 'email' => 'required|string|lowercase|email|max:255|unique:users',
                 'phone_number' => 'required|string|max:20',
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
-                'role' => 'required|in:tenant,owner',
+                'role' => 'required|in:guest,owner',
             ];
 
             // Add tenant-specific validation if role is tenant
@@ -111,6 +111,25 @@ class RegisteredUserController extends Controller
                 // Notify admins about new owner registration
                 $admins = User::where('role', 'admin')->get();
                 Notification::send($admins, new NewOwnerRegistered($user));
+            } elseif ($request->role === 'guest') {
+                // Handle tenant valid ID file uploads
+                $validIdFrontPath = $request->file('valid_id_front') ?
+                    $request->file('valid_id_front')->store('tenant_ids/front', 'public') : null;
+                $validIdBackPath = $request->file('valid_id_back') ?
+                    $request->file('valid_id_back')->store('tenant_ids/back', 'public') : null;
+
+                // Create the tenant profile
+                TenantProfile::create([
+                    'user_id' => $user->id,
+                    'current_address' => $request->current_address,
+                    'employment_status' => $request->employment_status,
+                    'monthly_income' => $request->monthly_income,
+                    'emergency_contact_name' => $request->emergency_contact_name,
+                    'emergency_contact_phone' => $request->emergency_contact_phone,
+                    'valid_id_type' => $request->valid_id_type,
+                    'valid_id_front_path' => $validIdFrontPath,
+                    'valid_id_back_path' => $validIdBackPath,
+                ]);
             }
 
     

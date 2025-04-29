@@ -55,34 +55,36 @@ class PaymentController extends Controller
     }
 
 
-public function ownerIndex()
-{
-    $user = Auth::user();
-    
-    // Determine owner ID based on user role
-    $userId = $user->role === 'caretaker' ? $user->owner_id : $user->id;
-    
-    // Fetch all listings owned by the user
-    $listings = Listing::where('owner_id', $userId)->get();
+    public function ownerIndex()
+    {
+        $user = Auth::user();
+        
+        // Determine owner ID based on user role
+        $userId = $user->role === 'caretaker' ? $user->owner_id : $user->id;
+        
+        // Fetch all listings owned by the user, order listings with tenant first
+        $listings = Listing::where('owner_id', $userId)
+            ->orderByRaw('tenant_id IS NULL, tenant_id')
+            ->get();
 
-    // Initialize collections to hold payments and billings
-    $payments = collect();
-    $billings = collect();
+        // Initialize collections to hold payments and billings
+        $payments = collect();
+        $billings = collect();
 
-    // Loop through each listing to get associated payments and billings
-    foreach ($listings as $listing) {
-        // Fetch payments for the current listing and merge into the collection
-        $listingPayments = Payment::where('listing_id', $listing->id)->get();
-        $payments = $payments->merge($listingPayments);
+        // Loop through each listing to get associated payments and billings
+        foreach ($listings as $listing) {
+            // Fetch payments for the current listing and merge into the collection
+            $listingPayments = Payment::where('listing_id', $listing->id)->get();
+            $payments = $payments->merge($listingPayments);
 
-        // Fetch billings for the current listing and eager load utilities, then merge into the collection
-        $listingBillings = Billings::with('utility')->where('listing_id', $listing->id)->get();
-        $billings = $billings->merge($listingBillings);
+            // Fetch billings for the current listing and eager load utilities, then merge into the collection
+            $listingBillings = Billings::with('utility')->where('listing_id', $listing->id)->get();
+            $billings = $billings->merge($listingBillings);
+        }
+
+        // Return the view with listings, payments, and billings data
+        return view('payment.index', compact('listings', 'payments', 'billings'));
     }
-
-    // Return the view with listings, payments, and billings data
-    return view('payment.index', compact('listings', 'payments', 'billings'));
-}
 
     /**
      * Show the form for creating a new resource.
@@ -131,6 +133,7 @@ public function ownerIndex()
         $payment->processed_by = Auth::id(); // Set the user ID of the processor
         $payment->listing_id = $request->listing_id;
         $payment->amount = $request->total_amount; // Total amount to be paid
+        $payment->reservation_amount = Listing::find($request->listing_id)->reservation_amount ?? 0; // Save reservation amount at payment time
         $payment->cash_advance_amount = $request->cash_advance_amount; // Set cash advance amount
         $payment->payment_method = $request->payment_method;
         $payment->reference_number = $request->reference_number;
@@ -157,9 +160,11 @@ public function ownerIndex()
 
         // Update the user's role to tenant
         $user = User::find($viewing->requested_by);
-        $user->role = 'tenant';
-        DB::table('sessions')->where('user_id', $user->id)->delete();
-        $user->save();
+        if ($user->role === 'guest') {
+            $user->role = 'tenant';
+            DB::table('sessions')->where('user_id', $user->id)->delete();
+            $user->save();
+        }
         
         
 
@@ -217,6 +222,10 @@ public function ownerIndex()
     // Fetch the payment with related models
     $payment = Payment::with(['listing.tenant', 'listing.user', 'processor'])->findOrFail($id);
 
+    // Fetch the billing related to this payment's listing and user
+    $billing = Billings::where('listing_id', $payment->listing_id)
+        ->where('user_id', $payment->listing->tenant->id ?? null)
+        ->first();
 
     // Prepare data for the PDF
     $data = [
@@ -226,6 +235,8 @@ public function ownerIndex()
         'owner' => $payment->listing->user, // Get owner details
         'processed_by' => $payment->processed_by, // Get the user who processed the payment
         'tenant' => $payment->listing->tenant, // Get tenant details
+        'billing' => $billing, // Pass billing to view for conditional reservation amount display
+        'reservation_amount' => $payment->reservation_amount, // Pass reservation amount from payment
     ];
 
     // Load PDF view and pass data
@@ -272,45 +283,67 @@ public function ownerIndex()
         try {
             // Create a new payment record
             
-    $payment = new Payment();
-    $payment->billing_id = $request->billing_id;
-    $payment->listing_id = $request->listing_id;
-    $payment->amount = $request->total_amount;
-    $payment->payment_method = $request->payment_method;
-    $payment->status = 'processing';
+            $payment = new Payment();
+            $payment->listing_id = $request->listing_id;
+            $payment->amount = $request->total_amount;
+            $payment->reservation_amount= 0;
+            $payment->payment_method = $request->payment_method;
 
-    if ($request->hasFile('screenshot')) {
-        $payment->screenshot = $request->file('screenshot')->store('payment_screenshots', 'public');
-    }
+            $user = Auth::user();
+            if ($user->role === 'caretaker' || $user->role === 'owner') {
+                $payment->status = 'completed';
+            } else {
+                $payment->status = 'pending';
+            }
 
-    if ($request->filled('reference_number')) {
-        $payment->reference_number = $request->reference_number;
-    }
+            if ($request->hasFile('screenshot')) {
+                $payment->screenshot = $request->file('screenshot')->store('payment_screenshots', 'public');
+            }
 
-    if ($request->has('cash_advance_checkbox') && $request->filled('cash_advance_amount')) {
-        $payment->cash_advance = $request->cash_advance_amount;
-    }
+            if ($request->filled('reference_number')) {
+                $payment->reference_number = $request->reference_number;
+            }
 
-    $payment->save();
-    
-            // Update the billing status to 'processing' using billing ID
+            // Fix: Always set cash_advance_amount if filled and numeric, regardless of checkbox presence
+            if ($request->filled('cash_advance_amount') && is_numeric($request->cash_advance_amount)) {
+                $payment->cash_advance_amount = $request->cash_advance_amount;
+            }
+
+            $payment->save();
+
+            // Find the listing and set reservation_amount to 0
+            $listing = Listing::find($request->listing_id);
+            if ($listing) {
+                $listing->reservation_amount = 0;
+                $listing->save();
+            }
+            
+            // Update the billing status based on user role
             $billing = Billings::find($request->billing_id);
             if ($billing) {
-                $billing->status = 'processing';
+                if ($user->role === 'caretaker' || $user->role === 'owner') {
+                    $billing->status = 'paid';
+
+                    $newBilling = new Billings();
+                    $newBilling->user_id = $billing->user_id;
+                    $newBilling->listing_id = $billing->listing_id;
+                    $newBilling->amount = $billing->amount; // Use the same amount as current billing
+                    $newBilling->due_date = now()->addMonth(); // Due date one month from now
+                    $newBilling->status = 'pending'; // Set initial status
+                    $newBilling->save();
+                } else {
+                    $billing->status = 'processing';
+                }
+                $billing->payment_id = $payment->id;
                 $billing->save();
             }
     
-            // Create a new billing record for the next month
-            $newBilling = new Billings();
-            $newBilling->user_id = Auth::id(); // Assuming current user is tenant
-            $newBilling->listing_id = $request->listing_id;
-            $newBilling->amount = $request->rent; // Or set to listing price if preferred
-            $newBilling->due_date = now()->addMonth(); // Due date one month from now
-            $newBilling->status = 'pending'; // Set initial status
-            $newBilling->save();
-    
-            // Redirect to tenant payment index route with success message
-            return redirect()->route('tenant.payment.index')->with('success', 'Payment submitted successfully and pending approval.');
+            // Redirect to appropriate route with success message
+            if ($user->role === 'caretaker' || $user->role === 'owner') {
+                return redirect()->route('payment.owner')->with('success', 'Payment submitted successfully and marked as completed.');
+            } else {
+                return redirect()->route('tenant.payment.index')->with('success', 'Payment submitted successfully and pending approval.');
+            }
         } catch (\Exception $e) {
             // Log the error message for debugging
             Log::error('Payment processing error: ' . $e->getMessage());

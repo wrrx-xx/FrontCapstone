@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('billing_id')->constrained('billings')->cascadeOnDelete(); // Link to the billing
             $table->string('type'); // Type of utility (water or electricity)
             $table->decimal('amount', 10, 2); // Amount charged for the utility
-            $table->decimal('reading', 10, 2); // Meter reading
+            $table->decimal('reading', 10, 2)->nullable(); // Meter reading
             $table->string('status')->default('pending'); // Payment status
             $table->timestamps(); // Created and updated timestamps
         });

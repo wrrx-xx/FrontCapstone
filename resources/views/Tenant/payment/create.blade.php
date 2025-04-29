@@ -29,8 +29,8 @@
                 <li>{{ ucfirst($utility->type) }}: ₱{{ number_format($utility->amount, 2) }}</li>
             @endforeach
         </ul>
-        
-        <p><strong>Grand Total:</strong> ₱{{ number_format($grandTotal, 2) }}</p>   
+        <br>
+        <h4><strong>Grand Total:</strong> ₱{{ number_format($grandTotal, 2) }}</h4>   
         <div class="form-group">
             <label for="payment_method">Payment Method</label>
             <select name="payment_method" id="payment_method" class="form-control" required>
@@ -39,7 +39,7 @@
             </select>
         </div>
         <div class="form-group">
-            <input type="checkbox" id="cash_advance_checkbox" name="cash_advance_checkbox">
+            <input type="checkbox" id="cash_advance_checkbox" name="cash_advance_checkbox" value="1">
             <label for="cash_advance_checkbox">I want a cash advance</label>
         </div>
         

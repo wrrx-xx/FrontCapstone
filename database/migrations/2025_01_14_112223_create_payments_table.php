@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('listing_id')->constrained('listings')->cascadeOnDelete(); // Link to the listing
             $table->double('amount', 10, 2); // Total amount after cash advance
-            $table->double('cash_advance_amount', 10, 2)->nullable(); // Cash advance amount
+            $table->double('cash_advance_amount',)->nullable(); // Cash advance amount
             $table->enum('payment_method', ['cash', 'gcash']); // Payment method
             $table->string('reference_number')->nullable(); // Reference number for GCash payments
             $table->string('screenshot')->nullable(); // Path to the uploaded screenshot

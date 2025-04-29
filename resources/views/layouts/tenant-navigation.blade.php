@@ -72,9 +72,9 @@
                             
                             
                             <p class="text-body mt-3 mb-2">Tenant Services</p>
-                            <a class="list-group-item hover-primary-soft" href="#"><i class="fas fa-fw fa-home me-2"></i>My Rentals</a>
+                            <a class="list-group-item hover-primary-soft" href="{{ route('tenant.rental.index') }}"><i class="fas fa-fw fa-home me-2"></i>My Rentals</a>
                             <a class="list-group-item hover-primary-soft" href="{{ route('tenant.payment.index') }}"><i class="fas fa-fw fa-file-invoice-dollar me-2"></i>Payment History</a>
-                            <a class="list-group-item hover-primary-soft" href="#"><i class="fas fa-fw fa-tools me-2"></i>Maintenance Requests</a>
+                            <a class="list-group-item hover-primary-soft" href="{{ route('tenant.maintenance.index') }}"><i class="fas fa-fw fa-tools me-2"></i>Maintenance</a>
                             <a class="list-group-item hover-primary-soft" href="#"><i class="fas fa-fw fa-life-ring me-2"></i>Support</a>
 
                             <p class="text-body mt-3 mb-2">Manage Account</p>

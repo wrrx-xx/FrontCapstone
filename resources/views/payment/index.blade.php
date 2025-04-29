@@ -2,181 +2,275 @@
 
 @section('content')
     <div class="main-content">
-        <h1 class="mb-4 text-primary">Your Listings</h1>
-        <table class="table table-hover table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th>Listing</th>
-                    <th>Tenant Name</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="container py-4">
+            @if (session('success') || $errors->any())
+                <!-- Feedback Modal -->
+                @include('components.feedback-modal')
+            @endif
+
+            <h2 class="text-primary mb-4">My Listings & Payments</h2>
+
+            <div class="row g-4">
                 @foreach ($listings as $listing)
-                            <tr class="align-middle">
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="me-3">
-                                            @if ($listing->photos->isNotEmpty())
-                                                <img class="rounded shadow"
-                                                    src="{{ asset('storage/' . $listing->photos->first()->photo_url) }}"
-                                                    alt="{{ $listing->title }}" style="max-width: 120px; height: auto;">
-                                            @else
-                                                <img class="rounded shadow" src="{{ asset('path/to/default/image.jpg') }}"
-                                                    alt="Default Image" style="max-width: 120px; height: auto;">
-                                            @endif
-                                        </div>
-                                        <a data-bs-toggle="collapse" href="#listing-{{ $listing->id }}" role="button"
-                                            aria-expanded="false" aria-controls="listing-{{ $listing->id }}"
-                                            class="text-decoration-none">
-                                            <strong class="text-dark">{{ $listing->title }}</strong>
-                                        </a>
-                                    </div>
-                                </td>
-                                <td>
-                                    @if ($listing->tenant)
-                                        <span class="text-success">{{ $listing->tenant->fname }} {{ $listing->tenant->mname }}
-                                            {{ $listing->tenant->lname }}</span>
-                                    @else
-                                        <span class="text-danger">No Tenant</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <button class="btn btn-outline-info btn-sm" data-bs-toggle="collapse"
-                                        data-bs-target="#listing-{{ $listing->id }}" aria-expanded="false"
-                                        aria-controls="listing-{{ $listing->id }}">
-                                        Toggle Details
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-header d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold">{{ $listing->title }}</span>
+                                    <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#listingDetails-{{ $listing->id }}">
+                                        View Details
                                     </button>
-                                </td>
-                            </tr>
-                            <tr class="collapse" id="listing-{{ $listing->id }}">
-                                <td colspan="3" class="bg-light">
-                                    <div class="p-3">
+                                </div>
+                                <div class="mt-2">
+                                    <small class="text-muted">
+                                        Tenant:
+                                        @if ($listing->tenant)
+                                            <span class="text-success fw-semibold">{{ $listing->tenant->fname }}
+                                                {{ $listing->tenant->lname }}</span>
+                                        @else
+                                            <span class="text-danger">Vacant</span>
+                                        @endif
+                                    </small>
+                                </div>
+                            </div>
 
+                            <div class="collapse" id="listingDetails-{{ $listing->id }}">
+                                <div class="card-body">
+                                    <!-- Tabs -->
+                                    <ul class="nav nav-tabs mb-3" id="tab-{{ $listing->id }}" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="billing-tab-{{ $listing->id }}"
+                                                data-bs-toggle="tab" data-bs-target="#billing-{{ $listing->id }}"
+                                                type="button" role="tab">Billings</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="payment-tab-{{ $listing->id }}"
+                                                data-bs-toggle="tab" data-bs-target="#payment-{{ $listing->id }}"
+                                                type="button" role="tab">Payments</button>
+                                        </li>
+                                    </ul>
 
-                                        <h5 class="text-primary mt-3">Billings</h5>
-                                        @php
-                                            $listingUtilities = $billings
-                                                ->where('listing_id', $listing->id)
-                                                ->flatMap->utility->sum('amount');
-                                            $listingBillingAmount = $billings->where('listing_id', $listing->id)->sum('amount');
-                                            $listingGrandTotal = $listingUtilities + $listingBillingAmount;
-                                        @endphp
-                                        <ul class="list-group">
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="tab-content overflow-auto" id="tabs-content-{{ $listing->id }}"
+                                        style="max-height: 400px;">
 
-                                            </li>
+                                        <!-- Billing -->
+                                        <div class="tab-pane fade show active" id="billing-{{ $listing->id }}"
+                                            role="tabpanel">
+                                            @php $listingBillings = $billings->where('listing_id', $listing->id); @endphp
 
-                                            @foreach ($billings as $billing)
-                                                        @if ($billing->listing_id == $listing->id)
-                                                        <li class="list-group-item py-1">
-                                                            <div class="row text-center text-md-start">
-                                                                <!-- Total Amount -->
-                                                                <div class="col-12 col-md-4 mb-2 mb-md-0 d-flex flex-column justify-content-center align-items-center align-items-md-start">
-                                                                    <strong>Total Amount:</strong>
-                                                                    <div>₱{{ number_format($billing->amount + $billing->utility->sum('amount'), 2) }}</div>
-                                                                    <small class="text-muted d-block mt-1">
-                                                                        (₱{{ number_format($billing->amount, 2) }} +
-                                                                        ₱{{ number_format($billing->utility->sum('amount'), 2) }})
-                                                                    </small>
-                                                                </div>
-                                                        
-                                                                <!-- Utilities -->
-                                                                <div class="col-12 col-md-4 mb-2 mb-md-0 d-flex flex-column justify-content-center">
-                                                                    <strong>Utilities:</strong>
-                                                                    <ul class="list-unstyled mb-0">
-                                                                        @foreach ($billing->utility as $utility)
-                                                                            <li>
-                                                                                {{ $utility->type ?? 'Utility' }}:
-                                                                                ₱{{ number_format($utility->amount, 2) }}
-                                                                            </li>
-                                                                        @endforeach
-                                                                    </ul>
-                                                                </div>
-                                                        
-                                                                <!-- Billing Info -->
-                                                                <div class="col-12 col-md-4 d-flex flex-column justify-content-center align-items-center align-items-md-end">
-                                                                    <div class="mb-1">Due Date: {{ $billing->due_date->format('m-d-Y') }}</div>
-                                                                    <div class="mb-1">
-                                                                        Status: 
-                                                                        <span class="badge bg-{{ $billing->status === 'paid' ? 'success' : ($billing->status === 'failed' ? 'danger' : 'warning') }}">
-                                                                            @if ($billing->status == 'processing')
-                                                                                <i class="fas fa-spinner fa-spin"></i> Waiting for Approval
-                                                                            @else
-                                                                                {{ ucfirst($billing->status) }}
-                                                                            @endif
+                                            @if ($listingBillings->isEmpty())
+                                                <p class="text-muted">No billings yet.</p>
+                                            @else
+                                                @foreach ($listingBillings as $billing)
+                                                    <div class="mb-3 border rounded p-2">
+                                                        <p class="mb-1">
+                                                            <strong>Total:</strong>
+                                                            ₱{{ number_format($billing->amount + $billing->utility->sum('amount'), 2) }}
+                                                            <br>
+                                                            <small
+                                                                class="text-muted">(₱{{ number_format($billing->amount, 2) }}
+                                                                rent
+                                                                @if ($billing->utility->sum('amount') > 0)
+                                                                    +
+                                                                    ₱{{ number_format($billing->utility->sum('amount'), 2) }}
+                                                                    utilities
+                                                                @endif
+                                                                )
+                                                                @if ($billing->utility->isNotEmpty())
+                                                                    <small class="text-muted d-block mt-2">
+                                                                        <span>
+                                                                            @foreach ($billing->utility as $utility)
+                                                                                <small class="me-2">
+                                                                                   <strong> {{ $utility->type ?? 'Utility' }}:</strong>
+                                                                                    ₱{{ number_format($utility->amount, 2) }}
+                                                                                </small>
+                                                                            @endforeach
                                                                         </span>
-                                                                    </div>
-                                                                    @if ($billing->status == 'processing')
-                                                                        <div class="mt-2">
-                                                                            <form action="{{ route('billing.approve', $billing->id) }}" method="POST" class="d-inline">
-                                                                                @csrf
-                                                                                <button type="submit" class="btn btn-success btn-sm me-1">Approve</button>
-                                                                            </form>
-                                                                            <form action="{{ route('billing.decline', $billing->id) }}" method="POST" class="d-inline">
-                                                                                @csrf
-                                                                                <button type="submit" class="btn btn-danger btn-sm">Decline</button>
-                                                                            </form>
-                                                                            
+                                                                    </small>
+                                                                @endif
+                                                            </small>
+                                                        </p>
+                                                        <p class="mb-1"><strong>Due:</strong>
+                                                            {{ $billing->due_date->format('M d, Y') }}</p>
+                                                        <p class="mb-2"><strong>Status:</strong>
+                                                            <span
+                                                                class="badge bg-{{ $billing->status === 'paid' ? 'success' : ($billing->status === 'failed' ? 'danger' : 'warning') }}">
+                                                                {{ $billing->status === 'processing' ? 'Waiting for Approval' : ucfirst($billing->status) }}
+                                                            </span>
+                                                        </p>
+                                                        @if (in_array(Auth::user()->role, ['owner', 'caretaker']) &&
+                                                                ($billing->status == 'pending' || $billing->status == 'failed'))
+                                                            <!-- Add Utility Bill button and modal here -->
+
+                                                            <!-- Button to trigger modal -->
+                                                            <button type="button"
+                                                                class="btn btn-sm btn-outline-primary mt-2"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#addUtilityBillModal-{{ $billing->id }}">
+                                                                Add Utility Bill
+                                                            </button>
+                                                            <a href="{{ route('tenant.payment.create', $billing->id) }}" class="btn btn-sm btn-primary mt-2 ms-2">
+                                                                Pay
+                                                            </a>
+                                                            
+
+                                                            <!-- Modal -->
+                                                            <div class="modal fade"
+                                                                id="addUtilityBillModal-{{ $billing->id }}" tabindex="-1"
+                                                                aria-labelledby="addUtilityBillModalLabel-{{ $billing->id }}"
+                                                                aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <form action="{{ route('utilitybill.store') }}"
+                                                                        method="POST" class="modal-content">
+                                                                        @csrf
+                                                                        <input type="hidden" name="billing_id"
+                                                                            value="{{ $billing->id }}">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title"
+                                                                                id="addUtilityBillModalLabel-{{ $billing->id }}">
+                                                                                Add Utility Bill</h5>
+                                                                            <button type="button" class="btn-close"
+                                                                                data-bs-dismiss="modal"
+                                                                                aria-label="Close"></button>
                                                                         </div>
-                                                                    @endif
+                                                                        <div class="modal-body">
+                                                                            <div class="mb-3">
+                                                                                <label for="type-{{ $billing->id }}" class="form-label">Utility Type</label>
+                                                                                <select name="type" id="type-{{ $billing->id }}" class="form-select" required onchange="toggleCustomUtilityType(this, {{ $billing->id }})">
+                                                                                    <option value="" disabled selected>Select Utility Type</option>
+                                                                                    <option value="electricity">Electricity</option>
+                                                                                    <option value="water">Water</option>
+                                                                                    <option value="other">Other</option>
+                                                                                </select>
+                                                                                <input type="text" name="custom_type" id="custom_type_{{ $billing->id }}" class="form-control mt-2" placeholder="Enter custom utility type" style="display:none;">
+                                                                            </div>
+                                                                            
+                                                                            <script>
+                                                                                function toggleCustomUtilityType(selectElem, billingId) {
+                                                                                    var customInput = document.getElementById('custom_type_' + billingId);
+                                                                                    if (selectElem.value === 'other') {
+                                                                                        customInput.style.display = 'block';
+                                                                                        customInput.required = true;
+                                                                                    } else {
+                                                                                        customInput.style.display = 'none';
+                                                                                        customInput.required = false;
+                                                                                    }
+                                                                                }
+                                                                            </script>
+                                                                            <div class="mb-3">
+                                                                                <label for="amount-{{ $billing->id }}"
+                                                                                    class="form-label">Amount</label>
+                                                                                <input type="number" step="0.01"
+                                                                                    name="amount"
+                                                                                    id="amount-{{ $billing->id }}"
+                                                                                    class="form-control" required>
+                                                                            </div>
+                                                                            <div class="mb-3">
+                                                                                <label for="reading-{{ $billing->id }}"
+                                                                                    class="form-label">Reading
+                                                                                    (optional)</label>
+                                                                                <input type="text" name="reading"
+                                                                                    id="reading-{{ $billing->id }}"
+                                                                                    class="form-control">
+                                                                            </div>
+                                                                            <div class="mb-3">
+                                                                                <label for="status-{{ $billing->id }}"
+                                                                                    class="form-label">Status</label>
+                                                                                <select name="status"
+                                                                                    id="status-{{ $billing->id }}"
+                                                                                    class="form-select" required>
+                                                                                    <option value="pending" selected>
+                                                                                        Pending</option>
+                                                                                    <option value="paid">Paid</option>
+                                                                                    <option value="failed">Failed</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="submit"
+                                                                                class="btn btn-primary">Add Utility
+                                                                                Bill</button>
+                                                                            <button type="button"
+                                                                                class="btn btn-secondary"
+                                                                                data-bs-dismiss="modal">Cancel</button>
+                                                                        </div>
+                                                                    </form>
                                                                 </div>
                                                             </div>
-                                                        </li>
-                                                        
                                                         @endif
-                                            @endforeach
-                                    </ul>
-                                    <h5 class="text-primary mt-3">Payments</h5>
-                                    <ul class="list-group">
-                                        @foreach ($payments as $payment)
-                                            @if ($payment->listing_id == $listing->id)
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    <span>
+                                                        @if ($billing->status == 'processing')
+                                                        <form action="{{ route('billing.approve', $billing->id) }}" method="POST" class="d-inline">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                                        </form>
+                                                        <form action="{{ route('billing.decline', $billing->id) }}" method="POST" class="d-inline">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-danger btn-sm">Decline</button>
+                                                        </form>
+                                                    @endif
+                                                    
 
-                                                        Amount: ₱{{ number_format($payment->amount, 2) }} -
-                                                        Status: <span
-                                                            class="badge bg-{{ $payment->status === 'completed' ? 'success' : 'warning' }}">{{ ucfirst($payment->status) }}</span>
-                                                        -
-                                                        Date: {{ $payment->created_at->format('Y-m-d') }}
-                                                    </span>
-                                                    <a href="{{ route('receipt.download', $payment->id) }}"
-                                                        class="btn btn-outline-primary btn-sm ms-2">Download Receipt</a>
-                                                </li>
+
+                                                    </div>
+                                                @endforeach
                                             @endif
-                                        @endforeach
-                                    </ul>
-                                </td>
-                            </tr>
-                @endforeach
-            </tbody>
-        </table>
-    
+                                        </div>
 
-     <style>
-        .table-hover tbody tr:hover {
-            background-color: #f 0f0f0;
-        }
 
-        .rounded {
-            border-radius: 0.5rem;
-        }
+                                        <!-- Payments -->
+                                        <div class="tab-pane fade" id="payment-{{ $listing->id }}" role="tabpanel">
+@forelse ($payments->where('listing_id', $listing->id) as $payment)
+    <div
+        class="mb-3 border rounded p-2 d-flex justify-content-between align-items-center">
+        <div>
+            @php
+                $totalAmount = $payment->amount + $payment->cash_advance_amount;
+            @endphp
+            <strong>₱{{ number_format($totalAmount, 2) }}</strong><br>
+            <small>
+                Amount: ₱{{ number_format($payment->amount, 2) }}<br>
+                Cash Advance: ₱{{ number_format($payment->cash_advance_amount, 2) }}
+            </small>
+            @php
+                $statusClass = 'warning'; // default to warning
+                if ($payment->status === 'completed') {
+                    $statusClass = 'success';
+                } elseif ($payment->status === 'failed') {
+                    $statusClass = 'danger';
+                }
+            @endphp
 
-        .shadow {
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-        }
+            <span class="badge bg-{{ $statusClass }}">
+                {{ ucfirst($payment->status) }}
+            </span>
 
-        .bg-light {
-            background-color: #f8f9fa !important;
-        }
-
-        .text-success {
-            color: #28a745 !important;
-        }
-
-        .text-danger {
-            color: #dc3545 !important;
-        }
-        </style>
+            <br><small>{{ $payment->created_at->format('Y-m-d') }}</small>
+        </div>
+        <a href="{{ route('receipt.download', $payment->id) }}"
+            class="btn btn-outline-primary btn-sm">Download</a>
     </div>
+@empty
+    <p class="text-muted">No payments yet.</p>
+@endforelse
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    <!-- Show modal on load if needed -->
+    @if (session('success') || $errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                new bootstrap.Modal(document.getElementById('feedbackModal')).show();
+            });
+            
+        </script>
+        
+    @endif
 @endsection

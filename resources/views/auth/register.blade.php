@@ -16,7 +16,7 @@
                         <div class="mb-4">
                             <x-input-label for="role" :value="__('Register As')" />
                             <select id="role" name="role" class="form-control bg-light border-0 rounded-pill" required>
-                                <option value="tenant" {{ old('role') == 'tenant' ? 'selected' : '' }}>Tenant</option>
+                                <option value="guest" selected>Tenant</option>
                                 <option value="owner" {{ old('role') == 'owner' ? 'selected' : '' }}>Property Owner</option>
                             </select>
                             <x-input-error :messages="$errors->get('role')" class="mt-2" />
@@ -232,7 +232,7 @@
 
         function toggleSteps() {
             const role = roleSelect.value;
-            if (role === 'tenant') {
+            if (role === 'guest') {
                 step2.querySelector('button[type="submit"]').style.display = 'inline-block';
                 if (nextStep2Btn) nextStep2Btn.style.display = 'none';
             } else {
@@ -248,7 +248,7 @@
         nextStep1Btn.addEventListener('click', function () {
             const role = roleSelect.value;
             step1.style.display = 'none';
-            if (role === 'tenant') {
+            if (role === 'guest') {
                 step2.style.display = 'block';
                 step3.style.display = 'none';
             } else {
@@ -274,7 +274,7 @@
         if (prevStep3Btn) {
             prevStep3Btn.addEventListener('click', function () {
                 const role = roleSelect.value;
-                if (role === 'tenant') {
+                if (role === 'guest') {
                     step2.style.display = 'block';
                     step3.style.display = 'none';
                 } else {

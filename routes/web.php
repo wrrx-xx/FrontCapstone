@@ -23,6 +23,10 @@ use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\ViewingController;
 use App\Http\Controllers\Admin\ApprovalController;
 use App\Http\Controllers\BillingsController;
+use App\Http\Controllers\MaintenanceRequestController;
+use App\Http\Controllers\OwnerMaintenance;
+use App\Http\Controllers\TenantRentalController;
+use App\Http\Controllers\UtilityBillsController;
 use App\Models\Listing;
 use Illuminate\Http\Request;
 use Illuminate\Routing\ViewController;
@@ -47,12 +51,16 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('/tenant/payment',[TenantController::class,'paymentindex'])->name('tenant.payment');
     Route::get('/tenant/payment/create/{id}',[PaymentController::class,'createpay'])->name('tenant.payment.create');
     Route::post('/tenant/payment/store',[PaymentController::class,'paystore'])->name('tenant.payment.store');
+    Route::get('/tenant/myrental', [TenantRentalController::class, 'index'])->name('tenant.rental.index');
+    Route::resource('maintenance', MaintenanceRequestController::class)->names('tenant.maintenance');
+
 });
 
 Route::get('/listing', function () {
     $listings = Listing::paginate(10);
     return view('listing.display', ['listings' => $listings]);
 })->middleware(['auth', 'verified'])->name('guest.home');
+
 
 
 Route::get('/caretaker/dashboard', function () {
@@ -84,6 +92,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/receipt/download/{id}', [PaymentController::class, 'downloadReceipt'])->name('receipt.download');
     Route::post('/billing/{id}/approve', [BillingsController::class, 'approve'])->name('billing.approve');
     Route::post('/billing/{id}/decline', [BillingsController::class, 'decline'])->name('billing.decline');
+    Route::resource('/utilitybill', UtilityBillsController::class);
+    Route::resource('owner/maintenance/request', OwnerMaintenance::class)->names('owner.maintenance');
 });
 
 Route::middleware('auth')->group(function () {

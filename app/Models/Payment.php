@@ -13,6 +13,7 @@ class Payment extends Model
         'listing_id',
         'billing_id',
         'amount',
+        'reservation_amount',  // Added to store reservation amount at payment time
         'payment_method',
         'cash_advance_amount',
         'reference_number',
