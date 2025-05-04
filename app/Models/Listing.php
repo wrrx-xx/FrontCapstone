@@ -23,7 +23,9 @@ class Listing extends Model
         'waiver_file',
         'map_link',
         'tenant_id',
+        'advance_payment_months', // added field
     ];
+    
 
     public function user()
     {

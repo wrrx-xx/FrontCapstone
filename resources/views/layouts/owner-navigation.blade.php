@@ -1,10 +1,10 @@
 <!-- **************** MAIN CONTENT START **************** -->
 <!-- Navbar top START -->
-<div class="dashboard-topbar navbar-dark bg-dark px-3 px-sm-4 px-md-5">
+<div class="dashboard-topbar navbar-light bg-light px-3 px-sm-4 px-md-5">
     <div class="d-flex justify-content-between align-items-center">
         <!-- Logo -->
         <a class="navbar-brand d-flex align-items-center py-2" href="index.html">
-            <img class="navbar-brand-item" src="assets/images/logo-light.svg" alt="logo">
+            <img class="navbar-brand-item" src="{{ asset('assets/images/logo2.png') }}" alt="logo">
         </a>
 
         <!-- Navbar right -->
@@ -134,11 +134,16 @@
                                     <i class="fas fa-fw fa-wallet me-2"></i>Payments
                                 </div>
                             @endif
-@if (Auth::user()->ownerProfile && Auth::user()->ownerProfile->approved)
-    <a class="list-group-item hover-primary-soft" href="{{ route('owner.maintenance.index') }}">
-        <i class="fas fa-fw fa-tools me-2"></i>Maintenance Requests
-    </a>
-@else
+                            @if (Auth::user()->ownerProfile && Auth::user()->ownerProfile->approved)
+                                <a class="list-group-item hover-primary-soft d-flex justify-content-between align-items-center"
+                                    href="{{ route('owner.maintenance.index') }}">
+                                    <span><i class="fas fa-fw fa-tools me-2"></i>Maintenance Requests</span>
+                                    @if (isset($pendingMaintenanceCount) && $pendingMaintenanceCount > 0)
+                                        <span
+                                            class="badge bg-danger rounded-pill">{{ $pendingMaintenanceCount }}</span>
+                                    @endif
+                                </a>
+                            @else
                                 <div class="list-group-item text-muted" style="opacity: 0.6;">
                                     <i class="fas fa-fw fa-tools me-2"></i>Maintenance Requests
                                 </div>

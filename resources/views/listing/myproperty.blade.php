@@ -2,11 +2,11 @@
 
 @section('content')
 <div class="main-content">
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-        @endif
+    @if (session('success') || $errors->any())
+    <!-- Feedback Modal -->
+    @include('components.feedback-modal')
+@endif
+
     <div class="row">
         <div class="col-12">
             <!-- Page title -->
@@ -81,6 +81,7 @@
                                                 <a href="{{ route('listing.detail', $listing->id) }}" class="btn btn-sm btn-info-soft me-1 mb-1">
                                                     <i class="fas fa-fw fa-eye"></i>
                                                 </a>
+                                                @if(auth()->user()->role !== 'caretaker')
                                                 <a href="{{ route('listing.edit', $listing->id) }}" class="btn btn-sm btn-success-soft me-1 mb-1">
                                                      
                                                     <i class="far fa-fw fa-edit"></i>
@@ -92,6 +93,7 @@
                                                         <i class="far fa-fw fa-trash-alt"></i>
                                                     </button>
                                                 </form>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -104,6 +106,15 @@
             </div>
             <!-- Property list END -->
         </div>
-    </div> <!-- Row END -->
+    </div> 
+    @if (session('success') || $errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new bootstrap.Modal(document.getElementById('feedbackModal')).show();
+        });
+        
+    </script>
+    
+@endif<!-- Row END -->
 </div>
 @endsection

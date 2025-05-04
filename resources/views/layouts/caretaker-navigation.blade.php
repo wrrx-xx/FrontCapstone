@@ -1,10 +1,10 @@
 <!-- **************** MAIN CONTENT START **************** -->
 <!-- Navbar top START -->
-<div class="dashboard-topbar navbar-dark bg-dark px-3 px-sm-4 px-md-5">
+<div class="dashboard-topbar navbar-light bg-light px-3 px-sm-4 px-md-5">
     <div class="d-flex justify-content-between align-items-center">
         <!-- Logo -->
         <a class="navbar-brand d-flex align-items-center py-2" href="index.html">
-            <img class="navbar-brand-item" src="assets/images/logo-light.svg" alt="logo">
+            <img class="navbar-brand-item" src="{{ asset('assets/images/logo2.png') }}" alt="logo">
         </a>
 
         <!-- Navbar right -->
@@ -79,9 +79,17 @@
                                     class="fas fa-fw fa-users me-2"></i>Bookings</a>
                                     <a class="list-group-item hover-primary-soft" href="{{ route('reservations.index') }}"><i
                                         class="fas fa-fw fa-users me-2"></i>Reservations</a>
-                                       
-                                            <a class="list-group-item hover-primary-soft" href="{{ route('payment.owner') }}"><i
-                                                class="fas fa-fw fa-users me-2"></i>Payments</a>
+                                        <a class="list-group-item hover-primary-soft" href="{{ route('payment.owner') }}">
+                                            <i class="fas fa-fw fa-wallet me-2"></i>Payments
+                                        </a>
+                                        <a class="list-group-item hover-primary-soft d-flex justify-content-between align-items-center"
+                                        href="{{ route('owner.maintenance.index') }}">
+                                        <span><i class="fas fa-fw fa-tools me-2"></i>Maintenance Requests</span>
+                                        @if (isset($pendingMaintenanceCountCaretaker) && $pendingMaintenanceCountCaretaker > 0)
+                                            <span
+                                                class="badge bg-danger rounded-pill">{{ $pendingMaintenanceCountCaretaker }}</span>
+                                        @endif
+                                    </a>
                             {{-- <a class="list-group-item hover-primary-soft" href="agent-review.html"><i
                                     class="far fa-fw fa-comment-dots me-2"></i>Review</a> --}}
 

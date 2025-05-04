@@ -15,7 +15,8 @@ class OwnerMaintenance extends Controller
      */
     public function index()
     {
-        $ownerId = Auth::id();
+        $user = Auth::user();
+        $ownerId = $user->role === 'caretaker' ? $user->owner_id : $user->id;
 
         // Get listings owned by the authenticated owner
         $listingIds = Listing::where('owner_id', $ownerId)->pluck('id');

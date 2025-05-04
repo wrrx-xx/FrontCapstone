@@ -8,7 +8,7 @@
                 @include('components.feedback-modal')
             @endif
 
-            <h2 class="text-primary mb-4">My Listings & Payments</h2>
+            <h2 class="text-black mb-4">My Listings & Payments</h2>
 
             <div class="row g-4">
                 @foreach ($listings as $listing)

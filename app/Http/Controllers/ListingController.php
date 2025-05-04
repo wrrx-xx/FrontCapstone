@@ -22,10 +22,14 @@ class ListingController extends Controller
      * Display a listing of the resource.
      */
     
-    public function create()
-    {
-        return view('listing.create');
-    }
+     public function create()
+     {
+         $amenities = (new \App\Models\Amenities())->getFillable();
+         // Remove 'listing_id' from the list
+         $amenities = array_filter($amenities, fn($item) => $item !== 'listing_id');
+         return view('listing.create', compact('amenities'));
+     }
+     
     public function ownerindex()
     {
     
@@ -68,7 +72,8 @@ class ListingController extends Controller
             'reservation_amount' => 'required|numeric',
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif', // Validate photo uploads
             'map_link' => '|string|max:255',
-            'waiver_file' => '|mimes:pdf|max:255', // Validate PDF file for waiver_file
+            'waiver_file' => '|mimes:pdf|max:255',
+            'advance_payment_months' => 'required|integer|in:0,1,2', // Validate PDF file for waiver_file
         ]);
         
 
@@ -87,6 +92,7 @@ class ListingController extends Controller
             'reservation_amount' => $request->reservation_amount,
             'map_link' => $request->maps,
             'waiver_file' => $request->waiver,
+            'advance_payment_months' => $request->input('advance_payment_months'),
         ]);
 
         // Create amenities
@@ -126,7 +132,7 @@ class ListingController extends Controller
         }
 
         // Redirect or return response
-        return redirect()->route('listing.create')->with('success', 'Listing created successfully!');
+        return redirect()->route('listing.myproperty')->with('success', 'Listing created successfully!');
     }
 
 
@@ -152,8 +158,11 @@ class ListingController extends Controller
      */
     public function edit($id)
 {
+    $amenities = (new \App\Models\Amenities())->getFillable();
+    // Remove 'listing_id' from the list
+    $amenities = array_filter($amenities, fn($item) => $item !== 'listing_id');
     $listing = Listing::with('amenities', 'photos')->findOrFail($id);
-    return view('listing.edit', compact('listing'));
+    return view('listing.edit', compact('listing','amenities'));
 }
 
 public function update(Request $request, $id)
@@ -174,6 +183,7 @@ public function update(Request $request, $id)
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif', // Validate photo uploads
             'map_link' => '|string|max:255',
             'waiver_file' => '|mimes:pdf|max:255', // Validate PDF file for waiver_file
+            'advance_payment_months' => 'required|integer|in:0,1,2',
         ]);
 
         // Find the listing
@@ -193,6 +203,7 @@ public function update(Request $request, $id)
             'reservation_amount' => $request->reservation_amount,
             'map_link' => $request->maps,
             'waiver_file' => $request->waiver,
+            'advance_payment_months' => $request->input('advance_payment_months'),
         ]);
 
         // Update amenities
@@ -230,7 +241,7 @@ public function update(Request $request, $id)
         }
 
         // Redirect or return response
-        return redirect()->route('listing.edit', $listing->id)->with('success', 'Listing updated successfully!');
+        return redirect()->route('listing.myproperty', $listing->id)->with('success', 'Listing updated successfully!');
 
     } catch (ModelNotFoundException $e) {
         // Handle the case where the listing or photo is not found

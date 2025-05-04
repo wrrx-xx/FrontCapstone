@@ -7,38 +7,40 @@
 
     <main>
         @if (session('success') || $errors->any())
-<!-- Feedback Modal -->
-<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg">
-            <div class="modal-header {{ session('success') ? 'bg-success' : 'bg-danger' }} text-white">
-                <h5 class="modal-title" id="feedbackModalLabel">
-                    {{ session('success') ? 'Success!' : 'Something went wrong!' }}
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-                @if (session('success'))
-                    <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
-                    <p class="mt-3 mb-0">{{ session('success') }}</p>
-                @endif
+            <!-- Feedback Modal -->
+            <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow-lg">
+                        <div class="modal-header {{ session('success') ? 'bg-success' : 'bg-danger' }} text-white">
+                            <h5 class="modal-title" id="feedbackModalLabel">
+                                {{ session('success') ? 'Success!' : 'Something went wrong!' }}
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            @if (session('success'))
+                                <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+                                <p class="mt-3 mb-0">{{ session('success') }}</p>
+                            @endif
 
-                @if ($errors->any())
-                    <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
-                    <ul class="mt-3 list-unstyled mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                @endif
+                            @if ($errors->any())
+                                <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
+                                <ul class="mt-3 list-unstyled mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">OK</button>
-            </div>
-        </div>
-    </div>
-</div>
-@endif
+        @endif
 
         <section class="pt-3 pt-md-4">
             <div class="container card-grid">
@@ -174,8 +176,9 @@
                                             <div class="col-sm-12 mb-0">
                                                 <ul class="list-group list-group-borderless">
                                                     <li class="list-group-item text-dark px-0 d-flex">
-                                                        Address:<span class="text-body ms-2">{{ $listing->address }}</span>
-                                                            </li>
+                                                        Address:<span
+                                                            class="text-body ms-2">{{ $listing->address }}</span>
+                                                    </li>
                                                 </ul>
                                             </div>
                                             <div class="col-sm-6 mb-0">
@@ -379,9 +382,7 @@
                                             </li>
                                             <li class="list-group-item text-body">
                                                 <i
-                                                    class="fas fa-fw fa-{{ $listing->amenities->school
-                                                        ? 'check text-success'
-                                                        : 'times text-danger' }}"></i>
+                                                    class="fas fa-fw fa-{{ $listing->amenities->school ? 'check text-success' : 'times text-danger' }}"></i>
                                                 School:
                                             </li>
                                             <li class="list-group-item text-body">
@@ -403,10 +404,10 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
 
-                       
+
                     </div>
 
                     <div class="col-lg-4 pt-5 pt-lg-0">
@@ -425,14 +426,33 @@
 
                                                 <h5 class="text-success text-end">
                                                     ₱{{ number_format($listing->reservation_amount, 2) }}</h5>
+
+
                                             </div>
+
                                         </div>
+                                        @if ($listing->advance_payment_months > 0)
+                                            <div class="mb-3">
+                                                <span class="text-dark fw-bold">Advance Payment Required:</span>
+                                                <span class="text-danger">{{ $listing->advance_payment_months }}
+                                                    month{{ $listing->advance_payment_months > 1 ? 's' : '' }}</span>
+                                            </div>
+                                        @else
+                                            <div class="mb-3">
+                                                <span class="text-dark fw-bold">Advance Payment Required:</span>
+                                                <span class="text-success">No advance</span>
+                                            </div>
+                                        @endif
+
                                         <div class="mb-4">
                                             <ul class="list-group list-group-borderless">
                                                 <li class="list-group-item px-0 d-flex justify-content-between text-body">
-                                                    Total:<span
-                                                        class="text-dark">₱{{ number_format($listing->price + $listing->reservation_amount, 2) }}</span>
-                                                </li>
+                                                    @php
+                                                    $advanceMonths = $listing->advance_payment_months ?? 0;
+                                                    $totalAmount = ($listing->price * $advanceMonths) + $listing->reservation_amount;
+                                                @endphp
+                                                Total:<span class="text-dark">₱{{ number_format($totalAmount, 2) }}</span>
+                                                  </li>
                                             </ul>
                                         </div>
                                         <hr>
@@ -454,12 +474,13 @@
                                                             id="visitTime" required>
                                                     </div>
                                                     <div class="d-grid gap-2 mt-2">
-                                                        <button type="submit" class="btn btn-primary" id="reserveButton" onclick="handleReserveClick(this.form)">Reserve
+                                                        <button type="submit" class="btn btn-primary" id="reserveButton"
+                                                            onclick="handleReserveClick(this.form)">Reserve
                                                             Now</button>
                                                     </div>
-                                                    
+
                                                 </form>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -473,20 +494,20 @@
     </main>
 @endsection
 @if (session('success') || $errors->any())
-<script>
-    function handleReserveClick(form) {
-        form.submit(); // Submit the form
-        var button = document.getElementById('reserveButton');
-        button.disabled = true; // Disable the button
-        setTimeout(function() {
-            button.disabled = false; // Re-enable the button after 15 seconds
-        }, 15000); // 15000 milliseconds = 15 seconds
-    }
-    document.addEventListener('DOMContentLoaded', function () {
-        var feedbackModal = new bootstrap.Modal(document.getElementById('feedbackModal'));
-        feedbackModal.show();
-    });
-</script>
+    <script>
+        function handleReserveClick(form) {
+            form.submit(); // Submit the form
+            var button = document.getElementById('reserveButton');
+            button.disabled = true; // Disable the button
+            setTimeout(function() {
+                button.disabled = false; // Re-enable the button after 15 seconds
+            }, 15000); // 15000 milliseconds = 15 seconds
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var feedbackModal = new bootstrap.Modal(document.getElementById('feedbackModal'));
+            feedbackModal.show();
+        });
+    </script>
 @endif
 <script src="{{ asset('assets/vendor/tiny-slider/tiny-slider.js') }}"></script>
 <script src="{{ asset('assets/vendor/sticky-js/sticky.min.js') }}"></script>

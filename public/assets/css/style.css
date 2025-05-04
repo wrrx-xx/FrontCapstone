@@ -15368,15 +15368,17 @@ header.navbar-sticky-on .navbar-brand .navbar-brand-item {
 }
 
 .navbar-brand {
-  padding-top: 24px;
-  padding-bottom: 24px;
-}
-
-.navbar-brand .navbar-brand-item {
-  height: 40px;
-  display: block;
+  max-height: 60px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  }
+  
+  .navbar-brand-item {
+  height: 105px !important;
   width: auto;
-}
+  display: block;
+  }
 
 @media (max-width: 767.98px) {
   .navbar-brand {
@@ -15872,7 +15874,7 @@ dl {
 }
 
 section {
-  padding-top: 6rem;
+  padding-top: 3rem;
   padding-bottom: 4.8rem;
 }
 

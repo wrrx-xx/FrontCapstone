@@ -84,7 +84,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/reservation/{id}/approve', [ReservationController::class, 'approve'])->name('reservation.approve');
     Route::post('/reservation/{id}/decline', [ReservationController::class, 'decline'])->name('reservation.decline');
     Route::resource('/book',ViewingController::class);
-    Route::resource('/payment',PaymentController::class);
+    Route::resource('/payment',PaymentController::class);   
     Route::get('/owner/payment', [PaymentController::class, 'ownerIndex'])->name('payment.owner');
     Route::get('/payment/create/{id}', [PaymentController::class, 'create'])->name('payment.create');
     Route::post('/payment/store', [PaymentController::class, 'store'])->name('payment.store');

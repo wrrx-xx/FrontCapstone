@@ -178,7 +178,8 @@ class PaymentController extends Controller
         $billing->save(); // Save the billing record
 
         // Return a JSON response to trigger the modal
-        return response()->json(['success' => true, 'payment_id' => $payment->id]);
+        return redirect()->route('payment.owner')->with('success', 'Payment processed successfully.');
+
 
     } catch (\Exception $e) {
         // Log the error message for debugging

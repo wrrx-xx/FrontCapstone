@@ -1,18 +1,18 @@
 <!-- **************** MAIN CONTENT START **************** -->
 <!-- Navbar top START -->
-<div class="dashboard-topbar navbar-dark bg-dark px-3 px-sm-4 px-md-5">
+<div class="dashboard-topbar navbar-light bg-light px-3 px-sm-4 px-md-5">
     <div class="d-flex justify-content-between align-items-center">
         <!-- Logo -->
         <a class="navbar-brand d-flex align-items-center py-2" href="{{route('tenant.dashboard') }}">
-            <img class="navbar-brand-item" src="{{ asset('assets/images/logo-light.svg') }}" alt="logo">
+            <img class="navbar-brand-item" src="{{ asset('assets/images/logo2.png') }}" alt="logo">
         </a>
 
         <!-- Navbar right -->
         <ul class="list-inline m-0 text-primary-hover">
             <!-- Search bar -->
-            <li class="d-none d-md-inline-block list-inline-item text-white me-3">
+            <li class="d-none d-md-inline-block list-inline-item text-dark me-3">
                 <form class="align-self-center position-relative" role="search" action="#">
-                    <input type="text" class="form-control bg-secondary-soft text-white border-0"
+                    <input type="text" class="form-control bg-secondary-soft text-dark border-0"
                         placeholder="Search here...">
                     <button type="submit" id="search-submit"
                         class="btn position-absolute top-50 end-0 translate-middle-y"><i
@@ -20,7 +20,7 @@
                 </form>
             </li>
             <!-- Icon -->
-            <li class="list-inline-item me-2 me-sm-3"> <a href="#" class="text-white"><i
+            <li class="list-inline-item me-2 me-sm-3"> <a href="#" class="text-dark"><i
                         class="far fa-envelope"></i></a></li>
             <li class="list-inline-item me-2 me-sm-3">
                 <a href="#" class="text-white position-relative">
@@ -34,7 +34,7 @@
             <li class="list-inline-item">
                 <a href="#" class="btn-link" role="button" id="dropdownAvatar" data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    <img class="box-sm rounded-circle" src="assets/images/avatar/2.jpg" alt="Profile picture">
+                    <img class="box-sm rounded-circle" src="{{asset('assets/images/avatar/2.jpg') }}" alt="Profile picture">
                 </a>
                 <!-- Dropdown list -->
                 <ul class="dropdown-menu min-w-auto" aria-labelledby="dropdownAvatar">
@@ -61,29 +61,29 @@
         <!-- Left sidebar START -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
             <div class="collapse navbar-collapse" id="dashboardNav">
-                <div class="dashboard-sidebar bg-light">
+                <div class="dashboard-sidebar bg-dark">
                     <div class="content mt-3">
                         <!-- Sidebar menu -->
                         <div class="list-group list-group-borderless p-3 p-md-4">
                             <p class="text-body mb-2">Main</p>
                             
-                            <a class="list-group-item hover-primary-soft" href="{{ route('tenant.dashboard') }}"><i
+                            <a class="list-group-item hover-primary-soft text-light" href="{{ route('tenant.dashboard') }}"><i
                                     class="fas fa-fw fa-tachometer-alt me-2"></i>Dashboard</a>
                             
                             
                             <p class="text-body mt-3 mb-2">Tenant Services</p>
-                            <a class="list-group-item hover-primary-soft" href="{{ route('tenant.rental.index') }}"><i class="fas fa-fw fa-home me-2"></i>My Rentals</a>
-                            <a class="list-group-item hover-primary-soft" href="{{ route('tenant.payment.index') }}"><i class="fas fa-fw fa-file-invoice-dollar me-2"></i>Payment History</a>
-                            <a class="list-group-item hover-primary-soft" href="{{ route('tenant.maintenance.index') }}"><i class="fas fa-fw fa-tools me-2"></i>Maintenance</a>
-                            <a class="list-group-item hover-primary-soft" href="#"><i class="fas fa-fw fa-life-ring me-2"></i>Support</a>
+                            <a class="list-group-item hover-primary-soft text-light" href="{{ route('tenant.rental.index') }}"><i class="fas fa-fw fa-home me-2"></i>My Rentals</a>
+                            <a class="list-group-item hover-primary-soft text-light" href="{{ route('tenant.payment.index') }}"><i class="fas fa-fw fa-file-invoice-dollar me-2"></i>Payment History</a>
+                            <a class="list-group-item hover-primary-soft text-light" href="{{ route('tenant.maintenance.index') }}"><i class="fas fa-fw fa-tools me-2"></i>Maintenance</a>
+                            <a class="list-group-item hover-primary-soft text-light" href="#"><i class="fas fa-fw fa-life-ring me-2"></i>Support</a>
 
                             <p class="text-body mt-3 mb-2">Manage Account</p>
-                            <a class="list-group-item hover-primary-soft" href="#"><i
+                            <a class="list-group-item hover-primary-soft text-light" href="#"><i
                                     class="fas fa-fw fa-user-alt me-2"></i>My Profile</a>
                             
-                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                            <form action="{{ route('logout') }}" method="POST" class="d-inline ">
                                 @csrf
-                                <button type="submit" class="list-group-item hover-primary-soft"
+                                <button type="submit" class="list-group-item hover-primary-soft text-light"
                                     style="border: none; background: none; cursor: pointer;">
                                     <i class="fas fa-fw fa-sign-out-alt me-2"></i>Log Out
                                 </button>

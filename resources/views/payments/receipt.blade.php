@@ -135,7 +135,7 @@
             <div class="info-col">
                 <div class="info-title">BILLED TO:</div>
                 <div class="info-content">
-<strong>{{ $payment->listing->tenant->fname ?? 'N/A' }} {{ $payment->listing->tenant->mname ?? '' }} {{ $payment->listing->tenant->lname ?? 'N/A' }}</strong><br>
+                    <strong>{{ $payment->listing->tenant->fname ?? 'N/A' }} {{ $payment->listing->tenant->mname ?? '' }} {{ $payment->listing->tenant->lname ?? 'N/A' }}</strong><br>
                     Email: {{ $payment->listing->tenant->email ?? '' }}<br>
                     Phone: {{ $payment->listing->tenant->phone_number ?? '' }}
                 </div>
@@ -144,32 +144,32 @@
                 <div class="info-title">RECEIPT DETAILS:</div>
                 <div class="info-content">
                     <strong>Date:</strong> {{ $payment->created_at->format('M d, Y') }}<br>
-                    <strong>processed by:</strong>{{ $payment->processor->fname ?? '' }} {{ $payment->processor->mname ?? '' }} {{ $payment->processor->lname ?? '' }}
-                    <br>
-                    <Br></Br>
+                    <strong>processed by:</strong> {{ $payment->processor->fname ?? '' }} {{ $payment->processor->mname ?? '' }} {{ $payment->processor->lname ?? '' }}
+                    <br><br>
                     @php
-                    $statusClass = strtolower($payment->status);
-                @endphp
-                
-                <strong>Status:</strong> 
-                <span class="status-badge {{ $statusClass }}">
-                    {{ ucfirst($payment->status) }}
-                </span>
-                <br>
-                
+                        $statusClass = strtolower($payment->status);
+                    @endphp
+                    <strong>Status:</strong> 
+                    <span class="status-badge {{ $statusClass }}">
+                        {{ ucfirst($payment->status) }}
+                    </span>
+                    <br>
                 </div>
             </div>
         </div>
-
-                <table>
+    
+        <table>
             <thead>
                 <tr>
                     <th>Description</th>
                     <th>Unit Price</th>
-                @if(isset($reservation_amount) && $reservation_amount > 0)
-                <th>Reservation Fee</th>
-                @endif
+                    @if(isset($reservation_amount) && $reservation_amount > 0)
+                    <th>Reservation Fee</th>
+                    @endif
                     <th>Cash Advance</th>
+                    @if(isset($billing) && $billing->utility && $billing->utility->count() > 0)
+                    <th>Utility Amount</th>
+                    @endif
                     <th>Total</th>
                 </tr>
             </thead>
@@ -177,18 +177,48 @@
                 <tr>
                     <td>{{ $payment->listing->title }}</td>
                     <td>{{ number_format($payment->listing->price, 2) }}</td>
-                @if(isset($reservation_amount) && $reservation_amount > 0)
-                <td>{{ number_format($reservation_amount, 2) }}</td>
-                <td>{{ number_format($payment->cash_advance_amount ?? 0, 2) }}</td>
-                <td>{{ number_format(($payment->listing->price + ($reservation_amount ?? 0) + ($payment->cash_advance_amount ?? 0)), 2) }}</td>
-                @else
-                <td>{{ number_format($payment->cash_advance_amount ?? 0, 2) }}</td>
-                <td>{{ number_format(($payment->listing->price + ($payment->cash_advance_amount ?? 0)), 2) }}</td>
-                @endif
+                    @if(isset($reservation_amount) && $reservation_amount > 0)
+                    <td>{{ number_format($reservation_amount, 2) }}</td>
+                    <td>{{ number_format($payment->cash_advance_amount ?? 0, 2) }}</td>
+                    @else
+                    <td>{{ number_format($payment->cash_advance_amount ?? 0, 2) }}</td>
+                    @endif
+                    @if(isset($billing) && $billing->utility && $billing->utility->count() > 0)
+                    @php
+                        $utilityTotal = $billing->utility->sum('amount');
+                    @endphp
+                    <td>₱{{ number_format($utilityTotal, 2) }}</td>
+                    @endif
+                    @php
+                        $totalAmount = $payment->listing->price + ($reservation_amount ?? 0) + ($payment->cash_advance_amount ?? 0) + ($utilityTotal ?? 0);
+                    @endphp
+                    <td>{{ number_format($totalAmount, 2) }}</td>
                 </tr>
             </tbody>
         </table>
-
+        
+        @if(isset($billing) && $billing->utility && $billing->utility->count() > 0)
+            <h3>Utility Bills</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($billing->utility as $utility)
+                    <tr>
+                        <td><i class="fas fa-bolt"></i> <strong>{{ ucfirst($utility->type) }}</strong></td>
+                        <td>{{ number_format($utility->amount, 2) }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+    
+           
+        @endif
+    
         <div class="info-row">
             <div class="info-col">
                 <div class="info-title">PAYMENT INFORMATION:</div>
@@ -209,18 +239,19 @@
                 </div>
             </div>
         </div>
-
+    
         <div class="divider"></div>
-
+    
         <div class="notes">
             <p>Thank you for your payment. This receipt serves as proof of your payment for the property rental.</p>
             <p>For any inquiries regarding this payment, please contact our support team.</p>
         </div>
-
+    
         <div class="footer">
             <p>This is an electronically generated receipt and does not require a signature.</p>
             <p>© {{ date('Y') }} RoomRental. All rights reserved.</p>
         </div>
     </div>
+    
 </body>
 </html>

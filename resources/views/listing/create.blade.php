@@ -74,15 +74,27 @@
             <div class="form-step" id="step2" style="display: none; background-color: #f8f9fa; border: 2px solid ; padding: 20px; border-radius: 15px;">
                 <h4 class="text-start">Step 2: Listing Details</h4>
                 
-                <div class="form-group">
-                    <label for="type">Type</label>
-                    <select name="type" id="type" class="form-control" required>
-                        <option value="Apartment">Apartment</option>
-                        <option value="House">House</option>
-                        <option value="Boarding house">Boarding house</option>
-                        <option value="Room">Room</option>
-                    </select>
+                <div class="form-group row">
+                    <div class="col-md-8">
+                        <label for="type">Type</label>
+                        <select name="type" id="type" class="form-control" required>
+                            <option value="Apartment">Apartment</option>
+                            <option value="House">House</option>
+                            <option value="Boarding house">Boarding house</option>
+                            <option value="Room">Room</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="advance_payment_months">Advance Payment</label>
+                        <select name="advance_payment_months" id="advance_payment_months" class="form-control" required>
+                            <option value="0">0 months</option>
+                            <option value="1">1 months</option>
+                            <option value="2">2 months</option>
+                            <option value="3">3 months</option>
+                        </select>
+                    </div>
                 </div>
+                
 
                 <div class="form-group row">
                     <div class="col-md-6">
@@ -118,7 +130,7 @@
                     </div>
                     <div class="col-md-4">
                         <label for="waiver">Waiver File</label>
-                        <input type="file" name="waiver" id="baranggay" class="form-control" required>
+                        <input type="file" name="waiver" id="waiver" class="form-control" required>
                     </div>
                 </div>
                 
@@ -131,30 +143,17 @@
             <div class="form-step" id="step3" style="display: none; background-color: #f8f9fa; border: 2px solid ; padding: 20px; border-radius: 15px;">
                 <h4 class="text-start">Step 3: Amenities</h4>
 
-                <div class="form-check">
-                    <input type="checkbox" name="wifi" id="wifi" class="form-check-input">
-                    <label for="wifi" class="form-check-label">WiFi</label>
+                <div class="row">
+                    @foreach ($amenities as $amenity)
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input type="checkbox" name="{{ $amenity }}" id="{{ $amenity }}" class="form-check-input">
+                                <label for="{{ $amenity }}" class="form-check-label">{{ ucwords(str_replace('_', ' ', $amenity)) }}</label>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-
-                <div class="form-check">
-                    <input type="checkbox" name="parking" id="parking" class="form-check-input">
-                    <label for="parking" class="form-check-label">Parking</label>
-                </div>
-
-                <div class="form-check">
-                    <input type="checkbox" name="bathroom" id="bathroom" class="form-check-input">
-                    <label for="bathroom" class="form-check-label">Bathroom</label>
-                </div>
-
-                <div class="form-check">
-                    <input type="checkbox" name="kitchen" id="kitchen" class="form-check-input">
-                    <label for="kitchen" class="form-check-label">Kitchen</label>
-                </div>
-
-                <div class="form-check">
-                    <input type="checkbox" name="laundry" id="laundry" class="form-check-input">
-                    <label for="laundry" class="form-check-label">Laundry</label>
-                </div>
+                
                 <br>
                 <button type="button" class="btn btn-secondary prev-btn">Previous</button>
                 <button type="button" class="btn btn-primary next-btn">Next</button>
