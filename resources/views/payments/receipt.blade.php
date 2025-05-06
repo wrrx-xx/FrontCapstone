@@ -21,6 +21,11 @@
         }
         .logo {
             margin-bottom: 15px;
+         
+        }
+        .logo img {
+            width: 100px;
+            height: auto;
         }
         .receipt-title {
             font-size: 24px;
@@ -125,7 +130,7 @@
         <div class="header">
             <div class="logo">
                 <!-- Logo placeholder - you can replace with your actual logo -->
-                <img src="assets/images/logo-dark.svg" alt="logo">
+                <img src="assets/images/logo5.png" alt="logo">
             </div>
             <div class="receipt-title">PAYMENT RECEIPT</div>
             <div class="receipt-id">Receipt #{{ $payment->id }}</div>

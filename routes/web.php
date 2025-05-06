@@ -41,9 +41,9 @@ Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->middleware(['auth', 'verified','admin'])->name('admin.dashboard');
 
-Route::get('/owner/dashboard', function () {
-    return view('owner.dashboard');
-})->middleware(['auth', 'verified'])->name('owner.dashboard');
+use App\Http\Controllers\Owner;
+
+Route::get('/owner/dashboard', [Owner::class, 'index'])->middleware(['auth', 'verified'])->name('owner.dashboard');
 
 
 Route::middleware(['auth','verified'])->group(function () {

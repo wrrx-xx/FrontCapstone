@@ -5,7 +5,46 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/glightbox/css/glightbox.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/splide-master/dist/css/splide.min.css') }}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+<style>
+    .id-flip-card {
+background-color: transparent;
+width: 500px;
+height: 250px;
+perspective: 1000px;
+cursor: pointer;
+}
 
+.id-flip-card-inner {
+position: relative;
+width: 100%;
+height: 100%;
+text-align: center;
+transition: transform 0.6s;
+transform-style: preserve-3d;
+}
+
+.id-flip-card.flipped .id-flip-card-inner {
+transform: rotateY(180deg);
+}
+
+.id-flip-card-front, .id-flip-card-back {
+position: absolute;
+width: 100%;
+height: 100%;
+backface-visibility: hidden;
+border-radius: 10px;
+}
+
+.id-flip-card-front {
+background-color: #fff;
+}
+
+.id-flip-card-back {
+background-color: #fff;
+transform: rotateY(180deg);
+}
+
+    </style>
 <section class="main-content">
 <main>
     <section class="pt-3 pt-md-4">
@@ -132,53 +171,56 @@
                         </div>
                         <div class="modal-body">
                             @if ($listing->tenant)
-                                <p><strong>Name:</strong> {{ $listing->tenant->fname }} {{ $listing->tenant->mname }} {{ $listing->tenant->lname }}</p>
-                                <p><strong>Email:</strong> {{ $listing->tenant->email }}</p>
-                                <p><strong>Phone:</strong> {{ $listing->tenant->phone_number }}</p>
-                                <p><strong>Emergency Contact Name:</strong> {{ $listing->tenant->tenantProfile->emergency_contact_name }}</p>
-                                <p><strong>Emergency Contact Phone:</strong> {{ $listing->tenant->tenantProfile->emergency_contact_phone }}</p>
-                                <p><strong>Valid ID Type:</strong>
-                                    @switch($listing->tenant->tenantProfile->valid_id_type)
-                                        @case('driver_license')
-                                            Driver's License
-                                            @break
-                                        @case('student_id')
-                                            School ID
-                                            @break
-                                        @case('passport')
-                                            Passport
-                                            @break
-                                        @case('national_id')
-                                            National ID
-                                            @break
-                                        @case('voter_id')
-                                            Voter ID
-                                            @break
-                                        @case('other')
-                                            Other
-                                            @break
-                                        @default
-                                            Not specified
-                                    @endswitch
-                                </p>
-                                <p><strong>Current Address:</strong> {{ $listing->tenant->tenantProfile->current_address }}</p>
-                                <p><strong>Monthly Income:</strong> ${{ number_format($listing->tenant->tenantProfile->monthly_income, 2) }}</p>
-
-                                <!-- Valid ID Front -->
-                                <p><strong>Valid ID Front:</strong></p>
-                                @if ($listing->tenant->tenantProfile->valid_id_front_path)
-                                    <img src="{{ asset('storage/' . $listing->tenant->tenantProfile->valid_id_front_path) }}" alt="Valid ID Front" class="img-fluid" style="max-width: 100%; height: auto;">
-                                @else
-                                    <p>N/A</p>
+                                @if ($listing->tenant->tenantProfile && $listing->tenant->tenantProfile->valid_id_front_path && $listing->tenant->tenantProfile->valid_id_back_path)
+                                <div class="d-flex justify-content-center mb-4">
+                                    <div class="id-flip-card" onclick="this.classList.toggle('flipped')">
+                                        <div class="id-flip-card-inner">
+                                            <div class="id-flip-card-front">
+                                                <img src="{{ asset('storage/' . $listing->tenant->tenantProfile->valid_id_front_path) }}" alt="ID Front" class="img-fluid rounded">
+                                            </div>
+                                            <div class="id-flip-card-back">
+                                                <img src="{{ asset('storage/' . $listing->tenant->tenantProfile->valid_id_back_path) }}" alt="ID Back" class="img-fluid rounded">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 @endif
-
-                                <!-- Valid ID Back -->
-                                <p><strong>Valid ID Back:</strong></p>
-                                @if ($listing->tenant->tenantProfile->valid_id_back_path)
-                                    <img src="{{ asset('storage/' . $listing->tenant->tenantProfile->valid_id_back_path) }}" alt="Valid ID Back" class="img-fluid" style="max-width: 100%; height: auto;">
-                                @else
-                                    <p>N/A</p>
-                                @endif
+                                
+                                <!-- Tenant Profile Details -->
+                                <div class="container pt-1">
+                                    <h6 class="mb-3">Tenant Profile</h6>
+                                    <p><strong>Name:</strong> {{ $listing->tenant->fname }} {{ $listing->tenant->mname }} {{ $listing->tenant->lname }}</p>
+                                    <p><strong>Email:</strong> {{ $listing->tenant->email }}</p>
+                                    <p><strong>Phone:</strong> {{ $listing->tenant->phone_number }}</p>
+                                    <p><strong>Emergency Contact Name:</strong> {{ $listing->tenant->tenantProfile->emergency_contact_name }}</p>
+                                    <p><strong>Emergency Contact Phone:</strong> {{ $listing->tenant->tenantProfile->emergency_contact_phone }}</p>
+                                    <p><strong>Valid ID Type:</strong>
+                                        @switch($listing->tenant->tenantProfile->valid_id_type)
+                                            @case('driver_license')
+                                                Driver's License
+                                                @break
+                                            @case('student_id')
+                                                School ID
+                                                @break
+                                            @case('passport')
+                                                Passport
+                                                @break
+                                            @case('national_id')
+                                                National ID
+                                                @break
+                                            @case('voter_id')
+                                                Voter ID
+                                                @break
+                                            @case('other')
+                                                Other
+                                                @break
+                                            @default
+                                                Not specified
+                                        @endswitch
+                                    </p>
+                                    <p><strong>Current Address:</strong> {{ $listing->tenant->tenantProfile->current_address }}</p>
+                                    <p><strong>Monthly Income:</strong> ${{ number_format($listing->tenant->tenantProfile->monthly_income, 2) }}</p>
+                                </div>
                             @else
                                 <p>No tenant profile found.</p>
                             @endif

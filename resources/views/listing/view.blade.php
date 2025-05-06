@@ -445,16 +445,22 @@
                                         @endif
 
                                         <div class="mb-4">
-                                            <ul class="list-group list-group-borderless">
-                                                <li class="list-group-item px-0 d-flex justify-content-between text-body">
-                                                    @php
-                                                    $advanceMonths = $listing->advance_payment_months ?? 0;
-                                                    $totalAmount = ($listing->price * $advanceMonths) + $listing->reservation_amount;
-                                                @endphp
-                                                Total:<span class="text-dark">₱{{ number_format($totalAmount, 2) }}</span>
-                                                  </li>
-                                            </ul>
-                                        </div>
+    <ul class="list-group list-group-borderless">
+        <li class="list-group-item px-0 d-flex justify-content-between text-body">
+            @php
+                $advanceMonths = $listing->advance_payment_months ?? 0;
+
+                if ($advanceMonths > 0) {
+                    $totalAmount = ($listing->price * $advanceMonths) + $listing->reservation_amount;
+                } else {
+                    $totalAmount = $listing->price + $listing->reservation_amount;
+                }
+            @endphp
+            Total:<span class="text-dark">₱{{ number_format($totalAmount, 2) }}</span>
+        </li>
+    </ul>
+</div>
+
                                         <hr>
                                         <div class="row">
                                             <div class="col-12">

@@ -178,7 +178,11 @@ class PaymentController extends Controller
         $billing->save(); // Save the billing record
 
         // Return a JSON response to trigger the modal
-        return redirect()->route('payment.owner')->with('success', 'Payment processed successfully.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Payment processed successfully.',
+            'payment_id' => $payment->id,
+        ]);
 
 
     } catch (\Exception $e) {
@@ -219,33 +223,34 @@ class PaymentController extends Controller
      */
 
      public function downloadReceipt($id)
-{
-    // Fetch the payment with related models
-    $payment = Payment::with(['listing.tenant', 'listing.user', 'processor'])->findOrFail($id);
-
-    // Fetch the billing related to this payment's listing and user
-    $billing = Billings::where('listing_id', $payment->listing_id)
-        ->where('user_id', $payment->listing->tenant->id ?? null)
-        ->first();
-
-    // Prepare data for the PDF
-    $data = [
-        'payment' => $payment,
-        'listing' => $payment->listing,
-        'reservation' => $payment->reservation,
-        'owner' => $payment->listing->user, // Get owner details
-        'processed_by' => $payment->processed_by, // Get the user who processed the payment
-        'tenant' => $payment->listing->tenant, // Get tenant details
-        'billing' => $billing, // Pass billing to view for conditional reservation amount display
-        'reservation_amount' => $payment->reservation_amount, // Pass reservation amount from payment
-    ];
-
-    // Load PDF view and pass data
-    $pdf = Pdf::loadView('payments.receipt', $data);
-
-    // Download the PDF
-    return $pdf->download('payment_receipt_' . $payment->id . '.pdf');
-}
+     {
+         // Fetch the payment with related models
+         $payment = Payment::with(['listing.tenant', 'listing.user', 'processor'])->findOrFail($id);
+     
+         // Fetch the billing related to this payment's listing and user
+         $billing = Billings::where('listing_id', $payment->listing_id)
+             ->where('user_id', $payment->listing->tenant->id ?? null)
+             ->first();
+     
+         // Prepare data for the PDF
+         $data = [
+             'payment' => $payment,
+             'listing' => $payment->listing,
+             'reservation' => $payment->reservation,
+             'owner' => $payment->listing->user, // Get owner details
+             'processed_by' => $payment->processed_by, // Get the user who processed the payment
+             'tenant' => $payment->listing->tenant, // Get tenant details
+             'billing' => $billing, // Pass billing to view for conditional reservation amount display
+             'reservation_amount' => $payment->reservation_amount, // Pass reservation amount from payment
+         ];
+     
+         // Load PDF view and pass data
+         $pdf = Pdf::loadView('payments.receipt', $data);
+     
+         // Download the PDF
+         return $pdf->download($payment->listing->tenant->lname.'_receipt No: ' . $payment->id . '.pdf');
+     }
+     
     public function show(string $id)
     {
         //
