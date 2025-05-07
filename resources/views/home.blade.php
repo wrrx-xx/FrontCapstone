@@ -492,7 +492,7 @@ Property START -->
 						<!-- Image -->
 						@if ($listing->photos->isNotEmpty())
 							<img class="card-img" 
-								 src="{{ Storage::url($listing->photos->first()->photo_url) }}" 
+								 src="{{$listing->photos->first()->photo_url}}" 
 								 alt="Property image" 
 								 style="width: 100%; height: 200px; object-fit: cover;">
 						@else

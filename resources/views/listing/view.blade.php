@@ -64,11 +64,11 @@
                                             @foreach ($listing->photos as $photo)
                                                 <li class="splide__slide h-400 rounded">
 
-                                                    <img src="{{ Storage::url($photo->photo_url) }}" alt="">
+                                                    <img src="{{ asset($photo->photo_url) }}" alt="">
 
                                                     <!-- Glightbox image -->
 
-                                                    <a href="{{ Storage::url($photo->photo_url) }}" class="stretched-link"
+                                                    <a href="{{ asset($photo->photo_url) }}" class="stretched-link"
                                                         data-glightbox="" data-gallery="banner"></a>
 
                                                 </li>
@@ -92,7 +92,7 @@
                                             @foreach ($listing->photos as $photo)
                                                 <li class="splide__slide">
 
-                                                    <img src="{{ Storage::url($photo->photo_url) }}" alt="">
+                                                    <img src="{{ asset($photo->photo_url) }}" alt="">
 
                                                 </li>
                                             @endforeach

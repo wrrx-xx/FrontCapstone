@@ -170,7 +170,7 @@
     <div class="existing-photos">
         @foreach ($listing->photos as $photo)
             <div class="photo-item">
-                <img src="{{ asset('storage/' . $photo->photo_url) }}" alt="Photo" style="width: 100px; height: auto;">
+                <img src="{{ asset($photo->photo_url) }}" alt="Photo" style="width: 100px; height: auto;">
                 <input type="checkbox" name="delete_photos[]" value="{{ $photo->id }}">
                 <label>Delete</label>
             </div>

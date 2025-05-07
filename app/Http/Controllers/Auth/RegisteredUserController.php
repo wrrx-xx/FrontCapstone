@@ -92,12 +92,21 @@ class RegisteredUserController extends Controller
 
             if ($request->role === 'owner') {
                 // Handle owner ID file uploads
-                $ownerIdFrontPath = $request->file('owner_id_front') ?
-                    $request->file('owner_id_front')->store('owner_ids/front', 'public') : null;
-                $ownerIdBackPath = $request->file('owner_id_back') ?
-                    $request->file('owner_id_back')->store('owner_ids/back', 'public') : null;
-
-                // Create the owner profile
+                $ownerIdFrontPath = null;
+                $ownerIdBackPath = null;
+            
+                if ($request->hasFile('owner_id_front')) {
+                    $frontName = time() . '_front_' . $request->file('owner_id_front')->getClientOriginalName();
+                    $request->file('owner_id_front')->move(public_path('owner_ids/front'), $frontName);
+                    $ownerIdFrontPath = 'owner_ids/front/' . $frontName;
+                }
+            
+                if ($request->hasFile('owner_id_back')) {
+                    $backName = time() . '_back_' . $request->file('owner_id_back')->getClientOriginalName();
+                    $request->file('owner_id_back')->move(public_path('owner_ids/back'), $backName);
+                    $ownerIdBackPath = 'owner_ids/back/' . $backName;
+                }
+            
                 OwnerProfile::create([
                     'user_id' => $user->id,
                     'business_name' => $request->business_name,
@@ -107,18 +116,28 @@ class RegisteredUserController extends Controller
                     'owner_id_front_path' => $ownerIdFrontPath,
                     'owner_id_back_path' => $ownerIdBackPath,
                 ]);
-
+            
                 // Notify admins about new owner registration
                 $admins = User::where('role', 'admin')->get();
                 Notification::send($admins, new NewOwnerRegistered($user));
-            } elseif ($request->role === 'guest') {
-                // Handle tenant valid ID file uploads
-                $validIdFrontPath = $request->file('valid_id_front') ?
-                    $request->file('valid_id_front')->store('tenant_ids/front', 'public') : null;
-                $validIdBackPath = $request->file('valid_id_back') ?
-                    $request->file('valid_id_back')->store('tenant_ids/back', 'public') : null;
-
-                // Create the tenant profile
+            }
+             elseif ($request->role === 'guest') {
+                // Handle tenant ID file uploads
+                $validIdFrontPath = null;
+                $validIdBackPath = null;
+            
+                if ($request->hasFile('valid_id_front')) {
+                    $frontName = time() . '_front_' . $request->file('valid_id_front')->getClientOriginalName();
+                    $request->file('valid_id_front')->move(public_path('tenant_ids/front'), $frontName);
+                    $validIdFrontPath = 'tenant_ids/front/' . $frontName;
+                }
+            
+                if ($request->hasFile('valid_id_back')) {
+                    $backName = time() . '_back_' . $request->file('valid_id_back')->getClientOriginalName();
+                    $request->file('valid_id_back')->move(public_path('tenant_ids/back'), $backName);
+                    $validIdBackPath = 'tenant_ids/back/' . $backName;
+                }
+            
                 TenantProfile::create([
                     'user_id' => $user->id,
                     'current_address' => $request->current_address,
@@ -131,6 +150,7 @@ class RegisteredUserController extends Controller
                     'valid_id_back_path' => $validIdBackPath,
                 ]);
             }
+            
 
     
     

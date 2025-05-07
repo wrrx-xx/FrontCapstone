@@ -649,7 +649,7 @@
                                     <div class="col-md-5 col-lg-12 col-xl-5">
                                         <div class="card overflow-hidden">
                                             <!-- Image -->
-                                            <img class="card-img rounded-1" src="{{ asset('storage/' . ($listing->photos->first()->photo_url ?? 'default.jpg')) }}" alt="Listing image" />
+                                            <img class="card-img rounded-1" src="{{ asset($listing->photos->first()->photo_url ) }}" alt="Listing image" />
                                             <!-- Image overlay -->
                                             <div class="card-img-overlay">
                                                 <div class="d-flex justify-content-between align-items-center">

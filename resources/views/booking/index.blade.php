@@ -45,7 +45,7 @@
                                             <div class="row">
                                                 <!-- Image -->
                                                 <div class="col-xl-3">
-                                                    <img class="rounded" src="{{ asset('storage/' . ($viewing->listing->photos->first()->photo_url ?? 'default.jpg')) }}" alt="{{ $viewing->listing->title }}">
+                                                    <img class="rounded" src="{{ asset($photo->first()->photo_url) }}" alt="{{ $viewing->listing->title }}">
                                                 </div>
                                                 <!-- Info -->
                                                 <div class="col-xl-9 pt-2 pt-xl-0">

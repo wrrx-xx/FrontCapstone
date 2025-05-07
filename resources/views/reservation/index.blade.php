@@ -42,7 +42,7 @@
                                                 <!-- Image -->
                                                 <div class="col-xl-3">
                                                     @if($reservation->listing->photos->isNotEmpty())
-                                                        <img class="rounded" src="{{ asset('storage/' . $reservation->listing->photos->first()->photo_url) }}" alt="{{ $reservation->listing->title }}">
+                                                        <img class="rounded" src="{{ asset($reservation->listing->photos->first()->photo_url) }}" alt="{{ $reservation->listing->title }}">
                                                     @else
                                                         <img class="rounded" src="{{ asset('path/to/default/image.jpg') }}" alt="Default Image">
                                                     @endif

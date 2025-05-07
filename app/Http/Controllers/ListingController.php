@@ -119,17 +119,17 @@ class ListingController extends Controller
         // Handle photo uploads
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photo) {
-                // Store the photo and get the path
-                $path = $photo->store('photos', 'public'); // Store in the 'photos' directory in the public disk
-
-                // Create a new photo record
+                $filename = time() . '_' . $photo->getClientOriginalName();
+                $photo->move(public_path('photos'), $filename);
+                $path = 'photos/' . $filename;
+        
                 Photos::create([
                     'listing_id' => $listing->id,
-
                     'photo_url' => $path,
                 ]);
             }
         }
+        
 
         // Redirect or return response
         return redirect()->route('listing.myproperty')->with('success', 'Listing created successfully!');

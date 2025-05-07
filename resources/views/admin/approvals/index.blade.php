@@ -52,11 +52,11 @@
                                                             <p><strong>Owner ID Type:</strong> {{ ucfirst(str_replace('_', ' ', $approval->owner_id_type)) }}</p>
                                                             @if($approval->owner_id_front_path)
                                                                 <p><strong>Owner ID Front:</strong></p>
-                                                                <img src="{{ asset('storage/' . $approval->owner_id_front_path) }}" alt="Owner ID Front" class="img-fluid" style="max-width: 100%; height: auto;">
+                                                                <img src="{{ asset($profile->owner_id_front_path) }}" alt="Owner ID Front" class="img-fluid" style="max-width: 100%; height: auto;">
                                                             @endif
                                                             @if($approval->owner_id_back_path)
                                                                 <p><strong>Owner ID Back:</strong></p>
-                                                                <img src="{{ asset('storage/' . $approval->owner_id_back_path) }}" alt="Owner ID Back" class="img-fluid" style="max-width: 100%; height: auto;">
+                                                                <img src="{{ asset($profile->owner_id_back_path) }}" alt="Owner ID Back" class="img-fluid" style="max-width: 100%; height: auto;">
                                                             @endif
                                                         </div>
                                                         <div class="modal-footer">

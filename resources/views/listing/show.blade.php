@@ -20,8 +20,8 @@
                                     <ul class="splide__list">
                                         @foreach ($listing->photos as $photo)
                                             <li class="splide__slide h-400 rounded">
-                                                <img src="{{ Storage::url($photo->photo_url) }}" alt="">
-                                                <a href="{{ Storage::url($photo->photo_url) }}" class="stretched-link" data-glightbox="" data-gallery="banner"></a>
+                                                <img src="{{ asset($photo->photo_url) }}" alt="">
+                                                <a href="{{ asset($photo->photo_url) }}" class="stretched-link" data-glightbox="" data-gallery="banner"></a>
                                             </li>
                                         @endforeach
                                     </ul>
@@ -32,7 +32,7 @@
                                     <ul class="splide__list">
                                         @foreach ($listing->photos as $photo)
                                             <li class="splide__slide">
-                                                <img src="{{ Storage::url($photo->photo_url) }}" alt="">
+                                                <img src="{{ asset($photo->photo_url) }}" alt="">
                                             </li>
                                         @endforeach
                                     </ul>
