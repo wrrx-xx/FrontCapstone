@@ -49,7 +49,7 @@
                                                 <!-- Image -->
                                                 <div class="col-xl-3">
                                                     @if($listing->photos->isNotEmpty())
-                                                        <img class="rounded" src="{{ asset('storage/' . $listing->photos->first()->photo_url) }}" alt="{{ $listing->title }}">
+                                                        <img class="rounded" src="{{ asset('storage/app/public' . $listing->photos->first()->photo_url) }}" alt="{{ $listing->title }}">
                                                     @else
                                                         <img class="rounded" src="{{ asset('path/to/default/image.jpg') }}" alt="Default Image">
                                                     @endif
