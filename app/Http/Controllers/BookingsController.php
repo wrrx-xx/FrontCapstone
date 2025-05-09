@@ -21,6 +21,13 @@ class BookingsController extends Controller
             $query->where('owner_id', $userId);
         })
             ->with(['listing', 'requestedBy.tenantProfile'])
+            ->orderByRaw("CASE 
+                WHEN viewing_status = 'pending' THEN 1
+                WHEN viewing_status = 'approved' THEN 2
+                WHEN viewing_status = 'declined' THEN 3
+                WHEN viewing_status = 'cancelled' THEN 4
+                ELSE 5 END")
+            ->orderBy('created_at', 'desc')
             ->paginate(10); // Paginate results (10 per page)
     
         return view('booking.dashindex', compact('viewings'));

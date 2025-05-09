@@ -41,50 +41,49 @@ Main Banner START -->
 				</div>
 
 				<!-- Search bar START -->
+				<form method="GET" action="{{ route('listing.display') }}">
 				<div class="row">
 					<div class="col-lg-10">
 						<div class="shadow-lg p-3 mb-5 bg-body p-4 rounded">
 							<div class="row align-items-center g-3">
 								<!-- Item 1 -->
 								<div class="col-sm-6 col-md-3 bottomborder-select">
-									<select class="form-select form-select-sm js-choice" aria-label=".form-select-sm example" >
+									<select name="type" class="form-select form-select-sm js-choice" aria-label=".form-select-sm example" >
 										<option value="">Type</option>
-										<option>Rent</option>
-										<option>Buy</option>
-										<option>Sale</option>
+										<option value="Apartment" {{ request('type') == 'Apartment' ? 'selected' : '' }}>Apartment</option>
+										<option value="House" {{ request('type') == 'House' ? 'selected' : '' }}>House</option>
+										<option value="Boarding house" {{ request('type') == 'Boarding house' ? 'selected' : '' }}>Boarding house</option>
+										<option value="Room" {{ request('type') == 'Room' ? 'selected' : '' }}>Room</option>
 									</select>
 								</div>
 								<!-- Item 2 -->
-								<div class="col-sm-6 col-md-3 bottomborder-select">
-									<select class="form-select form-select-sm js-choice" aria-label=".form-select-sm example">
-										<option value="">Category</option>
-										<option>Aparement</option>
-										<option>Land</option>
-										<option>Houses</option>
-										<option>Villas</option>
-										<option>Retails</option>
-										<option>Shop</option>
-										<option>Office</option>
-									</select>
-								</div>
+								
 								<!-- Item 3 -->
 								<div class="col-sm-6 col-md-3 bottomborder-select">
-									<select class="form-select form-select-sm js-choice" aria-label=".form-select-sm example">
+									<select name="city" class="form-select form-select-sm js-choice" aria-label=".form-select-sm example">
 										<option value="">City</option>
-										<option>New York</option>
-										<option>Los Angeles</option>
-										<option>Phoenix</option>
-										<option>Mumbai</option>
+										@foreach($cities as $city)
+											<option value="{{ $city }}" {{ request('city') == $city ? 'selected' : '' }}>{{ $city }}</option>
+										@endforeach
+									</select>
+								</div>
+								<div class="col-sm-6 col-md-3 bottomborder-select">
+									<select name="baranggay" class="form-select form-select-sm js-choice" aria-label=".form-select-sm example">
+										<option value="">Baranggay</option>
+										@foreach($baranggays as $baranggay)
+											<option value="{{ $baranggay }}" {{ request('baranggay') == $baranggay ? 'selected' : '' }}>{{ $baranggay }}</option>
+										@endforeach
 									</select>
 								</div>
 								<!-- Button -->
 								<div class="col-sm-6 col-md-3">
-									<button type="button" class="btn btn-sm btn-primary w-100">Search</button>
+									<button type="submit" class="btn btn-sm btn-primary w-100">Search</button>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+				</form>
 				<!-- Search bar END -->
 			</div>
 
@@ -118,40 +117,95 @@ Main Banner START -->
 						</figure>
 
 						<!-- Card Property START -->
+						@if(isset($randomListing))
 						<div class="position-absolute bottom-0 end-0 me-n5 mb-n5">
-							<div class="card d-inline-block mb-3 me-3">
+							<div class="card d-inline-block mb-3 me-3 property-card" style="width: 320px;">
+								<!-- Featured Image -->
+								<div class="position-relative">
+									@if($randomListing->photos->isNotEmpty())
+										<img src="{{ asset($randomListing->photos->first()->photo_url) }}" 
+											 class="card-img-top" 
+											 alt="{{ $randomListing->title }}"
+											 style="height: 180px; object-fit: cover;">
+									@endif
+									<div class="position-absolute top-0 end-0 m-2">
+										<span class="badge bg-{{ $randomListing->availability === 'open' ? 'success' : 'danger' }}">
+											{{ ucfirst($randomListing->availability) }}
+										</span>
+									</div>
+								</div>
 								<!-- Card info -->
 								<div class="card-body bg-white shadow-lg rounded">
 									<!-- Card title -->
-									<h4 class="card-title"><a href="post-single-4.html" class="btn-link text-reset fw-bold">Luxury villa in Paris</a></h4>
+									<h4 class="card-title">
+										<a href="{{ route('listings.show', $randomListing->id) }}" class="btn-link text-reset fw-bold text-truncate d-block">
+											{{ $randomListing->title }}
+										</a>
+									</h4>
+									<!-- Location -->
+									<p class="text-muted small mb-2">
+										<i class="fas fa-map-marker-alt me-1"></i>
+										{{ $randomListing->baranggay }}, {{ $randomListing->city }}
+									</p>
 									<!-- Info -->
 									<ul class="nav nav-divider align-items-center text-uppercase small mt-3">
 										<li class="nav-item me-4">
-											<i class="fas fa-bed pe-1"></i>5
+											<i class="fas fa-bed pe-1"></i>{{ $randomListing->bedrooms ?? 'N/A' }}
 										</li>
 										<li class="nav-item me-4">
-											<i class="fas fa-bath pe-1"></i>3
+											<i class="fas fa-bath pe-1"></i>{{ $randomListing->amenities->bathroom ?? 'N/A' }}
 										</li>
 										<li class="nav-item me-4">
-											<i class="fas fa-user pe-1"></i>6
-										</li>
-										<li class="nav-item me-4">
-											<i class="fas fa-square pe-1"></i>2900<sup class="text-lowercase">m2</sup>
+											<i class="fas fa-user pe-1"></i>{{ $randomListing->occupancy ?? 'N/A' }}
 										</li>
 									</ul>
-									<!-- Badge -->
+									<!-- Type and Amenities badges -->
 									<div class="mt-3">
-										<a href="#" class="badge bg-primary-soft text-primary"><i class="fas fa-user-friends pe-1"></i>Family</a>
-										<a href="#" class="badge bg-warning-soft text-warning"><i class="fas fa-rupee-sign pe-1"></i>Rent</a>
+										<span class="badge bg-primary me-1">
+											<i class="fas fa-home me-1"></i>{{ $randomListing->type }}
+										</span>
+										@if($randomListing->amenities)
+											@if($randomListing->amenities->wifi)
+												<span class="badge bg-info me-1"><i class="fas fa-wifi"></i></span>
+											@endif
+											@if($randomListing->amenities->parking)
+												<span class="badge bg-secondary me-1"><i class="fas fa-parking"></i></span>
+											@endif
+											@if($randomListing->amenities->gym)
+												<span class="badge bg-warning me-1"><i class="fas fa-dumbbell"></i></span>
+											@endif
+										@endif
 									</div>
 									<!-- Price -->
-									<div class="mt-3 d-flex">
-										<h3 class="text-success pe-2">$500</h3><span class="pt-2">/month</span>
+									<div class="mt-3 d-flex justify-content-between align-items-center">
+										<div>
+											<h3 class="text-success mb-0">₱{{ number_format($randomListing->price, 2) }}</h3>
+											<small class="text-muted">/month</small>
+										</div>
+										<a href="{{ route('listings.show', $randomListing->id) }}" 
+										   class="btn btn-primary btn-sm">View details</a>
 									</div>
 								</div>
 							</div>
 						</div>
+						@endif
 						<!-- Card Property END -->
+
+						<style>
+							.property-card {
+								transition: transform 0.3s ease, box-shadow 0.3s ease;
+							}
+							.property-card:hover {
+								transform: translateY(-5px);
+								box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
+							}
+							.badge {
+								transition: opacity 0.3s ease;
+							}
+							.badge:hover {
+								opacity: 0.8;
+							}
+						</style>
 					</div>
 					<!-- Image right END -->
 				</div>
@@ -318,7 +372,7 @@ About START -->
 			<!-- Right side START -->
 			<div class="col-lg-6 ps-md-5 order-1">
 				<!-- Title -->
-				<h2 class="h1">Serving renters & property owners</h2>
+				<h2 class="h1">Serving Renters & Property Owners</h2>
 				<p>Improved own provided blessing may peculiar domestic. Sight house has sex never. No visited raising gravity outward subject my cottage Mr be. Hold do at tore in park feet near my case.</p>
 				<!-- Button -->
 				<a href="#" class="btn btn-outline-primary">Read more</a>

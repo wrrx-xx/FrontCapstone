@@ -32,10 +32,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\ViewController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    $listings = Listing::where('availability', 'open')->inRandomOrder()->limit(6)->get();
-    return view('home', ['listings' => $listings]);
-});
+use App\Http\Controllers\HomeController;
+
+Route::get('/', [HomeController::class, 'filteredListings']);
 
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');

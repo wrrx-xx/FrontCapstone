@@ -1,0 +1,110 @@
+/* Dashboard specific styles */
+.dashboard-container {
+    padding: 2rem;
+    background-color: #f8f9fa;
+}
+
+/* Account Status Card */
+.status-card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: transform 0.2s;
+}
+
+.status-card:hover {
+    transform: translateY(-3px);
+}
+
+/* Stats Cards */
+.stats-card {
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    min-height: 120px;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stats-card .display-5 {
+    font-size: 2.5rem;
+}
+
+/* Alert Customization */
+.custom-alert {
+    border-left: 4px solid;
+    border-radius: 8px;
+}
+
+.alert-success.custom-alert {
+    border-left-color: #198754;
+}
+
+.alert-danger.custom-alert {
+    border-left-color: #dc3545;
+}
+
+/* Chart Container */
+.chart-container {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+/* Recent Activity */
+.activity-container {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    height: 100%;
+}
+
+.activity-item {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+}
+
+.activity-item:hover {
+    background-color: #f8f9fa;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+}
+
+/* Custom colors */
+.bg-orange {
+    background-color: #fd7e14;
+}
+
+.btn-primary-soft {
+    background-color: #e7f1ff;
+    color: #0d6efd;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-soft:hover {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.bg-secondary-soft {
+    background-color: #f8f9fa;
+    border-radius: 15px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}

@@ -403,7 +403,48 @@
     .upload-highlight {
         background-color: rgba(13, 110, 253, 0.1);
     }
+
+    /* Loading overlay styles */
+    .loading-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #0d6efd;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    .loading-text {
+        margin-top: 1rem;
+        color: #0d6efd;
+        font-weight: bold;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 </style>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Creating your listing...</div>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -493,15 +534,25 @@
             displayPreviews(photosInput.files);
         });
         
+        let selectedFiles = [];
+
         function displayPreviews(files) {
             if (files.length === 0) return;
             
+            // Add new files to existing selection
+            selectedFiles = [...selectedFiles, ...Array.from(files)];
+            
+            // Update the files in the input
+            const dataTransfer = new DataTransfer();
+            selectedFiles.forEach(file => dataTransfer.items.add(file));
+            photosInput.files = dataTransfer.files;
+            
+            // Display previews
             previewContainer.innerHTML = '';
             previewContainer.style.display = 'flex';
             
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                if (!file.type.startsWith('image/')) continue;
+            selectedFiles.forEach((file, index) => {
+                if (!file.type.startsWith('image/')) return;
                 
                 const col = document.createElement('div');
                 col.className = 'col-md-3 col-sm-4 col-6';
@@ -527,13 +578,37 @@
                 fileName.className = 'card-text small text-truncate mb-0';
                 fileName.textContent = file.name;
                 
+                // Add remove button
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'btn btn-sm btn-danger position-absolute top-0 end-0 m-1';
+                removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                removeBtn.onclick = (e) => {
+                    e.preventDefault();
+                    selectedFiles.splice(index, 1);
+                    displayPreviews([]);
+                };
+                
                 cardBody.appendChild(fileName);
                 card.appendChild(img);
                 card.appendChild(cardBody);
+                card.appendChild(removeBtn);
                 col.appendChild(card);
                 previewContainer.appendChild(col);
-            }
+            });
         }
+
+        // Handle form submission
+        const form = document.getElementById('listingForm');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const submitButton = form.querySelector('button[type="submit"]');
+
+        form.addEventListener('submit', function(e) {
+            // Show loading overlay
+            loadingOverlay.style.display = 'flex';
+            // Disable submit button
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Creating...';
+        });
     });
 </script>
 @endsection

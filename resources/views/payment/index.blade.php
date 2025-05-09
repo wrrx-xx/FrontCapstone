@@ -11,7 +11,7 @@
         <div class="row mb-4 align-items-center">
             <div class="col">
                 <h2 class="fw-bold text-primary mb-0">
-                    <i class="fas fa-building me-2"></i>Property Management Dashboard
+                    <i class="fas fa-building me-2"></i>Billings and Payment
                 </h2>
                 <p class="text-muted">Manage your listings, billings, and payment records</p>
             </div>

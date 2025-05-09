@@ -261,15 +261,18 @@ class PaymentController extends Controller
      */
     public function createpay($id)
     {
-        $billing = Billings::with('utility')->findOrFail($id);
+        $billing = Billings::with(['utility', 'listing.user'])->findOrFail($id);
     
         // Calculate total utilities amount
         $utilityTotal = $billing->utility->sum('amount');
     
         // Calculate grand total (billing amount + utilities)
         $grandTotal = $billing->amount + $utilityTotal;
+
+        // Get the owner information through the listing relationship
+        $owner = $billing->listing->user;
     
-        return view('Tenant.payment.create', compact('billing', 'utilityTotal', 'grandTotal'));
+        return view('Tenant.payment.create', compact('billing', 'utilityTotal', 'grandTotal', 'owner'));
     }
   
     public function paystore(Request $request)
@@ -359,4 +362,5 @@ class PaymentController extends Controller
         }
     }
 }
+
 

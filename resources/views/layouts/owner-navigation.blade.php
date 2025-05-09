@@ -106,8 +106,14 @@
                             @endif
 
                             @if (Auth::user()->ownerProfile && Auth::user()->ownerProfile->approved)
-                                <a class="list-group-item hover-primary-soft" href="{{ route('booking.owner') }}">
-                                    <i class="fas fa-fw fa-calendar-check me-2"></i>Bookings
+                                <a class="list-group-item hover-primary-soft d-flex justify-content-between align-items-center" href="{{ route('booking.owner') }}">
+                                    <span><i class="fas fa-fw fa-calendar-check me-2"></i>Bookings</span>
+                                    @php
+                                        $pendingBookingsCount = App\Models\Viewing::getPendingCount();
+                                    @endphp
+                                    @if($pendingBookingsCount > 0)
+                                        <span class="badge bg-danger rounded-pill">{{ $pendingBookingsCount }}</span>
+                                    @endif
                                 </a>
                             @else
                                 <div class="list-group-item text-muted" style="opacity: 0.6;">

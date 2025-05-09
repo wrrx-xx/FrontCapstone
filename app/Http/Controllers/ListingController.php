@@ -36,15 +36,64 @@ class ListingController extends Controller
         return view('owner.property');
     }
 
-    public function index()
-    {
-        // Fetch all listings with pagination
-        $listings = Listing::paginate(10); // Adjust the number per page as needed
+   public function index(Request $request)
+{
+    $query = Listing::with(['photos', 'amenities'])
+        ->where('availability', 'open');
 
-        // Pass the listings to the view
-        return view('listing.display', ['listings' => $listings]);
+    // Filter by type if provided
+    if ($request->filled('type')) {
+        $query->where('type', $request->type);
     }
 
+    // Filter by category if provided
+    if ($request->filled('category')) {
+        $category = $request->category;
+        $query->where('type', $category);
+    }
+
+    // Filter by city if provided
+    if ($request->filled('city')) {
+        $query->where('city', $request->city);
+    }
+
+    // Filter by baranggay if provided
+    if ($request->filled('baranggay')) {
+        $query->where('baranggay', $request->baranggay);
+    }
+
+    // Filter by price range if provided
+    if ($request->filled('min_price')) {
+        $query->where('price', '>=', $request->min_price);
+    }
+    if ($request->filled('max_price')) {
+        $query->where('price', '<=', $request->max_price);
+    }
+
+    // Filter by amenities if provided
+    $amenities = [
+        'wifi', 'parking', 'bathroom', 'kitchen', 'laundry', 
+        'gym', 'projector_room', 'back_yard', 'front_yard',
+        'attached_garage', 'pool', 'elevator', 'school', 
+        'transportation_hub', 'super_market', 'clinic',
+    ];
+
+    foreach ($amenities as $amenity) {
+        if ($request->has($amenity) && $request->input($amenity) == '1') {
+            $query->whereHas('amenities', function ($q) use ($amenity) {
+                $q->where($amenity, true);
+            });
+        }
+    }
+
+    $listings = $query->paginate(10);
+
+    // Get distinct cities and baranggays for dropdowns
+    $cities = Listing::select('city')->distinct()->pluck('city');
+    $baranggays = Listing::select('baranggay')->distinct()->pluck('baranggay');
+
+    return view('listing.display', compact('listings', 'cities', 'baranggays'));
+}
 
     /**
      * Store a newly created resource in storage.
@@ -304,7 +353,11 @@ public function myproperty()
 }
     public function display()
     {
-        Listing::all();
-        return view('listing.display');
+        $listings = Listing::where('availability', 'open')
+            ->orderBy('created_at', 'desc')
+            ->take(4)
+            ->get();
+
+        return view('listing.display', compact('listings'));
     }
 }
