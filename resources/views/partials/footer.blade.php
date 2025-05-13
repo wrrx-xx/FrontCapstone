@@ -26,7 +26,7 @@
             <div class="col-12 col-lg-6 mb-4 mb-lg-0">
                 <div class="row">
                     <!-- Only show these links for guest users -->
-                    @guest
+                    
                     <div class="col-6 col-md-4">
                         <h5 class="mb-2 mb-md-4">Explore</h5>
                         <ul class="nav flex-column text-primary-hover">
@@ -52,7 +52,7 @@
                             <li class="nav-item"><a class="nav-link" href="#">Cookie Policy</a></li>
                         </ul>
                     </div>
-                    @endguest
+                    
                 </div>
             </div>
             <!-- Widget 2 END -->

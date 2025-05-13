@@ -9,6 +9,10 @@
         background-attachment: fixed;
       ">
         <div class="container">
+            @if (session('success') || $errors->any())
+            <!-- Feedback Modal -->
+            @include('components.feedback-modal')
+        @endif
             <!-- Form START -->
             <form class="row" method="GET" action="{{ route('listing.display') }}">
                 <div class="col-md-12 my-4">
@@ -508,6 +512,13 @@
             </div>
             <!-- Row END -->
         </div>
+        @if (session('success') || $errors->any())
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        new bootstrap.Modal(document.getElementById('feedbackModal')).show();
+    });
+    
+</script>
     </section>
     <!-- =======================
                 Inner part END -->

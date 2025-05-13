@@ -4,6 +4,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/glightbox/css/glightbox.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/splide-master/dist/css/splide.min.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <main>
         @if (session('success') || $errors->any())
@@ -445,21 +446,25 @@
                                         @endif
 
                                         <div class="mb-4">
-    <ul class="list-group list-group-borderless">
-        <li class="list-group-item px-0 d-flex justify-content-between text-body">
-            @php
-                $advanceMonths = $listing->advance_payment_months ?? 0;
+                                            <ul class="list-group list-group-borderless">
+                                                <li class="list-group-item px-0 d-flex justify-content-between text-body">
+                                                    @php
+                                                        $advanceMonths = $listing->advance_payment_months ?? 0;
 
-                if ($advanceMonths > 0) {
-                    $totalAmount = ($listing->price * $advanceMonths) + $listing->reservation_amount;
-                } else {
-                    $totalAmount = $listing->price + $listing->reservation_amount;
-                }
-            @endphp
-            Total:<span class="text-dark">₱{{ number_format($totalAmount, 2) }}</span>
-        </li>
-    </ul>
-</div>
+                                                        if ($advanceMonths > 0) {
+                                                            $totalAmount =
+                                                                $listing->price * $advanceMonths +
+                                                                $listing->reservation_amount;
+                                                        } else {
+                                                            $totalAmount =
+                                                                $listing->price + $listing->reservation_amount;
+                                                        }
+                                                    @endphp
+                                                    Total:<span
+                                                        class="text-dark">₱{{ number_format($totalAmount, 2) }}</span>
+                                                </li>
+                                            </ul>
+                                        </div>
 
                                         <hr>
                                         <div class="row">
@@ -481,8 +486,28 @@
                                                     </div>
                                                     <div class="d-grid gap-2 mt-2">
                                                         <button type="submit" class="btn btn-primary" id="reserveButton"
-                                                            onclick="handleReserveClick(this.form)">Reserve
+                                                            onclick="handleReserveClick(this.form)" disabled>Reserve
                                                             Now</button>
+                                                    </div>
+                                                    <div class="form-check mt-3">
+                                                        <input class="form-check-input" type="checkbox" value="" id="termsCheckbox">
+                                                        <label class="form-check-label" for="termsCheckbox">
+                                                            I already read the <a href="#" id="openWaiverModal" style="text-decoration: underline; cursor: pointer;">terms and conditions</a> of the owner
+                                                        </label>
+                                                    </div>
+                                                    <!-- Waiver PDF Modal -->
+                                                    <div class="modal fade" id="waiverModal" tabindex="-1" aria-labelledby="waiverModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-xl modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="waiverModalLabel">Terms and Conditions</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body" style="height: 80vh;">
+                                                                    <iframe src="{{ asset('waivers/' .$listing->waiver_file)}}" frameborder="0" style="width: 100%; height: 100%;"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
 
                                                 </form>
@@ -499,22 +524,38 @@
         </section>
     </main>
 @endsection
-@if (session('success') || $errors->any())
-    <script>
-        function handleReserveClick(form) {
-            form.submit(); // Submit the form
-            var button = document.getElementById('reserveButton');
-            button.disabled = true; // Disable the button
-            setTimeout(function() {
-                button.disabled = false; // Re-enable the button after 15 seconds
-            }, 15000); // 15000 milliseconds = 15 seconds
-        }
-        document.addEventListener('DOMContentLoaded', function() {
+<script>
+    function handleReserveClick(form) {
+        form.submit(); // Submit the form
+        var button = document.getElementById('reserveButton');
+        button.disabled = true; // Disable the button
+        setTimeout(function() {
+            button.disabled = false; // Re-enable the button after 15 seconds
+        }, 15000); // 15000 milliseconds = 15 seconds
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        @if (session('success') || $errors->any())
             var feedbackModal = new bootstrap.Modal(document.getElementById('feedbackModal'));
             feedbackModal.show();
+        @endif
+
+        // Enable or disable reserve button based on checkbox
+        var termsCheckbox = document.getElementById('termsCheckbox');
+        var reserveButton = document.getElementById('reserveButton');
+        termsCheckbox.addEventListener('change', function() {
+            reserveButton.disabled = !this.checked;
         });
-    </script>
-@endif
+
+        // Open waiver modal on link click
+        var openWaiverModal = document.getElementById('openWaiverModal');
+        var waiverModal = new bootstrap.Modal(document.getElementById('waiverModal'));
+        openWaiverModal.addEventListener('click', function(e) {
+            e.preventDefault();
+            waiverModal.show();
+        });
+    });
+</script>
 <script src="{{ asset('assets/vendor/tiny-slider/tiny-slider.js') }}"></script>
 <script src="{{ asset('assets/vendor/sticky-js/sticky.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/glightbox/js/glightbox.js') }}"></script>

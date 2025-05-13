@@ -172,7 +172,7 @@
                     <th>Reservation Fee</th>
                     @endif
                     <th>Cash Advance</th>
-                    @if(isset($billing) && $billing->utility && $billing->utility->count() > 0)
+                    @if(isset($payment->billing) && $payment->billing->utility && $payment->billing->utility->count() > 0)
                     <th>Utility Amount</th>
                     @endif
                     <th>Total</th>
@@ -188,9 +188,9 @@
                     @else
                     <td>{{ number_format($payment->cash_advance_amount ?? 0, 2) }}</td>
                     @endif
-                    @if(isset($billing) && $billing->utility && $billing->utility->count() > 0)
+                    @if(isset($payment->billing) && $payment->billing->utility && $payment->billing->utility->count() > 0)
                     @php
-                        $utilityTotal = $billing->utility->sum('amount');
+                        $utilityTotal = $payment->billing->utility->sum('amount');
                     @endphp
                     <td>₱{{ number_format($utilityTotal, 2) }}</td>
                     @endif
@@ -202,7 +202,7 @@
             </tbody>
         </table>
         
-        @if(isset($billing) && $billing->utility && $billing->utility->count() > 0)
+        @if(isset($payment->billing) && $payment->billing->utility && $payment->billing->utility->count() > 0)
             <h3>Utility Bills</h3>
             <table>
                 <thead>
@@ -212,7 +212,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($billing->utility as $utility)
+                    @foreach ($payment->billing->utility as $utility)
                     <tr>
                         <td><i class="fas fa-bolt"></i> <strong>{{ ucfirst($utility->type) }}</strong></td>
                         <td>{{ number_format($utility->amount, 2) }}</td>

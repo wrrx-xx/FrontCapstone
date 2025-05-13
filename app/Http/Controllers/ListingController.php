@@ -121,10 +121,18 @@ class ListingController extends Controller
             'reservation_amount' => 'required|numeric',
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif', // Validate photo uploads
             'map_link' => '|string|max:255',
-            'waiver_file' => '|mimes:pdf|max:255',
+            'waiver_file' => 'nullable|mimes:pdf|max:10240', // Validate PDF file for waiver_file, max 10MB
             'advance_payment_months' => 'required|integer|in:0,1,2', // Validate PDF file for waiver_file
         ]);
-        
+
+        // Handle waiver_file upload
+        $waiverFilePath = null;
+        if ($request->hasFile('waiver_file')) {
+            $waiverFile = $request->file('waiver_file');
+            $filename = time() . '_' . $waiverFile->getClientOriginalName();
+            $waiverFile->move(public_path('waivers'), $filename);
+            $waiverFilePath = 'waivers/' . $filename;
+        }
 
         // Create the listing
         $listing = Listing::create([
@@ -140,7 +148,7 @@ class ListingController extends Controller
             'reservation' => $request->reservation,
             'reservation_amount' => $request->reservation_amount,
             'map_link' => $request->maps,
-            'waiver_file' => $request->waiver,
+            'waiver_file' => $waiverFilePath,
             'advance_payment_months' => $request->input('advance_payment_months'),
         ]);
 
@@ -231,12 +239,21 @@ public function update(Request $request, $id)
             'reservation_amount' => 'required|numeric',
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif', // Validate photo uploads
             'map_link' => '|string|max:255',
-            'waiver_file' => '|mimes:pdf|max:255', // Validate PDF file for waiver_file
+            'waiver_file' => 'nullable|mimes:pdf|max:10240', // Validate PDF file for waiver_file
             'advance_payment_months' => 'required|integer|in:0,1,2',
         ]);
 
         // Find the listing
         $listing = Listing::findOrFail($id);
+
+        // Handle waiver_file upload
+        $waiverFilePath = $listing->waiver_file; // default to existing file path
+        if ($request->hasFile('waiver_file')) {
+            $waiverFile = $request->file('waiver_file');
+            $filename = time() . '_' . $waiverFile->getClientOriginalName();
+            $waiverFile->move(public_path('waivers'), $filename);
+            $waiverFilePath = 'waivers/' . $filename;
+        }
 
         // Update the listing
         $listing->update([
@@ -251,7 +268,7 @@ public function update(Request $request, $id)
             'reservation' => $request->reservation,
             'reservation_amount' => $request->reservation_amount,
             'map_link' => $request->maps,
-            'waiver_file' => $request->waiver,
+            'waiver_file' => $waiverFilePath,
             'advance_payment_months' => $request->input('advance_payment_months'),
         ]);
 

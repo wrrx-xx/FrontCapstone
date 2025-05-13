@@ -102,6 +102,11 @@ document.addEventListener('DOMContentLoaded', function() {
 @section('content')
 <!-- Main content START -->
 <div class="main-content dashboard-container">
+    <div class="container">
+            @if (session('success') || $errors->any())
+            <!-- Feedback Modal -->
+            @include('components.feedback-modal')
+        @endif
     <div class="row">
         <div class="col-12">
             <!-- Page title -->
@@ -266,6 +271,13 @@ document.addEventListener('DOMContentLoaded', function() {
             </div> <!-- Row END -->
         </div>
     </div> <!-- Row END -->
+    @if (session('success') || $errors->any())
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        new bootstrap.Modal(document.getElementById('feedbackModal')).show();
+    });
+    
+</script>
 </div>
 <!-- Main content END -->
 @endsection

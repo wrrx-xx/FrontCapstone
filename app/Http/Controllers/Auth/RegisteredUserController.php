@@ -166,7 +166,7 @@ class RegisteredUserController extends Controller
     
             // Redirect to the dashboard
 
-            return redirect()->route($request->role === 'owner' ? 'owner.dashboard' : 'listing.display'); // Redirect based on role
+            return redirect()->route($request->role === 'owner' ? 'owner.dashboard' : 'listing.display')->with('success', 'User Registered Successfully!'); // Redirect based on role
     
     
         } catch (Exception $e) {

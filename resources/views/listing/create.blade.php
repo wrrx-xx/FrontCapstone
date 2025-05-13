@@ -203,10 +203,10 @@
                                 </div>
                                 
                                 <div class="col-md-4">
-                                    <label for="waiver" class="form-label fw-bold">
+                                    <label for="waiver_file" class="form-label fw-bold">
                                         <i class="fas fa-file-contract me-2 text-primary"></i>Waiver File
                                     </label>
-                                    <input type="file" name="waiver" id="waiver" class="form-control" accept=".pdf,.doc,.docx" required>
+                                    <input type="file" name="waiver_file" id="waiver" class="form-control" accept=".pdf,.doc,.docx" required>
                                     <div class="form-text">Upload waiver document (PDF or Word)</div>
                                 </div>
                             </div>

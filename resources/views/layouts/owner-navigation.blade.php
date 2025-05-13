@@ -10,9 +10,9 @@
         <!-- Navbar right -->
         <ul class="list-inline m-0 text-primary-hover">
             <!-- Search bar -->
-            <li class="d-none d-md-inline-block list-inline-item text-white me-3">
+            <li class="d-none d-md-inline-block list-inline-item text-black me-3">
                 <form class="align-self-center position-relative" role="search" action="#">
-                    <input type="text" class="form-control bg-secondary-soft text-white border-0"
+                    <input type="text" class="form-control bg-secondary-soft text-black border-0"
                         placeholder="Search here...">
                     <button type="submit" id="search-submit"
                         class="btn position-absolute top-50 end-0 translate-middle-y"><i
@@ -20,10 +20,10 @@
                 </form>
             </li>
             <!-- Icon -->
-            <li class="list-inline-item me-2 me-sm-3"> <a href="#" class="text-white"><i
+            <li class="list-inline-item me-2 me-sm-3"> <a href="#" class="text-black"><i
                         class="far fa-envelope"></i></a></li>
             <li class="list-inline-item me-2 me-sm-3">
-                <a href="#" class="text-white position-relative">
+                <a href="#" class="text-black position-relative">
                     <i class="far fa-bell"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger p-1">
                         <span class="visually-hidden">unread messages</span>
@@ -34,7 +34,7 @@
             <li class="list-inline-item">
                 <a href="#" class="btn-link" role="button" id="dropdownAvatar" data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    <img class="box-sm rounded-circle" src="assets/images/avatar/2.jpg" alt="Profile picture">
+            <img class="box-sm rounded-circle" src="{{ asset('assets/images/avatar/2.jpg') }}" alt="Profile picture">
                 </a>
                 <!-- Dropdown list -->
                 <ul class="dropdown-menu min-w-auto" aria-labelledby="dropdownAvatar">
