@@ -10,9 +10,9 @@
         <!-- Navbar right -->
         <ul class="list-inline m-0 text-primary-hover">
             <!-- Search bar -->
-            <li class="d-none d-md-inline-block list-inline-item text-white me-3">
+            <li class="d-none d-md-inline-block list-inline-item text-dark me-3">
                 <form class="align-self-center position-relative" role="search" action="#">
-                    <input type="text" class="form-control bg-secondary-soft text-white border-0"
+                    <input type="text" class="form-control bg-secondary-soft text-dark border-0"
                         placeholder="Search here...">
                     <button type="submit" id="search-submit"
                         class="btn position-absolute top-50 end-0 translate-middle-y"><i
@@ -20,25 +20,69 @@
                 </form>
             </li>
             <!-- Icon -->
-            <li class="list-inline-item me-2 me-sm-3"> <a href="#" class="text-white"><i
-                        class="far fa-envelope"></i></a></li>
-            <li class="list-inline-item me-2 me-sm-3">
-                <a href="#" class="text-white position-relative">
+           <li class="list-inline-item me-2 me-sm-3 dropdown">
+                <a href="#" class="text-black position-relative" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="far fa-bell"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger p-1">
                         <span class="visually-hidden">unread messages</span>
                     </span>
                 </a>
+                <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="notificationDropdown" style="min-width: 300px; max-width: 350px;">
+                    <h4 class="mb-4 mt-0 fw-bold">Recent Activity</h4>
+                    <ul class="list-inline mb-4 small">
+                        @foreach($maintenanceRequests->take(3) as $request)
+                        <li class="list-inline-item activity-item">
+                            <div class="d-flex align-items-center">
+                                <div class="fs-4 text-warning activity-icon">
+                                    <i class="fas fa-tools"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <p class="mb-0 text-dark">Maintenance request for {{ $request->listing->title }}</p>
+                                    <div class="small">{{ $request->created_at->format('d F Y') }}</div>
+                                </div>
+                            </div>
+                        </li>
+                        @endforeach
+
+                        @foreach($payments->take(2) as $payment)
+                        <li class="list-inline-item activity-item">
+                            <div class="d-flex align-items-center">
+                                <div class="fs-4 text-success activity-icon">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <p class="mb-0 text-dark">Payment received for {{ $payment->listing->title }}</p>
+                                    <div class="small">{{ $payment->created_at->format('d F Y') }}</div>
+                                </div>
+                            </div>
+                        </li>
+                        @endforeach
+
+                        @foreach($viewings->take(2) as $viewing)
+                        <li class="list-inline-item activity-item">
+                            <div class="d-flex align-items-center">
+                                <div class="fs-4 text-primary activity-icon">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <p class="mb-0 text-dark">Viewing request for {{ $viewing->listing->title }}</p>
+                                    <div class="small">{{ $viewing->created_at->format('d F Y') }}</div>
+                                </div>
+                            </div>
+                        </li>
+                        @endforeach
+                    </ul>
+                </ul>
             </li>
             <!-- Dropdown avatar -->
             <li class="list-inline-item">
                 <a href="#" class="btn-link" role="button" id="dropdownAvatar" data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    <img class="box-sm rounded-circle" src="assets/images/avatar/2.jpg" alt="Profile picture">
+                    <img class="box-sm rounded-circle" src="{{ asset(path: Auth::user()->profile_photo) }}" alt="Profile picture">
                 </a>
                 <!-- Dropdown list -->
                 <ul class="dropdown-menu min-w-auto" aria-labelledby="dropdownAvatar">
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
                     <li><a class="dropdown-item" href="#">Setting</a></li>
                     <li><a class="dropdown-item" href="#">My Wallet</a></li>
                     <li><a class="dropdown-item" href="#">Sign out</a></li>
@@ -100,11 +144,11 @@
                             {{-- <a class="list-group-item hover-primary-soft" href="agent-review.html"><i
                                     class="far fa-fw fa-comment-dots me-2"></i>Review</a> --}}
 
-                            <p class="text-body mt-3 mb-2">Messages</p>
-                            {{-- <a class="list-group-item hover-primary-soft" href="{{ route('suppmess.index') }}"><i class="fas fa-fw fa-envelope me-2"></i>Message</a> --}}
-
+                            {{-- <p class="text-body mt-3 mb-2">Messages</p>
+                            <a class="list-group-item hover-primary-soft" href="{{ route('suppmess.index') }}"><i class="fas fa-fw fa-envelope me-2"></i>Message</a>
+ --}}
                             <p class="text-body mt-3 mb-2">Manage Account</p>
-                            <a class="list-group-item hover-primary-soft" href="#"><i
+                            <a class="list-group-item hover-primary-soft" href="{{ route('profile.edit') }}"><i
                                     class="fas fa-fw fa-user-alt me-2"></i>My Profile</a>
                           
                                 <form action="{{ route('logout') }}" method="POST" class="d-inline">

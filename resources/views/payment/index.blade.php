@@ -15,11 +15,13 @@
                 </h2>
                 <p class="text-muted">Manage your listings, billings, and payment records</p>
             </div>
+            @if (!Auth::user()->isCaretaker())
             <div class="col-auto">
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#revenueModal">
                     <i class="fas fa-chart-line me-1"></i> Revenue Summary
                 </button>
             </div>
+            @endif
         </div>
 
         <!-- Dashboard Stats -->
@@ -66,13 +68,16 @@
             <div class="col-md-3">
                 <div class="card shadow-sm border-0 rounded-3 bg-white h-100">
                     <div class="card-body d-flex align-items-center">
+                        @if (!Auth::user()->isCaretaker())
                         <div class="rounded-circle bg-info bg-opacity-10 p-3 me-3">
                             <i class="fas fa-money-bill-wave text-info fs-3"></i>
                         </div>
+                        
                         <div>
                             <h3 class="mb-0 fw-bold">{{ number_format($payments->where('status', 'completed')->sum('amount'), 2) }}</h3>
                             <p class="text-muted mb-0">Total Revenue</p>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>

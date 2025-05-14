@@ -223,7 +223,7 @@
                                     <label class="form-label">Owner ID Back</label>
                                     <input type="file" name="owner_id_back_path" class="form-control @error('owner_id_back_path') is-invalid @enderror" accept="image/*">
                                     @if(optional($user->ownerProfile)->owner_id_back_path)
-                                    <small>Current file: <a href="{{ asset(optional($user->ownerProfile)->owner_id_back_path) }}" target="_blank">View</a></small>
+                                    <small>Current file: <a href="{{asset($user->ownerProfile->owner_id_back_path) }}" target="_blank">View</a></small>
                                     @endif
                                     @error('owner_id_back_path')
                                     <div class="invalid-feedback">{{ $errors->first('owner_id_back_path') }}</div>

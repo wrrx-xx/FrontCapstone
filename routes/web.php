@@ -52,7 +52,7 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::post('/tenant/payment/store',[PaymentController::class,'paystore'])->name('tenant.payment.store');
     Route::get('/tenant/myrental', [TenantRentalController::class, 'index'])->name('tenant.rental.index');
     Route::resource('maintenance', MaintenanceRequestController::class)->names('tenant.maintenance');
-
+    Route::get('/tenant/support', [SupportMessagesController::class, 'index'])->name('tenant.support');
 });
 
 Route::get('/listing', function () {
@@ -62,9 +62,7 @@ Route::get('/listing', function () {
 
 
 
-Route::get('/caretaker/dashboard', function () {
-    return view('caretaker.dashboard');
-})->middleware(['auth', 'verified','staff'])->name('caretaker.dashboard');
+Route::get('/caretaker/dashboard',[CaretakerController::class, 'dashboard'])->middleware(['auth', 'verified','staff'])->name('caretaker.dashboard');
 
 Route::get('/listings', [ListingController::class, 'index'])->name('listing.display');
 Route::get('/listings/{id}', [ListingController::class, 'show'])->name('listings.show');

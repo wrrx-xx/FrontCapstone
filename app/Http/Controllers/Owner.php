@@ -22,6 +22,7 @@ class Owner extends Controller
 
         // Get maintenance requests for owner's listings
         $maintenanceRequests = MaintenanceRequest::whereIn('listing_id', $listings->pluck('id'))
+
             ->with(['tenant', 'listing'])
             ->latest()
             ->get();
@@ -51,3 +52,4 @@ class Owner extends Controller
     }
     
 }
+

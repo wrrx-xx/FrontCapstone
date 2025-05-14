@@ -6,6 +6,7 @@ use App\Models\SupportMessages;
 use App\Http\Requests\StoreSupportMessagesRequest;
 use App\Http\Requests\UpdateSupportMessagesRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SupportMessagesController extends Controller
 {
@@ -14,9 +15,14 @@ class SupportMessagesController extends Controller
      */
     public function index()
     {
-        SupportMessages::all();
-        return view('message.message');
-    
+        // Load support conversations for the logged-in user (tenant)
+        $user = Auth::user();
+        // Filter by sender_id instead of user_id
+        $conversations = SupportMessages::where('sender_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('message.message', compact('conversations'));
     }
 
     /**
@@ -28,7 +34,8 @@ class SupportMessagesController extends Controller
             'support_id'=> 'required',
             'support_message' =>  'required',
         ]);
-        $suppmess = $request->user()->suppId()->create($field);
+        $field['sender_id'] = $request->user()->id;
+        $suppmess = SupportMessages::create($field);
         return ['support_messages' =>  $suppmess];
     }
 

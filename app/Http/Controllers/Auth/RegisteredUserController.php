@@ -8,12 +8,14 @@ use App\Models\TenantProfile;
 use App\Models\User;
 use Exception;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use App\Notifications\NewOwnerRegistered;
@@ -34,13 +36,9 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
-
     {
-    
         try {
-    
             // Validate the request data
-    
             $validationRules = [
                 'fname' => 'required|string|max:255',
                 'mname' => 'nullable|string|max:255',
@@ -49,6 +47,7 @@ class RegisteredUserController extends Controller
                 'phone_number' => 'required|string|max:20',
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
                 'role' => 'required|in:guest,owner',
+                'profile_photo' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
             ];
 
             // Add tenant-specific validation if role is tenant
@@ -151,41 +150,25 @@ class RegisteredUserController extends Controller
                 ]);
             }
             
-
-    
-    
             // Trigger the Registered event
-    
             event(new Registered($user));
     
-    
             // Log the user in
-    
             Auth::login($user);
     
-    
             // Redirect to the dashboard
-
-            return redirect()->route($request->role === 'owner' ? 'owner.dashboard' : 'listing.display')->with('success', 'User Registered Successfully!'); // Redirect based on role
+            return redirect()->route($request->role === 'owner' ? 'owner.dashboard' : 'listing.display')
+                             ->with('success', 'User Registered Successfully!');
     
-    
+        } catch (ValidationException $e) {
+            Log::warning('Validation failed in store method: ' . $e->getMessage());
+            return back()->withErrors($e->errors())->withInput();
+        } catch (QueryException $e) {
+            Log::error('Database error in store method: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'A database error occurred. Please try again later.']);
         } catch (Exception $e) {
-    
-            // Log the error or handle it as needed
-    
-            Log::error('Error in store method: ' . $e->getMessage());
-    
-    
-            // Return a RedirectResponse with an error message
-    
-            return back()->withErrors(['error' => 'An error occurred while processing your request. Please try again.']);
-    
-     
-    
-       }
-    
-}
-
-
-    
+            Log::error('Unexpected error in store method: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'An unexpected error occurred. Please try again.']);
+        }
+    }
 }

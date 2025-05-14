@@ -34,7 +34,7 @@
             <li class="list-inline-item">
                 <a href="#" class="btn-link" role="button" id="dropdownAvatar" data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    <img class="box-sm rounded-circle" src="{{ asset(Auth::user()->profile_photo) }}" alt="Profile picture">
+                    <img class="box-sm rounded-circle" src="{{ asset(path: Auth::user()->profile_photo) }}" alt="Profile picture">
                 </a>
                 <!-- Dropdown list -->
                 <ul class="dropdown-menu min-w-auto" aria-labelledby="dropdownAvatar">
@@ -75,7 +75,7 @@
                             <a class="list-group-item hover-primary-soft text-light" href="{{ route('tenant.rental.index') }}"><i class="fas fa-fw fa-home me-2"></i>My Rentals</a>
                             <a class="list-group-item hover-primary-soft text-light" href="{{ route('tenant.payment.index') }}"><i class="fas fa-fw fa-file-invoice-dollar me-2"></i>Payment History</a>
                             <a class="list-group-item hover-primary-soft text-light" href="{{ route('tenant.maintenance.index') }}"><i class="fas fa-fw fa-tools me-2"></i>Maintenance</a>
-                            <a class="list-group-item hover-primary-soft text-light" href="#"><i class="fas fa-fw fa-life-ring me-2"></i>Support</a>
+{{-- <a class="list-group-item hover-primary-soft text-light" href="{{ route('tenant.support') }}"><i class="fas fa-fw fa-life-ring me-2"></i>Support</a> --}}
 
                             <p class="text-body mt-3 mb-2">Manage Account</p>
                             <a class="list-group-item hover-primary-soft text-light" href="{{ route('profile.edit') }}"><i
