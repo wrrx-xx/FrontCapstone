@@ -29,7 +29,7 @@
                         <span class="visually-hidden">unread messages</span>
                     </span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="notificationDropdown" style="min-width: 300px; max-width: 350px;">
+                {{-- <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="notificationDropdown" style="min-width: 300px; max-width: 350px;">
                     <h4 class="mb-4 mt-0 fw-bold">Recent Activity</h4>
                     <ul class="list-inline mb-4 small">
                         @foreach($maintenanceRequests->take(3) as $request)
@@ -74,8 +74,7 @@
                         </li>
                         @endforeach
                     </ul>
-                </ul>
-            </li>
+                </ul> --}}
             <!-- Dropdown avatar -->
             <li class="list-inline-item">
                 <a href="#" class="btn-link" role="button" id="dropdownAvatar" data-bs-toggle="dropdown"
