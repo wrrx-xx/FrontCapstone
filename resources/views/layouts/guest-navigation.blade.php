@@ -61,7 +61,7 @@
                 </ul>
             </div>
             <div class="ms-5 ms-lg-0">
-                <a href="owner.dashboard" class="btn btn-sm btn-dark-soft"><i class="fas fa-plus me-2"></i>Add listing</a>
+                <a href="{{ route('listing.create') }}" class="btn btn-sm btn-dark-soft"><i class="fas fa-plus me-2"></i>Add listing</a>
             </div>
             <!-- Main navbar END -->
             @endif

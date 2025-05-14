@@ -23,7 +23,7 @@
             <li class="list-inline-item me-2 me-sm-3"> <a href="#" class="text-dark"><i
                         class="far fa-envelope"></i></a></li>
             <li class="list-inline-item me-2 me-sm-3">
-                <a href="#" class="text-white position-relative">
+                <a href="#" class="text-black position-relative">
                     <i class="far fa-bell"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger p-1">
                         <span class="visually-hidden">unread messages</span>
@@ -34,7 +34,7 @@
             <li class="list-inline-item">
                 <a href="#" class="btn-link" role="button" id="dropdownAvatar" data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    <img class="box-sm rounded-circle" src="{{asset($user->profile_photo) }}" alt="Profile picture">
+                    <img class="box-sm rounded-circle" src="{{ asset(Auth::user()->profile_photo) }}" alt="Profile picture">
                 </a>
                 <!-- Dropdown list -->
                 <ul class="dropdown-menu min-w-auto" aria-labelledby="dropdownAvatar">
