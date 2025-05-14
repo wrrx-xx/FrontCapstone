@@ -39,7 +39,7 @@ class ProfileController extends Controller
             'lname' => $validated['lname'],
             'phone_number' => $validated['phone_number'],
             'email' => $validated['email'],
-            'profile_photo'=> $validated['profile_photo'],
+            'profile_photo'=> $validated['profile_photo'] ?? $user->profile_photo,
         ]);
 
         if ($user->isDirty('email')) {
@@ -73,23 +73,29 @@ class ProfileController extends Controller
             // Handle valid ID front upload
             if ($request->hasFile('valid_id_front_path')) {
                 $file = $request->file('valid_id_front_path');
-                $tenantProfileData['valid_id_front_path'] = $file->store('tenant_ids/front', 'public');
+                $fileNameFront = time() . '_front_' . $file->getClientOriginalName();
+                $file->move(public_path('tenant_ids/front'), $fileNameFront);
+                $tenantProfileData['valid_id_front_path'] = 'tenant_ids/front/' . $fileNameFront;
             } else {
-                $tenantProfileData['valid_id_front_path'] = $user->tenantProfile->valid_id_front_path ?? null;
+                $tenantProfileData['valid_id_front_path'] = optional($user->tenantProfile)->valid_id_front_path ?? null;
             }
 
             // Handle valid ID back upload
             if ($request->hasFile('valid_id_back_path')) {
                 $file = $request->file('valid_id_back_path');
-                $tenantProfileData['valid_id_back_path'] = $file->store('tenant_ids/back', 'public');
+                $fileNameBack = time() . '_back_' . $file->getClientOriginalName();
+                $file->move(public_path('tenant_ids/back'), $fileNameBack);
+                $tenantProfileData['valid_id_back_path'] = 'tenant_ids/back/' . $fileNameBack;
             } else {
-                $tenantProfileData['valid_id_back_path'] = $user->tenantProfile->valid_id_back_path ?? null;
+                $tenantProfileData['valid_id_back_path'] = optional($user->tenantProfile)->valid_id_back_path ?? null;
             }
 
+            Log::debug('Updating tenant profile', ['user_id' => $user->id, 'data' => $tenantProfileData]);
             $user->tenantProfile()->updateOrCreate(
                 ['user_id' => $user->id],
                 $tenantProfileData
             );
+            Log::debug('Tenant profile updated successfully');
         }
 
         // Update or create owner profile if user is owner
@@ -104,21 +110,21 @@ class ProfileController extends Controller
             ]);
 
             // Handle owner ID front upload
-            if ($request->hasFile('owner_id_front')) {
-                $frontName = time() . '_front_' . $request->file('owner_id_front')->getClientOriginalName();
-                $request->file('owner_id_front')->move(public_path('owner_ids/front'), $frontName);
+            if ($request->hasFile('owner_id_front_path')) {
+                $frontName = time() . '_front_' . $request->file('owner_id_front_path')->getClientOriginalName();
+                $request->file('owner_id_front_path')->move(public_path('owner_ids/front'), $frontName);
                 $ownerProfileData['owner_id_front_path'] = 'owner_ids/front/' . $frontName;
             } else {
-                $ownerProfileData['owner_id_front_path'] = $user->ownerProfile->owner_id_front_path ?? null;
+                $ownerProfileData['owner_id_front_path'] = optional($user->ownerProfile)->owner_id_front_path ?? null;
             }
 
             // Handle owner ID back upload
-            if ($request->hasFile('owner_id_back')) {
-                $backName = time() . '_back_' . $request->file('owner_id_back')->getClientOriginalName();
-                $request->file('owner_id_back')->move(public_path('owner_ids/back'), $backName);
+            if ($request->hasFile('owner_id_back_path')) {
+                $backName = time() . '_back_' . $request->file('owner_id_back_path')->getClientOriginalName();
+                $request->file('owner_id_back_path')->move(public_path('owner_ids/back'), $backName);
                 $ownerProfileData['owner_id_back_path'] = 'owner_ids/back/' . $backName;
             } else {
-                $ownerProfileData['owner_id_back_path'] = $user->ownerProfile->owner_id_back_path ?? null;
+                $ownerProfileData['owner_id_back_path'] = optional($user->ownerProfile)->owner_id_back_path ?? null;
             }
 
             $user->ownerProfile()->updateOrCreate(
