@@ -38,7 +38,7 @@
                 </a>
                 <!-- Dropdown list -->
                 <ul class="dropdown-menu min-w-auto" aria-labelledby="dropdownAvatar">
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
                     <li><a class="dropdown-item" href="#">Setting</a></li>
                     <li><a class="dropdown-item" href="#">My Wallet</a></li>
                     <li><a class="dropdown-item" href="#">Sign out</a></li>
@@ -78,7 +78,7 @@
                             <a class="list-group-item hover-primary-soft text-light" href="#"><i class="fas fa-fw fa-life-ring me-2"></i>Support</a>
 
                             <p class="text-body mt-3 mb-2">Manage Account</p>
-                            <a class="list-group-item hover-primary-soft text-light" href="#"><i
+                            <a class="list-group-item hover-primary-soft text-light" href="{{ route('profile.edit') }}"><i
                                     class="fas fa-fw fa-user-alt me-2"></i>My Profile</a>
                             
                             <form action="{{ route('logout') }}" method="POST" class="d-inline ">
