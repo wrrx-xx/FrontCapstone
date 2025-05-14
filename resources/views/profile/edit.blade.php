@@ -82,7 +82,14 @@
                                 <!-- Employment Status -->
                                 <div class="col-md-6">
                                     <label class="form-label">Employment Status</label>
-                                    <input type="text" name="employment_status" class="form-control @error('employment_status') is-invalid @enderror" value="{{ old('employment_status', optional($user->tenantProfile)->employment_status) }}">
+                                    <select name="employment_status" class="form-select @error('employment_status') is-invalid @enderror">
+                                        <option value="">Select Employment Status</option>
+                                        <option value="Employed" {{ old('employment_status', optional($user->tenantProfile)->employment_status) == 'Employed' ? 'selected' : '' }}>Employed</option>
+                                        <option value="Self-Employed" {{ old('employment_status', optional($user->tenantProfile)->employment_status) == 'Self-Employed' ? 'selected' : '' }}>Self-Employed</option>
+                                        <option value="Unemployed" {{ old('employment_status', optional($user->tenantProfile)->employment_status) == 'Unemployed' ? 'selected' : '' }}>Unemployed</option>
+                                        <option value="Student" {{ old('employment_status', optional($user->tenantProfile)->employment_status) == 'Student' ? 'selected' : '' }}>Student</option>
+                                        <option value="Retired" {{ old('employment_status', optional($user->tenantProfile)->employment_status) == 'Retired' ? 'selected' : '' }}>Retired</option>
+                                    </select>
                                     @error('employment_status')
                                     <div class="invalid-feedback">{{ $errors->first('employment_status') }}</div>
                                     @enderror
@@ -114,7 +121,17 @@
                                 <!-- Valid ID Type -->
                                 <div class="col-md-6">
                                     <label class="form-label">Valid ID Type</label>
-                                    <input type="text" name="valid_id_type" class="form-control @error('valid_id_type') is-invalid @enderror" value="{{ old('valid_id_type', optional($user->tenantProfile)->valid_id_type) }}">
+                                    <select name="valid_id_type" class="form-select @error('valid_id_type') is-invalid @enderror">
+                                        <option value="">Select Valid ID</option>
+                                        <option value="Philippine Passport" {{ old('valid_id_type', optional($user->tenantProfile)->valid_id_type) == 'Philippine Passport' ? 'selected' : '' }}>Philippine Passport</option>
+                                        <option value="Driver's License" {{ old('valid_id_type', optional($user->tenantProfile)->valid_id_type) == "Driver's License" ? 'selected' : '' }}>Driver's License</option>
+                                        <option value="SSS ID" {{ old('valid_id_type', optional($user->tenantProfile)->valid_id_type) == 'SSS ID' ? 'selected' : '' }}>SSS ID</option>
+                                        <option value="GSIS ID" {{ old('valid_id_type', optional($user->tenantProfile)->valid_id_type) == 'GSIS ID' ? 'selected' : '' }}>GSIS ID</option>
+                                        <option value="PhilHealth ID" {{ old('valid_id_type', optional($user->tenantProfile)->valid_id_type) == 'PhilHealth ID' ? 'selected' : '' }}>PhilHealth ID</option>
+                                        <option value="Voter's ID" {{ old('valid_id_type', optional($user->tenantProfile)->valid_id_type) == "Voter's ID" ? 'selected' : '' }}>Voter's ID</option>
+                                        <option value="Postal ID" {{ old('valid_id_type', optional($user->tenantProfile)->valid_id_type) == 'Postal ID' ? 'selected' : '' }}>Postal ID</option>
+                                        <option value="Barangay Clearance" {{ old('valid_id_type', optional($user->tenantProfile)->valid_id_type) == 'Barangay Clearance' ? 'selected' : '' }}>Barangay Clearance</option>
+                                    </select>
                                     @error('valid_id_type')
                                     <div class="invalid-feedback">{{ $errors->first('valid_id_type') }}</div>
                                     @enderror
