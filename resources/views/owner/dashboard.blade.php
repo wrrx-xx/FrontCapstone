@@ -278,6 +278,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
 </script>
+@endif
 </div>
 <!-- Main content END -->
 @endsection

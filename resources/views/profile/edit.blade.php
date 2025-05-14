@@ -1,290 +1,266 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
+@section('content')
+<!-- Main content START -->
+<div class="main-content">
+     @if (session('success') || $errors->any())
+            <!-- Feedback Modal -->
+            @include('components.feedback-modal')
+        @endif
+    <div class="row">
+        <div class="col-12">
+            <!-- Page title -->
+            <div class="my-5">
+                <h3>My Profile</h3>
+                <hr>
+            </div>
+            <!-- Form START -->
+            <form class="file-upload" method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+                @csrf
+                @method('PATCH')
+                <div class="row mb-5 gx-5">
+                    <!-- Basic Information -->
+                    <div class="col-xxl-8 mb-5 mb-xxl-0">
+                        <div class="bg-secondary-soft px-4 py-5 rounded">
+                            <h4 class="mb-4 mt-0">Basic Information</h4>
+                            <div class="row g-3">
+                                <!-- First Name -->
+                                <div class="col-md-4">
+                                    <label class="form-label">First Name *</label>
+                                    <input type="text" name="fname" class="form-control @error('fname') is-invalid @enderror" value="{{ old('fname', $user->fname) }}" required>
+                                    @error('fname')
+                                    <div class="invalid-feedback">{{ $errors->first('fname') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Middle Name -->
+                                <div class="col-md-4">
+                                    <label class="form-label">Middle Name</label>
+                                    <input type="text" name="mname" class="form-control @error('mname') is-invalid @enderror" value="{{ old('mname', $user->mname) }}">
+                                    @error('mname')
+                                    <div class="invalid-feedback">{{ $errors->first('mname') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Last Name -->
+                                <div class="col-md-4">
+                                    <label class="form-label">Last Name *</label>
+                                    <input type="text" name="lname" class="form-control @error('lname') is-invalid @enderror" value="{{ old('lname', $user->lname) }}" required>
+                                    @error('lname')
+                                    <div class="invalid-feedback">{{ $errors->first('lname') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Phone number -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Phone Number *</label>
+                                    <input type="text" name="phone_number" class="form-control @error('phone_number') is-invalid @enderror" value="{{ old('phone_number', $user->phone_number) }}" required>
+                                    @error('phone_number')
+                                    <div class="invalid-feedback">{{ $errors->first('phone_number') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Email -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Email *</label>
+                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $user->email) }}" required>
+                                    @error('email')
+                                    <div class="invalid-feedback">{{ $errors->first('email') }}</div>
+                                    @enderror
+                                </div>
+                            </div> <!-- Row END -->
+                        </div>
 
-<!-- Mirrored from themes.webestica.com/realty/agent-profile.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 23 Oct 2024 10:21:56 GMT -->
-<head>
-	<title>Realty - Real Estate Bootstrap 5 Template</title>
-	<!-- Meta Tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="author" content="Webestica.com">
-	<meta name="description" content="bootstrap 5 based real estate template">
+                        @if($user->isTenant() || $user->isGuest())
+                        <!-- Tenant Profile Information -->
+                        <div class="bg-secondary-soft px-4 py-5 rounded mt-4">
+                            <h4 class="mb-4 mt-0">Tenant Profile</h4>
+                            <div class="row g-3">
+                                <!-- Current Address -->
+                                <div class="col-md-12">
+                                    <label class="form-label">Current Address</label>
+                                    <input type="text" name="current_address" class="form-control @error('current_address') is-invalid @enderror" value="{{ old('current_address', optional($user->tenantProfile)->current_address) }}">
+                                    @error('current_address')
+                                    <div class="invalid-feedback">{{ $errors->first('current_address') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Employment Status -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Employment Status</label>
+                                    <input type="text" name="employment_status" class="form-control @error('employment_status') is-invalid @enderror" value="{{ old('employment_status', optional($user->tenantProfile)->employment_status) }}">
+                                    @error('employment_status')
+                                    <div class="invalid-feedback">{{ $errors->first('employment_status') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Monthly Income -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Monthly Income</label>
+                                    <input type="number" name="monthly_income" class="form-control @error('monthly_income') is-invalid @enderror" value="{{ old('monthly_income', optional($user->tenantProfile)->monthly_income) }}" min="0" step="0.01">
+                                    @error('monthly_income')
+                                    <div class="invalid-feedback">{{ $errors->first('monthly_income') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Emergency Contact Name -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Emergency Contact Name</label>
+                                    <input type="text" name="emergency_contact_name" class="form-control @error('emergency_contact_name') is-invalid @enderror" value="{{ old('emergency_contact_name', optional($user->tenantProfile)->emergency_contact_name) }}">
+                                    @error('emergency_contact_name')
+                                    <div class="invalid-feedback">{{ $errors->first('emergency_contact_name') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Emergency Contact Phone -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Emergency Contact Phone</label>
+                                    <input type="text" name="emergency_contact_phone" class="form-control @error('emergency_contact_phone') is-invalid @enderror" value="{{ old('emergency_contact_phone', optional($user->tenantProfile)->emergency_contact_phone) }}">
+                                    @error('emergency_contact_phone')
+                                    <div class="invalid-feedback">{{ $errors->first('emergency_contact_phone') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Valid ID Type -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Valid ID Type</label>
+                                    <input type="text" name="valid_id_type" class="form-control @error('valid_id_type') is-invalid @enderror" value="{{ old('valid_id_type', optional($user->tenantProfile)->valid_id_type) }}">
+                                    @error('valid_id_type')
+                                    <div class="invalid-feedback">{{ $errors->first('valid_id_type') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Valid ID Front Upload -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Valid ID Front</label>
+                                    <input type="file" name="valid_id_front_path" class="form-control @error('valid_id_front_path') is-invalid @enderror" accept="image/*">
+                                    @if(optional($user->tenantProfile)->valid_id_front_path)
+                                    <small>Current file: <a href="{{ asset($user->tenantProfile->valid_id_front_path) }}" target="_blank">View</a></small>
+                                    @endif
+                                    @error('valid_id_front_path')
+                                    <div class="invalid-feedback">{{ $errors->first('valid_id_front_path') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Valid ID Back Upload -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Valid ID Back</label>
+                                    <input type="file" name="valid_id_back_path" class="form-control @error('valid_id_back_path') is-invalid @enderror" accept="image/*">
+                                    @if(optional($user->tenantProfile)->valid_id_back_path)
+                                    <small>Current file: <a href="{{ asset($user->tenantProfile->valid_id_back_path) }}" target="_blank">View</a></small>
+                                    @endif
+                                    @error('valid_id_back_path')
+                                    <div class="invalid-feedback">{{ $errors->first('valid_id_back_path') }}</div>
+                                    @enderror
+                                </div>
+                            </div> <!-- Row END -->
+                        </div>
+                        @endif
 
-	<!-- Favicon -->
-	<link rel="shortcut icon" href="assets/images/favicon.ico">
+                        @if($user->isOwner())
+                        <!-- Owner Profile Information -->
+                        <div class="bg-secondary-soft px-4 py-5 rounded mt-4">
+                            <h4 class="mb-4 mt-0">Owner Profile</h4>
+                            <div class="row g-3">
+                                <!-- Business Name -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Business Name</label>
+                                    <input type="text" name="business_name" class="form-control @error('business_name') is-invalid @enderror" value="{{ old('business_name', optional($user->ownerProfile)->business_name) }}">
+                                    @error('business_name')
+                                    <div class="invalid-feedback">{{ $errors->first('business_name') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Business Address -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Business Address</label>
+                                    <input type="text" name="business_address" class="form-control @error('business_address') is-invalid @enderror" value="{{ old('business_address', optional($user->ownerProfile)->business_address) }}">
+                                    @error('business_address')
+                                    <div class="invalid-feedback">{{ $errors->first('business_address') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Business Phone -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Business Phone</label>
+                                    <input type="text" name="business_phone" class="form-control @error('business_phone') is-invalid @enderror" value="{{ old('business_phone', optional($user->ownerProfile)->business_phone) }}">
+                                    @error('business_phone')
+                                    <div class="invalid-feedback">{{ $errors->first('business_phone') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Business Email -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Business Email</label>
+                                    <input type="email" name="business_email" class="form-control @error('business_email') is-invalid @enderror" value="{{ old('business_email', optional($user->ownerProfile)->business_email) }}">
+                                    @error('business_email')
+                                    <div class="invalid-feedback">{{ $errors->first('business_email') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Owner ID Type -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Owner ID Type</label>
+                                    <input type="text" name="owner_id_type" class="form-control @error('owner_id_type') is-invalid @enderror" value="{{ old('owner_id_type', optional($user->ownerProfile)->owner_id_type) }}">
+                                    @error('owner_id_type')
+                                    <div class="invalid-feedback">{{ $errors->first('owner_id_type') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Owner ID Front Upload -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Owner ID Front</label>
+                                    <input type="file" name="owner_id_front_path" class="form-control @error('owner_id_front_path') is-invalid @enderror" accept="image/*">
+                                    @if(optional($user->ownerProfile)->owner_id_front_path)
+                                    <small>Current file: <a href="{{ asset(optional($user->ownerProfile)->owner_id_front_path) }}" target="_blank">View</a></small>
+                                    @endif
+                                    @error('owner_id_front_path')
+                                    <div class="invalid-feedback">{{ $errors->first('owner_id_front_path') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Owner ID Back Upload -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Owner ID Back</label>
+                                    <input type="file" name="owner_id_back_path" class="form-control @error('owner_id_back_path') is-invalid @enderror" accept="image/*">
+                                    @if(optional($user->ownerProfile)->owner_id_back_path)
+                                    <small>Current file: <a href="{{ asset(optional($user->ownerProfile)->owner_id_back_path) }}" target="_blank">View</a></small>
+                                    @endif
+                                    @error('owner_id_back_path')
+                                    <div class="invalid-feedback">{{ $errors->first('owner_id_back_path') }}</div>
+                                    @enderror
+                                </div>
+                                <!-- Additional Info -->
+                                <div class="col-md-12">
+                                    <label class="form-label">Additional Info</label>
+                                    <textarea name="additional_info" class="form-control @error('additional_info') is-invalid @enderror" rows="3">{{ old('additional_info', optional($user->ownerProfile)->additional_info) }}</textarea>
+                                    @error('additional_info')
+                                    <div class="invalid-feedback">{{ $errors->first('additional_info') }}</div>
+                                    @enderror
+                                </div>
+                            </div> <!-- Row END -->
+                        </div>
+                        @endif
+                    </div>
+                    <!-- Upload profile photo -->
+                    <div class="col-xxl-4">
+                        <div class="bg-secondary-soft px-4 py-5 rounded">
+                            <h4 class="mb-4 mt-0">Upload your profile photo</h4>
+                            <div class="text-center">
+                                <!-- Image upload -->
+                                <div class="square position-relative display-2 mb-3">
+                                    @if($user->profile_photo_path)
+                                    <img src="{{ asset('storage/' . $user->profile_photo_path) }}" alt="Profile Photo" class="img-fluid rounded-circle" style="max-width: 150px; max-height: 150px;">
+                                    @else
+                                    <i class="fas fa-fw fa-user position-absolute top-50 start-50 translate-middle text-secondary"></i>
+                                    @endif
+                                </div>
+                                <!-- Button -->
+                                <input type="file" id="customFile" name="profile_photo" hidden accept="image/*">
+                                <label class="btn btn-success-soft btn-block" for="customFile">Upload</label>
+                                <button type="button" class="btn btn-danger-soft" id="removeProfilePhotoBtn">Remove</button>
+                                <!-- Content -->
+                                <p class="text-muted mt-3 mb-0"><span class="me-1">Note:</span>Minimum size 300px x 300px</p>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- Row END -->
 
-	<!-- Google Font -->
-	<link rel="preconnect" href="https://fonts.googleapis.com/">
-	<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=DM+Serif+Text&amp;display=swap" rel="stylesheet">
-
-	<!-- Plugins CSS -->
-	<link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css">
-	<link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css">
-	<!-- Theme CSS -->
-	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-
-</head>
-
-<body>
-<!-- **************** MAIN CONTENT START **************** -->
-<main>
-	<!-- Navbar top START -->
-	<div class="dashboard-topbar navbar-dark bg-dark px-3 px-sm-4 px-md-5">
-		<div class="d-flex justify-content-between align-items-center">
-			<!-- Logo -->
-			<a class="navbar-brand d-flex align-items-center py-2" href="index.html">
-				<img class="navbar-brand-item" src="assets/images/logo-light.svg" alt="logo">
-			</a>
-	
-			<!-- Navbar right -->
-			<ul class="list-inline m-0 text-primary-hover">
-				<!-- Search bar -->
-				<li class="d-none d-md-inline-block list-inline-item text-white me-3">
-					<form class="align-self-center position-relative" role="search" action="#">
-						<input type="text" class="form-control bg-secondary-soft text-white border-0" placeholder="Search here...">
-						<button type="submit" id="search-submit" class="btn position-absolute top-50 end-0 translate-middle-y"><i class="fa fa-search text-secondary"></i></button>
-					</form>
-				</li>
-				<!-- Icon -->
-				<li class="list-inline-item me-2 me-sm-3"> <a href="#" class="text-white"><i class="far fa-envelope"></i></a></li>
-				<li class="list-inline-item me-2 me-sm-3">
-					<a href="#" class="text-white position-relative">
-						<i class="far fa-bell"></i>
-						<span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger p-1"><span class="visually-hidden">unread messages</span></span>
-					</a>
-				</li>
-				<!-- Dropdown avatar -->
-				<li class="list-inline-item">
-					<a href="#" class="btn-link" role="button" id="dropdownAvatar" data-bs-toggle="dropdown" aria-expanded="false">
-						<img class="box-sm rounded-circle" src="assets/images/avatar/2.jpg" alt="Profile picture">
-					</a>
-					<!-- dropdown list -->
-					<ul class="dropdown-menu min-w-auto" aria-labelledby="dropdownAvatar">
-						<li><a class="dropdown-item" href="#">Profile</a></li>
-						<li><a class="dropdown-item" href="#">Setting</a></li>
-						<li><a class="dropdown-item" href="#">My Wallet</a></li>
-						<li><a class="dropdown-item" href="#">Sign out</a></li>
-					</ul>
-				</li>
-				<!-- Toggle button -->
-				<li class="list-inline-item d-md-inline-block d-lg-none">
-					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardNav" aria-controls="dashboardNav" aria-expanded="false" aria-label="Toggle navigation">
-						<span class="navbar-toggler-icon"></span>
-					</button>
-				</li>
-			</ul>
-		</div>
-	</div>
-	<!-- Navbar top END -->
-	
-	<div class="container-fluid px-0">
-		<div class="page-wrapper">
-			<!-- Left sidebar START -->
-			<nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
-				<div class="collapse navbar-collapse" id="dashboardNav">
-					<div class="dashboard-sidebar bg-light">
-						<div class="content mt-3">
-							<!-- Sidebar menu -->
-							<div class="list-group list-group-borderless p-3 p-md-4">
-								<p class="text-body mb-2">Main</p>
-									<a class="list-group-item hover-primary-soft" href="{{ route('owner') }}"><i class="fas fa-fw fa-tachometer-alt me-2"></i>Dashboard</a>
-
-								<p class="text-body mt-3 mb-2">Manage Listing</p>
-								<a class="list-group-item hover-primary-soft" href="{{ url('clisting') }}"><i class="bi fa-fw bi-bookmark-plus-fill me-2"></i>Add Property</a>
-								<a class="list-group-item hover-primary-soft" href="{{ route('owner.property') }}"><i class="fas fa-fw fa-home me-2"></i>My Property</a>
-									<a class="list-group-item hover-primary-soft" href="agent-review.html"><i class="far fa-fw fa-comment-dots me-2"></i>Review</a>
-
-								<p class="text-body mt-3 mb-2">Messages</p>
-									<a class="list-group-item hover-primary-soft" href="{{ route('suppmess.index') }}"><i class="fas fa-fw fa-envelope me-2"></i>Message</a>
-
-								<p class="text-body mt-3 mb-2">Manage Account</p>
-									<a class="list-group-item hover-primary-soft" href="{{ route('profile.edit') }}"><i class="fas fa-fw fa-user-alt me-2"></i>My Profile</a>
-									<form action="{{ route('signout') }}" method="POST" class="d-inline">
-										@csrf
-										<button type="submit" class="list-group-item hover-primary-soft" style="border: none; background: none; cursor: pointer;">
-											<i class="fas fa-fw fa-sign-out-alt me-2"></i>Log Out
-										</button>
-									</form>
-
-					
-							</div>
-						</div>
-					</div>
-				</div>
-			</nav>	
-			<!-- Left sidebar END -->
-	
-			<!-- Main content START -->
-			<div class="main-content">
-				<div class="row">
-					<div class="col-12">
-						<!-- Page title -->
-						<div class="my-5">
-							<h3>My Profile</h3>
-							<hr>
-						</div>
-						<!-- Form START -->
-						<form class="file-upload">
-							<div class="row mb-5 gx-5">
-								<!-- Contact detail -->
-								<div class="col-xxl-8 mb-5 mb-xxl-0">
-									<div class="bg-secondary-soft px-4 py-5 rounded">
-										<div class="row g-3">
-											<h4 class="mb-4 mt-0">Contact detail</h4>
-											<!-- First Name -->
-											<div class="col-md-6">
-												<label class="form-label">First Name *</label>
-												<input type="text" class="form-control" placeholder="" aria-label="First name" value="Scaralet">
-											</div>
-											<!-- Last name -->
-											<div class="col-md-6">
-												<label class="form-label">Last Name *</label>
-												<input type="text" class="form-control" placeholder="" aria-label="Last name" value="Doe">
-											</div>
-											<!-- Phone number -->
-											<div class="col-md-6">
-												<label class="form-label">Phone number *</label>
-												<input type="text" class="form-control" placeholder="" aria-label="Phone number" value="(333) 000 555">
-											</div>
-											<!-- Mobile number -->
-											<div class="col-md-6">
-												<label class="form-label">Mobile number *</label>
-												<input type="text" class="form-control" placeholder="" aria-label="Phone number" value="+91 9852 8855 252">
-											</div>
-											<!-- Email -->
-											<div class="col-md-6">
-												<label for="inputEmail4" class="form-label">Email *</label>
-												<input type="email" class="form-control" id="inputEmail4" value="example@homerealty.com">
-											</div>
-											<!-- Skype -->
-											<div class="col-md-6">
-												<label class="form-label">Skype *</label>
-												<input type="text" class="form-control" placeholder="" aria-label="Phone number" value="Scaralet D">
-											</div>
-											<!-- Language -->
-											<div class="col-md-6">
-												<label class="form-label">Language *</label>
-												<select class="form-select" multiple aria-label="multiple select example">
-													<option selected="">Select item</option>
-													<option value="1">US English</option>
-													<option value="2">UK English</option>
-													<option value="3">Franch</option>
-													<option value="3">Hindi</option>
-												</select>
-												<p class="text-muted small text-end mt-2 mb-0"><b>Note:</b> You can select multiple language</p>
-											</div>
-
-										</div> <!-- Row END -->
-									</div>
-								</div>
-								<!-- Upload profile -->
-								<div class="col-xxl-4">
-									<div class="bg-secondary-soft px-4 py-5 rounded">
-										<div class="row g-3">
-											<h4 class="mb-4 mt-0">Upload your profile photo</h4>
-											<div class="text-center">
-												<!-- Image upload -->
-												<div class="square position-relative display-2 mb-3">
-													<i class="fas fa-fw fa-user position-absolute top-50 start-50 translate-middle text-secondary"></i>
-												</div>
-												<!-- Button -->
-												<input type="file" id="customFile" name="file" hidden>
-												<label class="btn btn-success-soft btn-block" for="customFile">Upload</label>
-												<button type="button" class="btn btn-danger-soft">Remove</button>
-												<!-- Content -->
-												<p class="text-muted mt-3 mb-0"><span class="me-1">Note:</span>Minimum size 300px x 300px</p>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div> <!-- Row END -->
-
-							<!-- Social media detail -->
-							<div class="row mb-5 gx-5">
-								<div class="col-xxl-6 mb-5 mb-xxl-0">
-									<div class="bg-secondary-soft px-4 py-5 rounded">
-										<div class="row g-3">
-											<h4 class="mb-4 mt-0">Social media detail</h4>
-											<!-- Facebook -->
-											<div class="col-md-6">
-												<label class="form-label"><i class="fab fa-fw fa-facebook me-2 text-facebook"></i>Facebook *</label>
-												<input type="text" class="form-control" placeholder="" aria-label="Facebook" value="http://www.facebook.com/">
-											</div>
-											<!-- Twitter -->
-											<div class="col-md-6">
-												<label class="form-label"><i class="fab fa-fw fa-twitter text-twitter me-2"></i>Twitter *</label>
-												<input type="text" class="form-control" placeholder="" aria-label="Twitter" value="http://www.twitter.com/">
-											</div>
-											<!-- Linkedin -->
-											<div class="col-md-6">
-												<label class="form-label"><i class="fab fa-fw fa-linkedin-in text-linkedin me-2"></i>Linkedin *</label>
-												<input type="text" class="form-control" placeholder="" aria-label="Linkedin" value="http://www.linkedin.com/">
-											</div>
-											<!-- Instragram -->
-											<div class="col-md-6">
-												<label class="form-label"><i class="fab fa-fw fa-instagram text-instagram me-2"></i>Instagram *</label>
-												<input type="text" class="form-control" placeholder="" aria-label="Instragram" value="http://www.instragram.com/">
-											</div>
-											<!-- Dribble -->
-											<div class="col-md-6">
-												<label class="form-label"><i class="fas fa-fw fa-basketball-ball text-dribbble me-2"></i>Dribble *</label>
-												<input type="text" class="form-control" placeholder="" aria-label="Dribble" value="http://www.dribble.com/">
-											</div>
-											<!-- Pinterest -->
-											<div class="col-md-6">
-												<label class="form-label"><i class="fab fa-fw fa-pinterest text-pinterest"></i>Pinterest *</label>
-												<input type="text" class="form-control" placeholder="" aria-label="Pinterest" value="http://www.pinterest.com/">
-											</div>
-										</div> <!-- Row END -->
-									</div>
-								</div>
-
-								<!-- change password -->
-								<div class="col-xxl-6">
-									<div class="bg-secondary-soft px-4 py-5 rounded">
-										<div class="row g-3">
-											<h4 class="my-4">Change Password</h4>
-											<!-- Old password -->
-											<div class="col-md-6">
-												<label for="exampleInputPassword1" class="form-label">Old password *</label>
-												<input type="password" class="form-control" id="exampleInputPassword1">
-											</div>
-											<!-- New password -->
-											<div class="col-md-6">
-												<label for="exampleInputPassword2" class="form-label">New password *</label>
-												<input type="password" class="form-control" id="exampleInputPassword2">
-											</div>
-											<!-- Confirm password -->
-											<div class="col-md-12">
-												<label for="exampleInputPassword3" class="form-label">Confirm Password *</label>
-												<input type="password" class="form-control" id="exampleInputPassword3">
-											</div>
-										</div>
-									</div>
-								</div>
-							</div> <!-- Row END -->
-							<!-- button -->
-							<div class="gap-3 d-md-flex justify-content-md-end text-center">
-								<button type="button" class="btn btn-danger btn-lg">Delete profile</button>
-								<button type="button" class="btn btn-primary btn-lg">Upload profile</button>
-							</div>
-						</form> <!-- Form END -->
-					</div>
-				</div>
-			</div>
-			<!-- Main content END -->
-		</div>
-	</div>
-</main>
-<!-- **************** MAIN CONTENT END **************** -->
+                <!-- Buttons -->
+                <div class="gap-3 d-md-flex justify-content-md-end text-center">
+                    <button type="button" class="btn btn-danger btn-lg" id="deleteProfileBtn">Delete profile</button>
+                    <button type="submit" class="btn btn-primary btn-lg">Update Profile</button>
+                </div>
+            </form> <!-- Form END -->
+        </div>
+    </div>
+</div>
+<!-- Main content END -->
 
 <!-- Back to top -->
 <div class="back-top"><i class="bi bi-arrow-up-short position-absolute top-50 start-50 translate-middle"></i></div>
-<!-- Back to top -->
-
-<!-- =======================
-JS libraries, plugins and custom scripts -->
 
 <!-- Bootstrap JS -->
 <script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -292,7 +268,28 @@ JS libraries, plugins and custom scripts -->
 <!-- Template Functions -->
 <script src="assets/js/functions.js"></script>
 
-</body>
+<script>
+    document.getElementById('removeProfilePhotoBtn').addEventListener('click', function() {
+        // Clear the file input
+        document.getElementById('customFile').value = '';
+        // Optionally, add logic to remove the profile photo on the server side
+        alert('Profile photo removal functionality to be implemented.');
+    });
 
-<!-- Mirrored from themes.webestica.com/realty/agent-profile.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 23 Oct 2024 10:21:56 GMT -->
-</html>
+    document.getElementById('deleteProfileBtn').addEventListener('click', function() {
+        if(confirm('Are you sure you want to delete your profile? This action cannot be undone.')) {
+            // Redirect or submit a form to delete profile
+            alert('Profile deletion functionality to be implemented.');
+        }
+    });
+</script>
+
+ @if (session('success') || $errors->any())
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        new bootstrap.Modal(document.getElementById('feedbackModal')).show()
+        });
+    
+</script>
+@endif
+@endsection

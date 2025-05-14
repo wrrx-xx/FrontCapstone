@@ -38,7 +38,7 @@
                 </a>
                 <!-- Dropdown list -->
                 <ul class="dropdown-menu min-w-auto" aria-labelledby="dropdownAvatar">
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
                     <li><a class="dropdown-item" href="#">Setting</a></li>
                     <li><a class="dropdown-item" href="#">My Wallet</a></li>
                     <li><a class="dropdown-item" href="#">Sign out</a></li>
@@ -157,7 +157,7 @@
 
 
                             <p class="text-body mt-3 mb-2">Manage Account</p>
-                            <a class="list-group-item hover-primary-soft" href="#">
+                            <a class="list-group-item hover-primary-soft" href="{{ route('profile.edit') }}">
                                 <i class="fas fa-fw fa-id-badge me-2"></i>My Profile
                             </a>
 

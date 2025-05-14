@@ -36,7 +36,7 @@
                         <a class="nav-link" href="{{ route('reserve.index') }}" >Bookings</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
+                        <a class="nav-link" href="{{ route('profile.edit') }}">Profile</a>
                     </li>
                         <li class="nav-item">
                             <form action="{{ route('logout') }}" method="POST" style="display: inline;">
@@ -61,7 +61,7 @@
                 </ul>
             </div>
             <div class="ms-5 ms-lg-0">
-                <a href="#" class="btn btn-sm btn-dark-soft"><i class="fas fa-plus me-2"></i>Add listing</a>
+                <a href="owner.dashboard" class="btn btn-sm btn-dark-soft"><i class="fas fa-plus me-2"></i>Add listing</a>
             </div>
             <!-- Main navbar END -->
             @endif

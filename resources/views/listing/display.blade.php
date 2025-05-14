@@ -85,7 +85,7 @@
                     <!-- Title START -->
                     <div class="d-md-flex justify-content-md-between align-items-center">
                         <!-- Title -->
-                        <h3 class="mb-0">30 Properties in California</h3>
+                        <h3 class="mb-0">Properties in Dumaguete City</h3>
                         <!-- Button -->
                         <div class="text-primary-hover text-end d-none d-md-block">
                             <ul class="list-inline">
@@ -515,10 +515,11 @@
         @if (session('success') || $errors->any())
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        new bootstrap.Modal(document.getElementById('feedbackModal')).show();
-    });
+        new bootstrap.Modal(document.getElementById('feedbackModal')).show()
+        });
     
 </script>
+@endif
     </section>
     <!-- =======================
                 Inner part END -->
