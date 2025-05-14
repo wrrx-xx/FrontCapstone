@@ -41,8 +41,8 @@ class ProfileUpdateRequest extends FormRequest
             'emergency_contact_name' => ['nullable', 'string', 'max:255'],
             'emergency_contact_phone' => ['nullable', 'string', 'max:20'],
             'valid_id_type' => ['nullable', 'string', 'max:255'],
-            'valid_id_front_path' => ['nullable', 'image', 'max:10048'],
-            'valid_id_back_path' => ['nullable', 'image', 'max:10048'],
+            'valid_id_front_path' => ['nullable', 'image', 'max:100000'],
+            'valid_id_back_path' => ['nullable', 'image', 'max:100000'],
             // OwnerProfile fields validation added
             'business_name' => ['nullable', 'string', 'max:255'],
             'business_address' => ['nullable', 'string', 'max:255'],
