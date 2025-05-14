@@ -20,7 +20,8 @@
                 </form>
             </li>
             <!-- Icon -->
-          
+            <li class="list-inline-item me-2 me-sm-3"> <a href="#" class="text-black"><i
+                        class="far fa-envelope"></i></a></li>
             <li class="list-inline-item me-2 me-sm-3 dropdown">
                 <a href="#" class="text-black position-relative" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="far fa-bell"></i>

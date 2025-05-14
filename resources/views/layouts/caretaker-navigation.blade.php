@@ -20,59 +20,15 @@
                 </form>
             </li>
             <!-- Icon -->
-           <li class="list-inline-item me-2 me-sm-3 dropdown">
-                <a href="#" class="text-black position-relative" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <li class="list-inline-item me-2 me-sm-3"> <a href="#" class="text-dark"><i
+                        class="far fa-envelope"></i></a></li>
+            <li class="list-inline-item me-2 me-sm-3">
+                <a href="#" class="text-dark position-relative">
                     <i class="far fa-bell"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger p-1">
                         <span class="visually-hidden">unread messages</span>
                     </span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="notificationDropdown" style="min-width: 300px; max-width: 350px;">
-                    <h4 class="mb-4 mt-0 fw-bold">Recent Activity</h4>
-                    <ul class="list-inline mb-4 small">
-                        @foreach($maintenanceRequests->take(3) as $request)
-                        <li class="list-inline-item activity-item">
-                            <div class="d-flex align-items-center">
-                                <div class="fs-4 text-warning activity-icon">
-                                    <i class="fas fa-tools"></i>
-                                </div>
-                                <div class="ms-3">
-                                    <p class="mb-0 text-dark">Maintenance request for {{ $request->listing->title }}</p>
-                                    <div class="small">{{ $request->created_at->format('d F Y') }}</div>
-                                </div>
-                            </div>
-                        </li>
-                        @endforeach
-
-                        @foreach($payments->take(2) as $payment)
-                        <li class="list-inline-item activity-item">
-                            <div class="d-flex align-items-center">
-                                <div class="fs-4 text-success activity-icon">
-                                    <i class="fas fa-hand-holding-usd"></i>
-                                </div>
-                                <div class="ms-3">
-                                    <p class="mb-0 text-dark">Payment received for {{ $payment->listing->title }}</p>
-                                    <div class="small">{{ $payment->created_at->format('d F Y') }}</div>
-                                </div>
-                            </div>
-                        </li>
-                        @endforeach
-
-                        @foreach($viewings->take(2) as $viewing)
-                        <li class="list-inline-item activity-item">
-                            <div class="d-flex align-items-center">
-                                <div class="fs-4 text-primary activity-icon">
-                                    <i class="fas fa-eye"></i>
-                                </div>
-                                <div class="ms-3">
-                                    <p class="mb-0 text-dark">Viewing request for {{ $viewing->listing->title }}</p>
-                                    <div class="small">{{ $viewing->created_at->format('d F Y') }}</div>
-                                </div>
-                            </div>
-                        </li>
-                        @endforeach
-                    </ul>
-                </ul>
             </li>
             <!-- Dropdown avatar -->
             <li class="list-inline-item">
