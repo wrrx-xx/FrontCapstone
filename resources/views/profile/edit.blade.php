@@ -231,8 +231,8 @@
                             <div class="text-center">
                                 <!-- Image upload -->
                                 <div class="square position-relative display-2 mb-3">
-                                    @if($user->profile_photo_path)
-                                    <img src="{{ asset('storage/' . $user->profile_photo_path) }}" alt="Profile Photo" class="img-fluid rounded-circle" style="max-width: 150px; max-height: 150px;">
+                                    @if($user->profile_photo)
+                                    <img src="{{ asset( $user->profile_photo) }}" alt="Profile Photo" class="img-fluid rounded-circle" style="max-width: 250px; max-height: 250px;">
                                     @else
                                     <i class="fas fa-fw fa-user position-absolute top-50 start-50 translate-middle text-secondary"></i>
                                     @endif

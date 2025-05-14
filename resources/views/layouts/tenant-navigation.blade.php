@@ -34,7 +34,7 @@
             <li class="list-inline-item">
                 <a href="#" class="btn-link" role="button" id="dropdownAvatar" data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    <img class="box-sm rounded-circle" src="{{asset('assets/images/avatar/2.jpg') }}" alt="Profile picture">
+                    <img class="box-sm rounded-circle" src="{{asset($user->profile_photo) }}" alt="Profile picture">
                 </a>
                 <!-- Dropdown list -->
                 <ul class="dropdown-menu min-w-auto" aria-labelledby="dropdownAvatar">

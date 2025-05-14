@@ -196,11 +196,14 @@ class ListingController extends Controller
     public function show($id)
     {
         // Retrieve the listing by its ID
-        $listing = Listing::with(['photos', 'amenities'])->findOrFail($id);
+        $listing = Listing::with(['photos', 'amenities', 'user'])->findOrFail($id);
     
         // Return the 'show' view with the listing data
         return view('listing.view', compact('listing'));
     }
+
+    // New API endpoint to get map link for a listing
+   
     public function detail($id)
     {
         // Retrieve the listing by ID, including the tenant and their profile

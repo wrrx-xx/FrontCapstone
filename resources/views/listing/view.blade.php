@@ -4,7 +4,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/glightbox/css/glightbox.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/splide-master/dist/css/splide.min.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <main>
         @if (session('success') || $errors->any())
@@ -132,38 +132,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="d-flex justify-content-between mb-4">
-                                            <div>
-                                                <a href="#" class="badge bg-orange text-white">Featured</a>
-                                                <a href="#" class="badge bg-danger-soft text-danger"><i
-                                                        class="fas fa-rupee-sign pe-1"></i>For sale</a>
-                                            </div>
-                                            <ul class="list-inline text-primary-hover">
-                                                <li class="list-inline-item"><a href="#"
-                                                        class="border rounded p-1 me-1 small"><i
-                                                            class="fas fa-fw fa-print"></i></a></li>
-                                                <li class="list-inline-item position-relative">
-                                                    <a href="#" class="btn-link border rounded p-1 me-1 small"
-                                                        role="button" id="dropdownShare" data-bs-toggle="dropdown"
-                                                        aria-expanded="false">
-                                                        <i class="fas fa-fw fa-share-alt"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu dropdown-w-sm dropdown-menu-end rounded"
-                                                        aria-labelledby="dropdownShare">
-                                                        <li><a class="dropdown-item" href="#"><i
-                                                                    class="fab fa-twitter-square me-2"></i>Twitter</a></li>
-                                                        <li><a class="dropdown-item" href="#"><i
-                                                                    class="fab fa-facebook-square me-2"></i>Facebook</a>
-                                                        </li>
-                                                        <li><a class="dropdown-item" href="#"><i
-                                                                    class="fab fa-linkedin me-2"></i>LinkedIn</a></li>
-                                                        <li><a class="dropdown-item" href="#"><i
-                                                                    class="fas fa-copy me-2"></i>Copy link</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="list-inline-item"><a href="#"
-                                                        class="border rounded p-1 me-1 small"><i
-                                                            class="fas fa-fw fa-heart text-danger"></i></a></li>
-                                            </ul>
+                                            
                                         </div>
                                         <h3 class="lh-1 mb-3">{{ $listing->title }}</h3>
                                         <div class="d-flex align-items-center mb-3">
@@ -182,6 +151,7 @@
                                                     </li>
                                                 </ul>
                                             </div>
+                                           
                                             <div class="col-sm-6 mb-0">
                                                 <ul class="list-group list-group-borderless">
                                                     <li class="list-group-item text-dark px-0">
@@ -199,9 +169,14 @@
 
                                                 </ul>
                                             </div>
-
+                                             <div class="col-sm-12 mb-3">
+                                                <a href="{{ $listing->map_link }}" target="_blank" class="btn btn-primary">
+                                                    View on Google Maps
+                                                </a>
+                                            </div>
                                         </div>
                                         <p class="mb-0">{{ $listing->body }}</p>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -490,21 +465,30 @@
                                                             Now</button>
                                                     </div>
                                                     <div class="form-check mt-3">
-                                                        <input class="form-check-input" type="checkbox" value="" id="termsCheckbox">
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                            id="termsCheckbox">
                                                         <label class="form-check-label" for="termsCheckbox">
-                                                            I already read the <a href="#" id="openWaiverModal" style="text-decoration: underline; cursor: pointer;">terms and conditions</a> of the owner
+                                                            I already read the <a href="#" id="openWaiverModal"
+                                                                style="text-decoration: underline; cursor: pointer;">terms
+                                                                and conditions</a> of the owner
                                                         </label>
                                                     </div>
                                                     <!-- Waiver PDF Modal -->
-                                                    <div class="modal fade" id="waiverModal" tabindex="-1" aria-labelledby="waiverModalLabel" aria-hidden="true">
+                                                    <div class="modal" id="waiverModal" tabindex="-1"
+                                                        aria-labelledby="waiverModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog modal-xl modal-dialog-centered">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title" id="waiverModalLabel">Terms and Conditions</h5>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    <h5 class="modal-title" id="waiverModalLabel">Terms
+                                                                        and Conditions</h5>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body" style="height: 80vh;">
-                                                                    <iframe src="{{ asset('waivers/' .$listing->waiver_file)}}" frameborder="0" style="width: 100%; height: 100%;"></iframe>
+                                                                    <iframe src="{{ asset($listing->waiver_file) }}"
+                                                                        frameborder="0"
+                                                                        style="width: 100%; height: 100%;"></iframe>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -525,14 +509,6 @@
     </main>
 @endsection
 <script>
-    function handleReserveClick(form) {
-        form.submit(); // Submit the form
-        var button = document.getElementById('reserveButton');
-        button.disabled = true; // Disable the button
-        setTimeout(function() {
-            button.disabled = false; // Re-enable the button after 15 seconds
-        }, 15000); // 15000 milliseconds = 15 seconds
-    }
 
     document.addEventListener('DOMContentLoaded', function() {
         @if (session('success') || $errors->any())

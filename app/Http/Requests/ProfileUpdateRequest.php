@@ -31,7 +31,7 @@ class ProfileUpdateRequest extends FormRequest
             'skype' => ['nullable', 'string', 'max:255'],
             'language' => ['nullable', 'array'],
             'language.*' => ['string', 'max:255'],
-            'profile_photo' => ['nullable', 'image', 'max:2048'], // max 2MB
+            'profile_photo' => ['nullable', 'image', 'max:10058'], // max 2MB
             'old_password' => ['nullable', 'string', 'min:8'],
             'new_password' => ['nullable', 'string', 'min:8', 'confirmed'],
             // TenantProfile fields can be added here if needed

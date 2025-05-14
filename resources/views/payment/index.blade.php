@@ -346,11 +346,15 @@
                                                                     @php
                                                                         $totalAmount = $payment->amount + $payment->cash_advance_amount;
                                                                     @endphp
-                                                                    <strong>₱{{ number_format($totalAmount, 2) }}</strong>
+                                                                    <strong>₱{{ number_format($payment->amount, 2) }}</strong>
                                                                     @if ($payment->cash_advance_amount > 0)
                                                                         <div class="small text-muted">
-                                                                            Payment: ₱{{ number_format($payment->amount, 2) }}<br>
+
                                                                             Cash Advance: ₱{{ number_format($payment->cash_advance_amount, 2) }}
+                                                                            <br>
+                                                                            Rent: ₱{{ number_format($payment->listing->price, 2) }}
+                                                                            <br>
+                                                                            Reservation: ₱{{ number_format($payment->reservation_amount, 2) }}
                                                                         </div>
                                                                     @endif
                                                                 </td>

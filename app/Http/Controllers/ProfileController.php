@@ -39,6 +39,7 @@ class ProfileController extends Controller
             'lname' => $validated['lname'],
             'phone_number' => $validated['phone_number'],
             'email' => $validated['email'],
+            'profile_photo'=> $validated['profile_photo'],
         ]);
 
         if ($user->isDirty('email')) {
@@ -48,9 +49,13 @@ class ProfileController extends Controller
         // Handle profile photo upload
         if ($request->hasFile('profile_photo')) {
             $file = $request->file('profile_photo');
-            $path = $file->store('profile_photos', 'public');
-            $user->profile_photo_path = $path;
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('profile_photos'), $fileName);
+            $profilePhotoPath = 'profile_photos/' . $fileName;
+        } else {
+            $profilePhotoPath = $user->profile_photo ?? null;
         }
+        $user->profile_photo = $profilePhotoPath;
 
         $user->save();
 
