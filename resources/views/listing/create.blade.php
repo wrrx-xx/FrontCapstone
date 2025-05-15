@@ -135,9 +135,10 @@
                                     </label>
                                     <select name="advance_payment_months" id="advance_payment_months" class="form-select form-select-lg" required>
                                         <option value="0">No advance payment</option>
-                                        <option value="1">1 month</option>
                                         <option value="2">2 months</option>
                                         <option value="3">3 months</option>
+                                        <option value="4">4 months</option>
+                                        <option value="5">5 months</option>
                                     </select>
                                 </div>
                                 

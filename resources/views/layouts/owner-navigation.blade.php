@@ -3,7 +3,7 @@
 <div class="dashboard-topbar navbar-light bg-light px-3 px-sm-4 px-md-5">
     <div class="d-flex justify-content-between align-items-center">
         <!-- Logo -->
-        <a class="navbar-brand d-flex align-items-center py-2" href="index.html">
+        <a class="navbar-brand d-flex align-items-center py-2" href="{{ route('owner.dashboard') }}">
             <img class="navbar-brand-item" src="{{ asset('assets/images/logo2.png') }}" alt="logo">
         </a>
 
