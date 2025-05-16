@@ -22,6 +22,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\ViewingController;
 use App\Http\Controllers\Admin\ApprovalController;
+use App\Http\Controllers\AdminBookingController;
+use App\Http\Controllers\AdminCaretakerController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminListingController;
 use App\Http\Controllers\BillingsController;
 use App\Http\Controllers\MaintenanceRequestController;
 use App\Http\Controllers\OwnerMaintenance;
@@ -36,9 +40,6 @@ use App\Http\Controllers\HomeController;
 
 Route::get('/', [HomeController::class, 'filteredListings']);
 
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-})->middleware(['auth', 'verified','admin'])->name('admin.dashboard');
 
 use App\Http\Controllers\Owner;
 
@@ -55,6 +56,14 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('/tenant/support', [SupportMessagesController::class, 'index'])->name('tenant.support');
 });
 
+Route::middleware(['auth','verified','admin'])->group(function () {
+    Route::resource('admin/listing',AdminListingController::class)->names('admin.listing');
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard')->middleware('auth', 'admin');
+    Route::resource('admin/caretakers',AdminCaretakerController::class)->names('admin.caretaker');
+    Route::resource('admin/bookings',AdminBookingController::class)->names('admin.booking');
+    Route::get('admin/reservations',[AdminBookingController::class, 'adminIndex'])->name('admin.reservation.index');
+Route::get('admin/payments',[PaymentController::class, 'adminIndex'])->name('admin.payment.index');
+});
 Route::get('/listing', function () {
     $listings = Listing::paginate(10);
     return view('listing.display', ['listings' => $listings]);

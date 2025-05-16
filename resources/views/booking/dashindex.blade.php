@@ -158,7 +158,7 @@
                                                                                     <p class="mb-2"><strong>Employment Status:</strong> {{ $viewing->requestedBy->tenantProfile->employment_status }}</p>
                                                                                 </div>
                                                                                 <div class="col-md-6">
-                                                                                    <p class="mb-2"><strong>Monthly Income:</strong> ${{ number_format($viewing->requestedBy->tenantProfile->monthly_income, 2) }}</p>
+                                                                                    <p class="mb-2"><strong>Monthly Income:</strong> {{ number_format($viewing->requestedBy->tenantProfile->monthly_income, 2) }}</p>
                                                                                     <p class="mb-2"><strong>Emergency Contact Name:</strong> {{ $viewing->requestedBy->tenantProfile->emergency_contact_name }}</p>
                                                                                     <p class="mb-2"><strong>Emergency Contact Phone:</strong> {{ $viewing->requestedBy->tenantProfile->emergency_contact_phone }}</p>
                                                                                     <p class="mb-2"><strong>Valid ID Type:</strong>

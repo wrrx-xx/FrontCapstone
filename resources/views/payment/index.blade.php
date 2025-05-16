@@ -77,7 +77,7 @@
                             <h3 class="mb-0 fw-bold">{{ number_format($payments->where('status', 'completed')->sum('amount'), 2) }}</h3>
                             <p class="text-muted mb-0">Total Revenue</p>
                         </div>
-                        @endif
+                        @endif  
                     </div>
                 </div>
             </div>
@@ -214,7 +214,7 @@
                                                                 </td>
                                                                 <td>
                                                                     <div class="btn-group">
-                                                                        @if (in_array(Auth::user()->role, ['owner', 'caretaker']) &&
+                                                                        @if (in_array(Auth::user()->role, ['owner', 'caretaker','admin']) &&
                                                                                 ($billing->status == 'pending' || $billing->status == 'failed'))
                                                                             <button type="button" class="btn btn-sm btn-outline-primary"
                                                                                 data-bs-toggle="modal" data-bs-target="#addUtilityBillModal-{{ $billing->id }}">

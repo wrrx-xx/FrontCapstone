@@ -23,6 +23,27 @@ class PaymentController extends Controller
     /**
      * Process payment for a specific billing.
      */
+    public function adminIndex()
+    {
+        // Get all owners (users with role 'owner')
+        $owners = User::where('role', 'owner')
+            ->with([
+                'listing' => function ($query) {
+                    $query->withCount(['billings as total_billings'])
+                        ->withSum(['billings as total_amount' => function ($query) {
+                            $query->where('status', 'pending');
+                        }], 'amount');
+                },
+                'listing.billings' => function ($query) {
+                    $query->latest();
+                },
+                'listing.billings.payment',
+                'listing.tenant'
+            ])
+            ->get();
+
+        return view('admin.payment.index', compact('owners'));
+    }
    
      public function tenantindex(){
         $tenant = Auth::user(); // Assuming the tenant is authenticated as a User
@@ -299,7 +320,7 @@ class PaymentController extends Controller
             $payment->payment_method = $request->payment_method;
 
             $user = Auth::user();
-            if ($user->role === 'caretaker' || $user->role === 'owner') {
+           if (in_array($user->role, ['caretaker', 'owner', 'admin'])) {
                 $payment->status = 'completed';
             } else {
                 $payment->status = 'pending';
@@ -330,7 +351,7 @@ class PaymentController extends Controller
             // Update the billing status based on user role
             $billing = Billings::find($request->billing_id);
             if ($billing) {
-                if ($user->role === 'caretaker' || $user->role === 'owner') {
+                if (in_array($user->role, ['caretaker', 'owner', 'admin']))  {
                     $billing->status = 'paid';
 
                     $newBilling = new Billings();
@@ -350,7 +371,10 @@ class PaymentController extends Controller
             // Redirect to appropriate route with success message
             if ($user->role === 'caretaker' || $user->role === 'owner') {
                 return redirect()->route('payment.owner')->with('success', 'Payment submitted successfully and marked as completed.');
-            } else {
+            }elseif ($user->role === 'admin'){
+                return redirect()->route('admin.payment.index')->with('success', 'Payment submitted successfully and marked as completed.');
+            }
+             else {
                 return redirect()->route('tenant.payment.index')->with('success', 'Payment submitted successfully and pending approval.');
             }
         } catch (\Exception $e) {

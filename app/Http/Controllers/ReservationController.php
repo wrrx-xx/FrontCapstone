@@ -24,17 +24,20 @@ class ReservationController extends Controller
     }
 
     public function ownerindex()
+{
+    $userId = Auth::id();
 
-    {
+    // Fetch reservations where the listing's owner_id matches the logged-in user
+    $reservations = Reservation::with(['listing.photos', 'prospect'])
+        ->whereHas('listing', function ($query) use ($userId) {
+            $query->where('owner_id', $userId);
+        })
+        ->orderBy('reservation_status', 'desc')
+        ->get();
 
-        // Fetch reservations for the logged-in user
+    return view('reservation.index', compact('reservations'));
+}
 
-        // Fetch all reservations with related listings, prospects, and photos
-        $reservations = Reservation::with(['listing.photos', 'prospect'])->orderBy('reservation_status', 'desc')->get();
-
-        // Pass the reservations data to the view
-        return view('reservation.index', compact('reservations'));
-    }
     /**
      * Store a newly created resource in storage.
      */

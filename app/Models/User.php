@@ -98,21 +98,29 @@ class User extends Authenticatable
     public function request(){
         return $this->hasMany(MaintenanceRequest::class, 'tenant_id');
     }
-    public function isAdmin(){
-        return $this->role=='admin';
-    }
-    public function isOwner(){
-        return $this->role=='owner';
-    }
-    public function isTenant(){
-        return $this->role=='tenant';
+    
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
     }
 
-    public function isCaretaker(){
-        return $this->role=='caretaker';
+    public function isOwner(): bool
+    {
+        return $this->role === 'owner';
     }
-    public function isGuest(){
-        return $this->role=='guest';
+
+    public function isTenant(): bool
+    {
+        return $this->role === 'tenant';
     }
-   
+
+    public function isCaretaker(): bool
+    {
+        return $this->role === 'caretaker';
+    }
+
+    public function isGuest(): bool
+    {
+        return $this->role === 'guest';
+    }
 }
