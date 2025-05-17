@@ -213,59 +213,59 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <canvas id="chartJSContainer" width="600" height="400"></canvas>
                             </div>
                         </div>
-                        <div class="col-xl-5">
-                            <div class="bg-secondary-soft p-4 rounded activity-container">
-                                <!-- Title -->
-                                <h4 class="mb-4 mt-0 fw-bold">Recent Activity</h4>
-                                <ul class="list-inline mb-4">
-                                    @foreach($maintenanceRequests->take(3) as $request)
-                                    <li class="list-inline-item activity-item">
-                                        <div class="d-flex align-items-center">
-                                            <div class="fs-4 text-warning activity-icon">
-                                                <i class="fas fa-tools"></i>
+                            <div class="col-xl-5">
+                                <div class="bg-secondary-soft p-4 rounded activity-container">
+                                    <!-- Title -->
+                                    <h4 class="mb-4 mt-0 fw-bold">Recent Activity</h4>
+                                    <ul class="list-inline mb-4">
+                                        @foreach($maintenanceRequests->take(3) as $request)
+                                        <li class="list-inline-item activity-item">
+                                            <div class="d-flex align-items-center">
+                                                <div class="fs-4 text-warning activity-icon">
+                                                    <i class="fas fa-tools"></i>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <p class="mb-0 text-dark">Maintenance request for {{ $request->listing->title }}</p>
+                                                    <div class="small">{{ $request->created_at->format('d F Y') }}</div>
+                                                </div>
                                             </div>
-                                            <div class="ms-3">
-                                                <p class="mb-0 text-dark">Maintenance request for {{ $request->listing->title }}</p>
-                                                <div class="small">{{ $request->created_at->format('d F Y') }}</div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    @endforeach
+                                        </li>
+                                        @endforeach
 
-                                    @foreach($payments->take(2) as $payment)
-                                    <li class="list-inline-item activity-item">
-                                        <div class="d-flex align-items-center">
-                                            <div class="fs-4 text-success activity-icon">
-                                                <i class="fas fa-hand-holding-usd"></i>
+                                        @foreach($payments->take(2) as $payment)
+                                        <li class="list-inline-item activity-item">
+                                            <div class="d-flex align-items-center">
+                                                <div class="fs-4 text-success activity-icon">
+                                                    <i class="fas fa-hand-holding-usd"></i>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <p class="mb-0 text-dark">Payment received for {{ $payment->listing->title }}</p>
+                                                    <div class="small">{{ $payment->created_at->format('d F Y') }}</div>
+                                                </div>
                                             </div>
-                                            <div class="ms-3">
-                                                <p class="mb-0 text-dark">Payment received for {{ $payment->listing->title }}</p>
-                                                <div class="small">{{ $payment->created_at->format('d F Y') }}</div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    @endforeach
+                                        </li>
+                                        @endforeach
 
-                                    @foreach($viewings->take(2) as $viewing)
-                                    <li class="list-inline-item activity-item">
-                                        <div class="d-flex align-items-center">
-                                            <div class="fs-4 text-primary activity-icon">
-                                                <i class="fas fa-eye"></i>
+                                        @foreach($viewings->take(2) as $viewing)
+                                        <li class="list-inline-item activity-item">
+                                            <div class="d-flex align-items-center">
+                                                <div class="fs-4 text-primary activity-icon">
+                                                    <i class="fas fa-eye"></i>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <p class="mb-0 text-dark">Viewing request for {{ $viewing->listing->title }}</p>
+                                                    <div class="small">{{ $viewing->created_at->format('d F Y') }}</div>
+                                                </div>
                                             </div>
-                                            <div class="ms-3">
-                                                <p class="mb-0 text-dark">Viewing request for {{ $viewing->listing->title }}</p>
-                                                <div class="small">{{ $viewing->created_at->format('d F Y') }}</div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                                <!-- button -->
-                                <div class="text-center">
-                                    <button type="button" class="btn btn-sm btn-primary-soft">View all</button>
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                    <!-- button -->
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-sm btn-primary-soft">View all</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                     </div>
                 </div>
             </div> <!-- Row END -->

@@ -19,13 +19,20 @@ class AdminController extends Controller
         $recentListings = Listing::with('user')->orderBy('created_at', 'desc')->take(5)->get();
         $recentMaintenanceRequests = MaintenanceRequest::orderBy('created_at', 'desc')->take(5)->get();
 
+        $maintenanceRequests = MaintenanceRequest::orderBy('created_at', 'desc')->get();
+        $payments = Payment::orderBy('created_at', 'desc')->get();
+        $viewings = \App\Models\Viewing::orderBy('created_at', 'desc')->get();
+
         return view('admin.dashboard', compact(
             'totalOwners',
             'totalListings',
             'totalMaintenanceRequests',
             'totalPayments',
             'recentListings',
-            'recentMaintenanceRequests'
+            'recentMaintenanceRequests',
+            'maintenanceRequests',
+            'payments',
+            'viewings'
         ));
     }
 }

@@ -139,11 +139,22 @@
 
 
                             <p class="text-body mt-3 mb-2">Manage Users</p>
-                            <a class="list-group-item hover-primary-soft" href="{{ route('admin.caretaker.index') }}">
-                                    <i class="fas fa-fw fa-user-tie me-2"></i>Caretaker
+                            <div class="list-group-item hover-primary-soft dropdown">
+                                <a href="#" class="d-flex justify-content-between align-items-center text-decoration-none text-black" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span><i class="fas fa-fw fa-users me-2"></i>Users</span>
+                                    <i class="fas fa-caret-down"></i>
                                 </a>
-                            <a class="list-group-item hover-primary-soft" href="{{ route('admin.approvals.index') }}"><i
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ route('admin.caretaker.index') }}">Caretaker</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin.owner.index') }}">Owner</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin.tenant.index') }}">Tenant</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin.guest.index') }}">Guest</a></li>
+                                    
+                                </ul>
+                            </div>
+                               <a class="list-group-item hover-primary-soft" href="{{ route('admin.approvals.index') }}"><i
                                     class="fas fa-fw fa-user-check me-2"></i>Pending Approvals</a>
+    
                                 
     
                             <p class="text-body mt-3 mb-2">Manage Account</p>
