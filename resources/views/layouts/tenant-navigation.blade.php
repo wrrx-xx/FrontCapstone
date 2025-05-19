@@ -1,9 +1,10 @@
+{{-- filepath: resources/views/layouts/tenant-navigation.blade.php --}}
 <!-- **************** MAIN CONTENT START **************** -->
 <!-- Navbar top START -->
 <div class="dashboard-topbar navbar-light bg-light px-3 px-sm-4 px-md-5">
     <div class="d-flex justify-content-between align-items-center">
         <!-- Logo -->
-        <a class="navbar-brand d-flex align-items-center py-2" href="{{route('tenant.dashboard') }}">
+        <a class="navbar-brand d-flex align-items-center py-2" href="{{ route('tenant.dashboard') }}">
             <img class="navbar-brand-item" src="{{ asset('assets/images/logo2.png') }}" alt="logo">
         </a>
 
@@ -29,12 +30,13 @@
                         <span class="visually-hidden">unread messages</span>
                     </span>
                 </a>
-            </li>`
+            </li>
             <!-- Dropdown avatar -->
             <li class="list-inline-item">
                 <a href="#" class="btn-link" role="button" id="dropdownAvatar" data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    <img class="box-sm rounded-circle" src="{{ asset(path: Auth::user()->profile_photo) }}" alt="Profile picture">
+                    <img class="box-sm rounded-circle" src="{{ asset(Auth::user()->profile_photo) }}"
+                        alt="Profile picture">
                 </a>
                 <!-- Dropdown list -->
                 <ul class="dropdown-menu min-w-auto" aria-labelledby="dropdownAvatar">
@@ -61,26 +63,29 @@
         <!-- Left sidebar START -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
             <div class="collapse navbar-collapse" id="dashboardNav">
-                <div class="dashboard-sidebar bg-dark">
-                    <div class="content mt-3">
+                <div class="dashboard-sidebar bg-dark d-flex flex-column" style="min-height: 100vh;">
+                    <div class="content mt-3 flex-grow-1">
                         <!-- Sidebar menu -->
                         <div class="list-group list-group-borderless p-3 p-md-4">
                             <p class="text-body mb-2">Main</p>
-                            
-                            <a class="list-group-item hover-primary-soft text-light" href="{{ route('tenant.dashboard') }}"><i
+                            <a class="list-group-item hover-primary-soft text-light"
+                                href="{{ route('tenant.dashboard') }}"><i
                                     class="fas fa-fw fa-tachometer-alt me-2"></i>Dashboard</a>
-                            
-                            
                             <p class="text-body mt-3 mb-2">Tenant Services</p>
-                            <a class="list-group-item hover-primary-soft text-light" href="{{ route('tenant.rental.index') }}"><i class="fas fa-fw fa-home me-2"></i>My Rentals</a>
-                            <a class="list-group-item hover-primary-soft text-light" href="{{ route('tenant.payment.index') }}"><i class="fas fa-fw fa-file-invoice-dollar me-2"></i>Payment History</a>
-                            <a class="list-group-item hover-primary-soft text-light" href="{{ route('tenant.maintenance.index') }}"><i class="fas fa-fw fa-tools me-2"></i>Maintenance</a>
-{{-- <a class="list-group-item hover-primary-soft text-light" href="{{ route('tenant.support') }}"><i class="fas fa-fw fa-life-ring me-2"></i>Support</a> --}}
-
+                            <a class="list-group-item hover-primary-soft text-light"
+                                href="{{ route('tenant.rental.index') }}"><i class="fas fa-fw fa-home me-2"></i>My
+                                Rentals</a>
+                            <a class="list-group-item hover-primary-soft text-light"
+                                href="{{ route('tenant.payment.index') }}"><i
+                                    class="fas fa-fw fa-file-invoice-dollar me-2"></i>Payment History</a>
+                            <a class="list-group-item hover-primary-soft text-light"
+                                href="{{ route('tenant.maintenance.index') }}"><i
+                                    class="fas fa-fw fa-tools me-2"></i>Maintenance</a>
+                            {{-- <a class="list-group-item hover-primary-soft text-light" href="{{ route('tenant.support') }}"><i class="fas fa-fw fa-life-ring me-2"></i>Support</a> --}}
                             <p class="text-body mt-3 mb-2">Manage Account</p>
-                            <a class="list-group-item hover-primary-soft text-light" href="{{ route('profile.edit') }}"><i
-                                    class="fas fa-fw fa-user-alt me-2"></i>My Profile</a>
-                            
+                            <a class="list-group-item hover-primary-soft text-light"
+                                href="{{ route('profile.edit') }}"><i class="fas fa-fw fa-user-alt me-2"></i>My
+                                Profile</a>
                             <form action="{{ route('logout') }}" method="POST" class="d-inline ">
                                 @csrf
                                 <button type="submit" class="list-group-item hover-primary-soft text-light"
@@ -90,6 +95,23 @@
                             </form>
                         </div>
                     </div>
+                    <!-- ...sidebar and nav code above... -->
+
+                    @if (isset($listing) && auth()->user()->isTenant() && $listing->tenant_id == auth()->id())
+                        <div class="p-4 mb-5">
+                            <button type="button"
+                                class="list-group-item hover-danger-soft bg-danger text-white w-100 rounded"
+                                style="border: none; cursor: pointer;" data-bs-toggle="modal"
+                                data-bs-target="#leaveListingModal">
+                                <i class="fas fa-fw fa-door-open me-2"></i>Leave Listing
+                            </button>
+                        </div>
+                    @endif
+
+
+
+                    <!-- Place the modal OUTSIDE the sidebar/container, at the end of the file -->
+
                 </div>
             </div>
         </nav>

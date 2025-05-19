@@ -200,6 +200,26 @@
                                 </div>
                             @endif
 
+                            @if (Auth::user()->ownerProfile && Auth::user()->ownerProfile->approved)
+                                <a class="list-group-item hover-primary-soft d-flex justify-content-between align-items-center"
+                                    href="{{ route('owner.leave-requests') }}">
+                                    <span><i class="fas fa-fw fa-door-open me-2"></i>Leave Requests</span>
+                                    @php
+                                        $pendingLeaveRequestsCount = App\Models\LeaveRequest::where('status', 'pending')
+                                            ->whereHas('listing', function($query) {
+                                                $query->where('owner_id', auth()->id());
+                                            })
+                                            ->count();
+                                    @endphp
+                                    @if($pendingLeaveRequestsCount > 0)
+                                        <span class="badge bg-danger rounded-pill">{{ $pendingLeaveRequestsCount }}</span>
+                                    @endif
+                                </a>
+                            @else
+                                <div class="list-group-item text-muted" style="opacity: 0.6;">
+                                    <i class="fas fa-fw fa-door-open me-2"></i>Leave Requests
+                                </div>
+                            @endif
 
                             <p class="text-body mt-3 mb-2">Manage Account</p>
                             <a class="list-group-item hover-primary-soft" href="{{ route('profile.edit') }}">

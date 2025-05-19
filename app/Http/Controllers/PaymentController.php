@@ -63,14 +63,15 @@ class PaymentController extends Controller
 
         $payments = Payment::whereIn('listing_id', $listings)->get(); // Fetch payments for those listings
 
- return view('Tenant.payment.index', [
+        // Calculate total cash advance amount from completed payments
+        $totalCashAdvance = $payments->where('status', 'completed')->sum('cash_advance_amount');
 
+        return view('Tenant.payment.index', [
             'billings' => $billings,
- 'payments' => $payments,
-
+            'payments' => $payments,
             'tenant' => $tenant,
             'listings'=> $listings,
-
+            'totalCashAdvance' => $totalCashAdvance,
         ]);
        
     }
@@ -290,10 +291,20 @@ class PaymentController extends Controller
         // Calculate grand total (billing amount + utilities)
         $grandTotal = $billing->amount + $utilityTotal;
 
+        // Calculate available cash advance (total received - total used)
+        $totalCashAdvance = Payment::where('listing_id', $billing->listing_id)
+            ->where('status', 'completed')
+            ->sum('cash_advance_amount');
+        $totalCashAdvanceUsed = Payment::where('listing_id', $billing->listing_id)
+            ->where('status', 'completed')
+            ->sum('cash_advance_used');
+        $availableCashAdvance = $totalCashAdvance - $totalCashAdvanceUsed;
+        $remainingAmount = $grandTotal > $availableCashAdvance ? $grandTotal - $availableCashAdvance : 0;
+
         // Get the owner information through the listing relationship
         $owner = $billing->listing->user;
     
-        return view('Tenant.payment.create', compact('billing', 'utilityTotal', 'grandTotal', 'owner'));
+        return view('Tenant.payment.create', compact('billing', 'utilityTotal', 'grandTotal', 'owner', 'availableCashAdvance', 'remainingAmount'));
     }
   
     public function paystore(Request $request)
@@ -338,6 +349,9 @@ class PaymentController extends Controller
             if ($request->filled('cash_advance_amount') && is_numeric($request->cash_advance_amount)) {
                 $payment->cash_advance_amount = $request->cash_advance_amount;
             }
+
+            // Save how much cash advance was used for this payment
+            $payment->cash_advance_used = $request->input('cash_advance_used', 0);
 
             $payment->save();
 

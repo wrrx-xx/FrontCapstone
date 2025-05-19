@@ -40,6 +40,7 @@ use Illuminate\Routing\ViewController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Listing as ControllersListing;
 
 Route::get('/', [HomeController::class, 'filteredListings']);
 
@@ -106,14 +107,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/billing/{id}/decline', [BillingsController::class, 'decline'])->name('billing.decline');
     Route::resource('/utilitybill', UtilityBillsController::class);
     Route::resource('owner/maintenance/request', OwnerMaintenance::class)->names('owner.maintenance');
-});
+    Route::post('/tenant/rental/{listing}/leave', [ListingController::class, 'leave'])->name('tenant.rental.leave');
+    
+    // Owner/Caretaker leave request management
+   
+ });
 
-Route::middleware('auth')->group(function () {
+    Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
+ Route::middleware(['auth'])->group(function() {
+        Route::get('/owner/leave-requests', [ListingController::class, 'leaveRequests'])->name('owner.leave-requests');
+        Route::post('/owner/leave-requests/{id}/approve', [ListingController::class, 'approveLeaveRequest'])->name('owner.leave-requests.approve');
+        Route::post('/owner/leave-requests/{id}/decline', [ListingController::class, 'declineLeaveRequest'])->name('owner.leave-requests.decline');
+    });
 require __DIR__.'/auth.php';
 
 // Admin approval routes
@@ -121,4 +130,4 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/approvals', [ApprovalController::class, 'index'])->name('admin.approvals.index');
     Route::post('/admin/approvals/{id}/approve', [ApprovalController::class, 'approve'])->name('admin.approvals.approve');
     Route::delete('/admin/approvals/{id}/reject', [ApprovalController::class, 'reject'])->name('admin.approvals.reject');
-});
+ });

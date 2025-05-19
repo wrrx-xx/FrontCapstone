@@ -51,7 +51,7 @@
                                                 <div class="col-xl-9 pt-2 pt-xl-0">
                                                     <h6 class="mb-1">{{ $viewing->listing->title }}</h6>
                                                     <p class="mb-1 text-body">{{ $viewing->listing->address }}</p>
-                                                    <span class="text-success">${{ number_format($viewing->listing->price, 2) }}</span>
+                                                    <span class="text-success">₱{{ number_format($viewing->listing->price, 2) }}</span>
                                                 </div>
                                             </div>
                                         </div>

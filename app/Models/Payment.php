@@ -16,6 +16,7 @@ class Payment extends Model
         'reservation_amount',  // Added to store reservation amount at payment time
         'payment_method',
         'cash_advance_amount',
+        'cash_advance_used',
         'reference_number',
         'screenshot',
         'status',

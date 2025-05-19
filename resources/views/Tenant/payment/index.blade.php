@@ -40,8 +40,15 @@
                                 <i class="fas fa-hand-holding-usd text-info fa-2x"></i>
                             </div>
                             <div>
-                                <h6 class="card-subtitle text-muted mb-1">Total Cash Advance</h6>
-                                <h4 class="card-title text-info mb-0">₱{{ number_format($payments->where('status', 'completed')->sum('cash_advance_amount'), 2) }}</h4>
+                                @php
+                                    $totalCashAdvance = $payments->where('status', 'completed')->sum('cash_advance_amount');
+                                    $totalCashAdvanceUsed = $payments->where('status', 'completed')->sum('cash_advance_used');
+                                    $availableCashAdvance = $totalCashAdvance - $totalCashAdvanceUsed;
+                                @endphp
+                                <div>
+                                    <h6 class="card-subtitle text-muted mb-1">Available Cash Advance</h6>
+                                    <h4 class="card-title text-info mb-0">₱{{ number_format($availableCashAdvance, 2) }}</h4>
+                                </div>
                             </div>
                         </div>
                     </div>

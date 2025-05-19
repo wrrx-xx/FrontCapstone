@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Amenities;
+use App\Models\LeaveRequest;
 use App\Models\Listing;
 use App\Models\Photos;
 use Exception;
@@ -380,4 +381,98 @@ public function myproperty()
 
         return view('listing.display', compact('listings'));
     }
+
+public function leave($listingId)
+{
+    $listing = Listing::findOrFail($listingId);
+
+    // Only allow if the current user is the tenant of this listing
+    if (Auth::user()->role === 'tenant' && $listing->tenant_id == Auth::id()) {
+        // Check if a pending leave request already exists
+        $existingRequest = LeaveRequest::where('listing_id', $listingId)
+            ->where('tenant_id', Auth::id())
+            ->where('status', 'pending')
+            ->first();
+
+        if ($existingRequest) {
+            return redirect()->back()->with('error', 'You already have a pending leave request.');
+        }
+
+        // Create a new leave request with status pending
+        LeaveRequest::create([
+            'listing_id' => $listingId,
+            'tenant_id' => Auth::id(),
+            'status' => 'pending',
+        ]);
+
+        return redirect()->back()->with('success', 'Leave request submitted. Waiting for owner approval.');
+    }
+    return redirect()->back()->with('error', 'Unauthorized action.');
+}
+
+
+public function leaveRequests()
+{
+    $user = Auth::user();
+    $ownerId = $user->role === 'caretaker' ? $user->owner_id : $user->id;
+
+    $leaveRequests = LeaveRequest::with('tenant', 'listing')
+        ->whereHas('listing', function ($query) use ($ownerId) {
+            $query->where('owner_id', $ownerId);
+        })
+        ->where('status', 'pending')
+        ->get();
+
+    return view('owner.leave-requests', compact('leaveRequests'));
+}
+
+public function approveLeaveRequest($id)
+{
+    $leaveRequest = LeaveRequest::findOrFail($id);
+
+    // Check if current user is owner of the listing
+     $user = Auth::user();
+    $ownerId = $user->role === 'caretaker' ? $user->owner_id : $user->id;
+
+    if ($ownerId !== $leaveRequest->listing->owner_id) {
+        abort(403);
+    }
+
+    // Approve the leave request
+    $leaveRequest->status = 'approved';
+    $leaveRequest->save();
+
+    // Remove tenant from listing
+    $listing = $leaveRequest->listing;
+    $listing->tenant_id = null;
+    $listing->save();
+
+    // Change user role from tenant to guest
+    $user = $leaveRequest->tenant;
+    if ($user && $user->role === 'tenant') {
+        $user->role = 'guest';
+        $user->save();
+
+        // If the tenant is currently logged in, log them out
+DB::table('sessions')->where('user_id', $user->id)->delete();
+    }
+
+    return redirect()->back()->with('success', 'Leave request approved and tenant removed from listing.');
+}
+
+public function declineLeaveRequest($id)
+{
+    $leaveRequest = LeaveRequest::findOrFail($id);
+
+    // Check if current user is owner of the listing
+    if (Auth::id() !== $leaveRequest->listing->owner_id) {
+        abort(403);
+    }
+
+    // Decline the leave request
+    $leaveRequest->status = 'declined';
+    $leaveRequest->save();
+
+    return redirect()->back()->with('success', 'Leave request declined.');
+}
 }

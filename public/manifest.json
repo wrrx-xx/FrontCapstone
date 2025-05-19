@@ -2,10 +2,10 @@
     "name": "Staynest",
     "short_name": "Staynest",
     "start_url": "/",
-    "display": "standalone",
+    "display": "fullscreen",
     "background_color": "#ffffff",
     "theme_color": "#007bff",
-    "description": "A Laravel PWA application",
+    "description": "Staynest App",
     "icons": [
         {
             "src": "/images/icons/logo.png",

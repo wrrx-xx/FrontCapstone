@@ -58,7 +58,7 @@
                                                 <div class="col-xl-9 pt-2 pt-xl-0">
                                                     <h6 class="mb-1">{{ $listing->title }}</h6>
                                                     <p class="mb-1 text-body">{{ Str::limit($listing->body, 100) }}</p>
-                                                    <span class="text-success">${{ $listing->price }}</span>
+                                                    <span class="text-success">₱{{ $listing->price }}</span>
                                                 </div>
                                             </div>
                                         </div>
