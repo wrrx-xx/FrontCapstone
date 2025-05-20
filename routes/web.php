@@ -62,7 +62,7 @@ Route::middleware(['auth','verified'])->group(function () {
 
 Route::middleware(['auth','verified','admin'])->group(function () {
     Route::resource('admin/listing',AdminListingController::class)->names('admin.listing');
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard')->middleware('auth', 'admin');
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard')->middleware('auth', 'admin');
     Route::resource('admin/caretakers',AdminCaretakerController::class)->names('admin.caretaker');
     Route::resource('admin/owners', AdminOwnerController::class)->names('admin.owner');
     Route::resource('admin/tenants', AdminTenantController::class)->names('admin.tenant');
@@ -130,4 +130,5 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/approvals', [ApprovalController::class, 'index'])->name('admin.approvals.index');
     Route::post('/admin/approvals/{id}/approve', [ApprovalController::class, 'approve'])->name('admin.approvals.approve');
     Route::delete('/admin/approvals/{id}/reject', [ApprovalController::class, 'reject'])->name('admin.approvals.reject');
+    Route::get('/admin/maintenance', [OwnerMaintenance::class, 'adminIndex'])->name('admin.maintenance.index');
  });

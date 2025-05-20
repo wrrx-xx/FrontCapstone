@@ -29,6 +29,22 @@ class OwnerMaintenance extends Controller
         return view('owner.maintenance.index', compact('requests'));
     }
 
+    /**
+     * Display a listing of maintenance requests for admin, arranged by owners.
+     */
+    public function adminIndex()
+    {
+        // Get all maintenance requests with listing, tenant, and listing owner eager loaded
+        $requests = MaintenanceRequest::with(['listing.user', 'tenant'])
+            ->get()
+            ->sortBy(function ($request) {
+                $owner = $request->listing->user;
+                return $owner ? $owner->lname . $owner->fname : '';
+            });
+
+        return view('admin.maintenance.index', compact('requests'));
+    }
+
     public function update(Request $request, $id)
     {
         $request->validate([

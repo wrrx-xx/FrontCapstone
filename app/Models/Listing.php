@@ -54,4 +54,8 @@ class Listing extends Model
     public function tenant(){
         return $this->belongsTo(User::class, 'tenant_id');
     }
+    public function inquiries()
+    {
+        return $this->hasMany(Inquiries::class, 'listing_id');
+    }
 }

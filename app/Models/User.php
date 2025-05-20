@@ -123,4 +123,7 @@ class User extends Authenticatable
     {
         return $this->role === 'guest';
     }
+     public function listings(){
+        return $this->hasMany(Listing::class, 'owner_id');
+    }
 }

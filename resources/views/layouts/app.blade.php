@@ -71,6 +71,7 @@
     <!-- Template Functions -->
     <script src="{{ asset('assets/js/functions.js') }}"></script>
 
+    @stack('scripts')
 </body>
 
 </html>

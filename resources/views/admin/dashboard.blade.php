@@ -129,24 +129,24 @@
                 <!-- Activity Chart -->
                 <div class="col-lg-7">
                     <div class="card border-0 shadow-sm rounded-4">
-                        <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center py-3">
-                            <h5 class="mb-0 fw-bold">Monthly Activity Summary</h5>
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="activityTimeRange" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Last 30 Days
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="activityTimeRange">
-                                    <li><a class="dropdown-item" href="#">Last 7 Days</a></li>
-                                    <li><a class="dropdown-item" href="#">Last 30 Days</a></li>
-                                    <li><a class="dropdown-item" href="#">Last 3 Months</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="chart-container" style="position: relative; height:280px;">
-                                <canvas id="activityChart"></canvas>
-                            </div>
-                        </div>
+                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0 fw-bold">Payment Summary</h5>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="paymentTimeRange" data-bs-toggle="dropdown" aria-expanded="false">
+                            Last 12 Months
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="paymentTimeRange">
+                            <li><a class="dropdown-item" href="#">Last 6 Months</a></li>
+                            <li><a class="dropdown-item" href="#">Last 12 Months</a></li>
+                            <li><a class="dropdown-item" href="#">Last 24 Months</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="chart-container" style="position: relative; height:280px;">
+                        <canvas id="paymentChart"></canvas>
+                    </div>
+                </div>
                     </div>
                 </div>
 
@@ -359,49 +359,24 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Activity Chart
-                const ctx = document.getElementById('activityChart').getContext('2d');
-                const activityChart = new Chart(ctx, {
-                    type: 'line',
+                // Payment Summary Chart
+                const ctx = document.getElementById('paymentChart').getContext('2d');
+                const paymentChart = new Chart(ctx, {
+                    type: 'bar',
                     data: {
-                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        labels: @json($paymentMonths),
                         datasets: [{
-                            label: 'Listings',
-                            data: [12, 19, 13, 15, 20, 25, 22, 30, 28, 25, 22, 24],
-                            borderColor: '#0d6efd',
-                            backgroundColor: 'rgba(13, 110, 253, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }, {
-                            label: 'Maintenance Requests',
-                            data: [8, 15, 9, 12, 17, 13, 18, 15, 22, 19, 16, 14],
-                            borderColor: '#fd7e14',
-                            backgroundColor: 'rgba(253, 126, 20, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }, {
-                            label: 'Payments',
-                            data: [5, 10, 8, 15, 12, 18, 15, 22, 20, 25, 22, 20],
-                            borderColor: '#198754',
-                            backgroundColor: 'rgba(25, 135, 84, 0.1)',
-                            tension: 0.4,
-                            fill: true
+                            label: 'Total Payments',
+                            data: @json($paymentAmounts),
+                            backgroundColor: 'rgba(25, 135, 84, 0.7)',
+                            borderColor: 'rgba(25, 135, 84, 1)',
+                            borderWidth: 1,
+                            borderRadius: 5,
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                                align: 'end',
-                                labels: {
-                                    boxWidth: 10,
-                                    usePointStyle: true,
-                                    pointStyle: 'circle'
-                                }
-                            }
-                        },
                         scales: {
                             y: {
                                 beginAtZero: true,
@@ -415,10 +390,15 @@
                                 }
                             }
                         },
-                        elements: {
-                            point: {
-                                radius: 3,
-                                hoverRadius: 6
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    boxWidth: 10,
+                                    usePointStyle: true,
+                                    pointStyle: 'rectRounded'
+                                }
                             }
                         }
                     }

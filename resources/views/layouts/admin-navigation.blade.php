@@ -134,6 +134,14 @@
                                  <a class="list-group-item hover-primary-soft" href="{{ route('admin.payment.index') }}">
                                     <i class="fas fa-fw fa-wallet me-2"></i>Payments
                                 </a>
+                                 <a class="list-group-item hover-primary-soft d-flex justify-content-between align-items-center"
+                                    href="{{ route('admin.maintenance.index') }}">
+                                    <span><i class="fas fa-fw fa-tools me-2"></i>Maintenance Requests</span>
+                                    @if (isset($pendingMaintenanceCount) && $pendingMaintenanceCount > 0)
+                                        <span
+                                            class="badge bg-danger rounded-pill">{{ $pendingMaintenanceCount }}</span>
+                                    @endif
+                                </a>
                             {{-- <a class="list-group-item hover-primary-soft" href="agent-review.html"><i
                                     class="far fa-fw fa-comment-dots me-2"></i>Review</a> --}}
 

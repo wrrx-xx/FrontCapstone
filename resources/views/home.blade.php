@@ -23,61 +23,81 @@ Main Banner START -->
 				<div class="row">
 					<div class="col-lg-6">
 						<!-- Title -->
-						<h1 class="mb-0 display-4">Find your</h1>
-						<h2 class="display-5">Dream <span class="text-primary position-relative">Property
-								<!-- Svg START -->
+						<h1 class="mb-0 display-4"></h1>
+						<h2 class="display-5">Find Your Dream <span class="text-primary position-relative">Property
+								<!-- SVG decoration START -->
 								<span class="position-absolute bottom-0 start-0 mb-n2 d-flex">
 									<svg class="mt-auto" width="100%" height="13px" xmlns="http://www.w3.org/2000/svg">
 									<path class="fill-primary" fill-rule="evenodd"
 									 d="M212.085,0.394 C204.384,0.051 195.626,0.202 187.838,0.120 C183.695,0.067 180.307,0.298 176.119,0.566 C170.855,0.909 165.842,0.830 160.919,0.938 C140.929,1.402 121.831,2.202 102.966,3.072 C85.830,3.849 68.326,5.613 51.511,5.528 C35.988,5.419 19.171,5.679 3.940,8.169 C-2.659,9.318 0.701,13.793 7.221,12.801 C22.156,10.566 39.083,10.615 54.338,10.577 C62.025,10.558 69.639,9.783 77.332,9.307 C86.344,8.750 95.372,8.246 104.415,7.718 C122.137,6.688 139.886,5.668 158.038,4.717 C162.113,4.505 166.200,4.407 170.328,4.172 C174.299,3.941 178.151,3.269 182.264,3.024 C186.073,2.796 189.753,2.843 193.719,2.546 C198.584,2.173 203.525,1.468 209.034,1.298 C211.295,1.192 214.566,0.484 212.085,0.394 L212.085,0.394 Z"/>
 									</svg>
 								</span>
-								<!-- Svg END -->
+								<!-- SVG decoration END -->
 							</span>
 						</h2>
 						<!-- Content -->
-						<p class="mt-3">Rooms oh fully taken by worse do. Points afraid but may end law lasted. Was out laughter raptures returned outweigh. Luckily cheered colonel I do we attack highest enabled. Tried law yet style child.</p>
+						<p class="mt-3 lead">Find your perfect boarding house, apartment, or room with ease. Whether you're a student or young professional, we connect you with quality accommodations that feel like home. Property owners can easily list and manage their properties all in one place.</p>
+						
+						<!-- Features list -->
+						<div class="mt-4">
+							<div class="d-flex align-items-center mb-2">
+								<i class="fas fa-check-circle text-primary me-2"></i>
+								<span>Verified listings from trusted property owners</span>
+							</div>
+							<div class="d-flex align-items-center mb-2">
+								<i class="fas fa-check-circle text-primary me-2"></i>
+								<span>Easy online payment and booking system</span>
+							</div>
+							<div class="d-flex align-items-center">
+								<i class="fas fa-check-circle text-primary me-2"></i>
+								<span>Complete property management tools</span>
+							</div>
+						</div>
 					</div>
 				</div>
 
 				<!-- Search bar START -->
 				<form method="GET" action="{{ route('listing.display') }}">
-				<div class="row">
+				<div class="row mt-4">
 					<div class="col-lg-10">
-						<div class="shadow-lg p-3 mb-5 bg-body p-4 rounded">
+						<div class="shadow-lg p-4 mb-5 bg-body rounded">
 							<div class="row align-items-center g-3">
-								<!-- Item 1 -->
-								<div class="col-sm-6 col-md-3 bottomborder-select">
-									<select name="type" class="form-select form-select-sm js-choice" aria-label=".form-select-sm example" >
-										<option value="">Type</option>
+								<!-- Property Type -->
+								<div class="col-sm-6 col-md-3">
+									<select name="type" class="form-select form-select-lg js-choice" aria-label="Property Type">
+										<option value="">Property Type</option>
 										<option value="Apartment" {{ request('type') == 'Apartment' ? 'selected' : '' }}>Apartment</option>
 										<option value="House" {{ request('type') == 'House' ? 'selected' : '' }}>House</option>
-										<option value="Boarding house" {{ request('type') == 'Boarding house' ? 'selected' : '' }}>Boarding house</option>
+										<option value="Boarding house" {{ request('type') == 'Boarding house' ? 'selected' : '' }}>Boarding House</option>
 										<option value="Room" {{ request('type') == 'Room' ? 'selected' : '' }}>Room</option>
 									</select>
 								</div>
-								<!-- Item 2 -->
 								
-								<!-- Item 3 -->
-								<div class="col-sm-6 col-md-3 bottomborder-select">
-									<select name="city" class="form-select form-select-sm js-choice" aria-label=".form-select-sm example">
-										<option value="">City</option>
+								<!-- City -->
+								<div class="col-sm-6 col-md-3">
+									<select name="city" class="form-select form-select-lg js-choice" aria-label="City">
+										<option value="">Select City</option>
 										@foreach($cities as $city)
 											<option value="{{ $city }}" {{ request('city') == $city ? 'selected' : '' }}>{{ $city }}</option>
 										@endforeach
 									</select>
 								</div>
-								<div class="col-sm-6 col-md-3 bottomborder-select">
-									<select name="baranggay" class="form-select form-select-sm js-choice" aria-label=".form-select-sm example">
-										<option value="">Baranggay</option>
+
+								<!-- Barangay -->
+								<div class="col-sm-6 col-md-3">
+									<select name="baranggay" class="form-select form-select-lg js-choice" aria-label="Barangay">
+										<option value="">Select Barangay</option>
 										@foreach($baranggays as $baranggay)
 											<option value="{{ $baranggay }}" {{ request('baranggay') == $baranggay ? 'selected' : '' }}>{{ $baranggay }}</option>
 										@endforeach
 									</select>
 								</div>
-								<!-- Button -->
+
+								<!-- Search Button -->
 								<div class="col-sm-6 col-md-3">
-									<button type="submit" class="btn btn-sm btn-primary w-100">Search</button>
+									<button type="submit" class="btn btn-lg btn-primary w-100">
+										<i class="fas fa-search me-2"></i>Find Property
+									</button>
 								</div>
 							</div>
 						</div>
@@ -87,7 +107,7 @@ Main Banner START -->
 				<!-- Search bar END -->
 			</div>
 
-			<!-- Images -->
+			<!-- Property Images Showcase -->
 			<div class="col-lg-7">
 				<div class="row justify-content-center">
 					<!-- Image left START -->
@@ -335,8 +355,8 @@ About START -->
 						<circle class="st0" cx="45.7" cy="38" r="5.9"/>
 						<circle class="st0" cx="85.5" cy="38" r="5.9"/>
 						<circle class="st0" cx="125.3" cy="38" r="5.9"/>
-						<path class="st0" d="M165.1,32.1c-3.3,0-5.9,2.7-5.9,5.9c0,3.3,2.7,5.9,5.9,5.9c3.3,0,5.9-2.7,5.9-5.9 C171,34.8,168.4,32.1,165.1,32.1z"/>
-						<path class="st0" d="M204.9,32.1c-3.3,0-5.9,2.7-5.9,5.9c0,3.3,2.7,5.9,5.9,5.9c3.3,0,5.9-2.7,5.9-5.9 C210.8,34.8,208.1,32.1,204.9,32.1z"/>
+						<path class="st0" d="M165.1,32.1c-3.3,0-5.9,2.7-5.9,5.9c0,3.3,2.7,5.9,5.9,5.9c3.3,0,5.9-2.7,5.9-5.9C171,34.8,168.4,32.1,165.1,32.1z"/>
+						<path class="st0" d="M204.9,32.1c-3.3,0-5.9,2.7-5.9,5.9c0,3.3,2.7,5.9,5.9,5.9c3.3,0,5.9-2.7,5.9-5.9C210.8,34.8,208.1,32.1,204.9,32.1z"/>
 						<path class="st0" d="M5.9,0C2.7,0,0,2.7,0,5.9c0,3.3,2.7,5.9,5.9,5.9c3.3,0,5.9-2.7,5.9-5.9C11.9,2.7,9.2,0,5.9,0z"/>
 						<circle class="st0" cx="45.7" cy="5.9" r="5.9"/>
 						<circle class="st0" cx="85.5" cy="5.9" r="5.9"/>
@@ -371,10 +391,9 @@ About START -->
 
 			<!-- Right side START -->
 			<div class="col-lg-6 ps-md-5 order-1">
-				<!-- Title -->
-				<h2 class="h1">Serving Renters & Property Owners</h2>
-				<p>Improved own provided blessing may peculiar domestic. Sight house has sex never. No visited raising gravity outward subject my cottage Mr be. Hold do at tore in park feet near my case.</p>
-				<!-- Button -->
+				<!-- Title -->                <h2 class="h1">Your Trusted Boarding House Platform</h2>
+                <p>Discover the perfect living space or efficiently manage your property listings. Our platform connects property owners with quality tenants, offering a complete solution for boarding houses, apartments, and rooms. Experience hassle-free property management with automated rent collection, maintenance tracking, and tenant screening all in one place.</p>
+                <!-- Button -->
 				<a href="#" class="btn btn-outline-primary">Read more</a>
 				<!-- Rating START -->
 				<div class="d-flex pt-2">
@@ -469,7 +488,7 @@ Work START -->
 					</div>
 					<!-- Content -->
 					<div class="card-body">
-						<h4 class="card-title">Find Real Estate</h4>
+						<h4 class="card-title">Find Listings</h4>
 						<p class="card-text">What better way to demonstrate your value to a potential customer than to describe</p>
 					</div>
 				</div>
@@ -492,7 +511,7 @@ Work START -->
 					</div>
 					<!-- Content -->
 					<div class="card-body">
-						<h4 class="card-title">Buy or Rent Home</h4>
+						<h4 class="card-title">Rent Home</h4>
 						<p class="card-text">Fulfilled direction use continual Saw met applauded concealed and her.</p>
 					</div>
 				</div>
@@ -713,15 +732,109 @@ City START -->
 City END -->
 
 
-</main>
+<!-- =======================
+Key Features START -->
+<section class="pt-0 pt-md-5">
+    <div class="container">
+        <!-- Title -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h2 class="mb-0">Why Choose Our Platform?</h2>
+            </div>
+        </div>
 
-<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Features -->
+        <div class="row g-4">
+            <!-- Feature item -->
+            <div class="col-sm-6 col-lg-3">
+                <div class="card card-body bg-light h-100 p-4">
+                    <div class="icon-lg bg-primary bg-opacity-10 text-primary rounded-circle mb-4"><i class="fas fa-shield-alt"></i></div>
+                    <h5>Verified Listings</h5>
+                    <p class="mb-0">All property listings are verified to ensure safety and reliability for our users</p>
+                </div>
+            </div>
 
-<!-- Vendors -->
-<script src="assets/vendor/purecounterjs/dist/purecounter_vanilla.js"></script>
-<script src="assets/vendor/tiny-slider/tiny-slider.js"></script>
-<script src="../../cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+            <!-- Feature item -->
+            <div class="col-sm-6 col-lg-3">
+                <div class="card card-body bg-light h-100 p-4">
+                    <div class="icon-lg bg-primary bg-opacity-10 text-primary rounded-circle mb-4"><i class="fas fa-hand-holding-usd"></i></div>
+                    <h5>Easy Payments</h5>
+                    <p class="mb-0">Secure online payment system for rent and utilities with automatic billing</p>
+                </div>
+            </div>
 
-<!-- Template Functions -->
-<script src="assets/js/functions.js"></script>
+            <!-- Feature item -->
+            <div class="col-sm-6 col-lg-3">
+                <div class="card card-body bg-light h-100 p-4">
+                    <div class="icon-lg bg-primary bg-opacity-10 text-primary rounded-circle mb-4"><i class="fas fa-tasks"></i></div>
+                    <h5>Property Management</h5>
+                    <p class="mb-0">Complete tools for owners to manage properties, tenants, and maintenance requests</p>
+                </div>
+            </div>
+
+            <!-- Feature item -->
+            <div class="col-sm-6 col-lg-3">
+                <div class="card card-body bg-light h-100 p-4">
+                    <div class="icon-lg bg-primary bg-opacity-10 text-primary rounded-circle mb-4"><i class="fas fa-comments"></i></div>
+                    <h5>Direct Communication</h5>
+                    <p class="mb-0">Built-in messaging system between tenants, owners, and property managers</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- =======================
+Key Features END -->
+
+<!-- =======================
+For Property Owners START -->
+<section class="pt-5 pt-md-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <!-- Left content -->
+            <div class="col-lg-5">
+                <h2 class="mb-3">Are You a Property Owner?</h2>
+                <p class="mb-4">List your property on our platform and enjoy these benefits:</p>
+                
+                <!-- Features list -->
+                <ul class="list-group list-group-borderless mb-4">
+                    <li class="list-group-item d-flex align-items-center mb-3">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Free property listing with detailed customization
+                    </li>
+                    <li class="list-group-item d-flex align-items-center mb-3">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Automated rent collection and billing system
+                    </li>
+                    <li class="list-group-item d-flex align-items-center mb-3">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Tenant screening and management tools
+                    </li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        Maintenance request tracking system
+                    </li>
+                </ul>
+                
+                <!-- Buttons -->
+                <div class="d-flex align-items-center">
+                    <a href="{{ route('register') }}" class="btn btn-primary me-3">
+                        <i class="fas fa-user-plus me-2"></i>Register as Owner
+                    </a>
+                    <a href="{{ route('listing.create') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-plus me-2"></i>Add Your Property
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Right image -->
+            <div class="col-lg-7 text-center">
+                <img src="assets/images/about/property-management.jpg" class="rounded" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+<!-- =======================
+For Property Owners END -->
+
 @endsection

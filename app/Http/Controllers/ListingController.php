@@ -276,14 +276,20 @@ public function update(Request $request, $id)
             'advance_payment_months' => $request->input('advance_payment_months'),
         ]);
 
-        // Update amenities
-        $listing->amenities->update([
-            'wifi' => $request->has('wifi') ? 1 : 0,
-            'parking' => $request->has('parking') ? 1 : 0,
-            'bathroom' => $request->has('bathroom') ? 1 : 0,
-            'kitchen' => $request->has('kitchen') ? 1 : 0,
-            'laundry' => $request->has('laundry') ? 1 : 0,
-        ]);
+        // Prepare amenities data from request (checkboxes are now amenities[amenity] in the form)
+        $amenitiesData = [];
+        $allAmenities = (new \App\Models\Amenities())->getFillable();
+        foreach ($allAmenities as $amenity) {
+            if ($amenity === 'listing_id') continue;
+            $amenitiesData[$amenity] = $request->input('amenities.' . $amenity, 0) ? 1 : 0;
+        }
+
+        // Update or create amenities for this listing
+        if ($listing->amenities) {
+            $listing->amenities->update($amenitiesData);
+        } else {
+            $listing->amenities()->create($amenitiesData);
+        }
 
         // Handle photo uploads
         if ($request->hasFile('photos')) {
