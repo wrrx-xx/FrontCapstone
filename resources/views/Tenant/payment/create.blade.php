@@ -114,7 +114,7 @@
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-light py-3">
                         <h4 class="card-title mb-0">
-                            <i class="fas fa-credit-card text-primary me-2"></i>Payment Method
+                            <i class="fas fa-credit-card text-primary me-2"></i>Payment Methods
                         </h4>
                     </div>
                     <div class="card-body">
@@ -232,7 +232,7 @@
                                 <label for="new_cash_advance_amount" class="form-label">New Cash Advance Amount</label>
                                 <div class="input-group">
                                     <span class="input-group-text">₱</span>
-                                    <input type="number" name="new_cash_advance_amount" id="new_cash_advance_amount"
+                                    <input type="number" name="cash_advance_amount" id="new_cash_advance_amount"
                                         class="form-control" min="0" step="0.01"
                                         placeholder="Enter amount">
                                 </div>

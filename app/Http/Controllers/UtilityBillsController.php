@@ -33,7 +33,7 @@ class UtilityBillsController extends Controller
         $utilityBill->billing_id = $request->billing_id;
         $utilityBill->type = $utilityType;
         $utilityBill->amount = $request->amount;
-        $utilityBill->reading = $request->reading ?? '';
+        $utilityBill->reading = $request->reading ?? null;
         $utilityBill->status = $request->status;
         $utilityBill->save();
     

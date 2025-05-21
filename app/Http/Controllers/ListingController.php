@@ -432,39 +432,44 @@ public function leaveRequests()
     return view('owner.leave-requests', compact('leaveRequests'));
 }
 
-public function approveLeaveRequest($id)
-{
-    $leaveRequest = LeaveRequest::findOrFail($id);
+    public function approveLeaveRequest($id)
+    {
+        $leaveRequest = LeaveRequest::findOrFail($id);
 
-    // Check if current user is owner of the listing
-     $user = Auth::user();
-    $ownerId = $user->role === 'caretaker' ? $user->owner_id : $user->id;
+        // Check if current user is owner of the listing
+        $user = Auth::user();
+        $ownerId = $user->role === 'caretaker' ? $user->owner_id : $user->id;
 
-    if ($ownerId !== $leaveRequest->listing->owner_id) {
-        abort(403);
+        if ($ownerId !== $leaveRequest->listing->owner_id) {
+            abort(403);
+        }
+
+        // Fail all pending billings for the tenant
+        \App\Models\Billings::where('user_id', $leaveRequest->tenant_id)
+            ->where('status', 'pending')
+            ->update(['status' => 'failed']);
+
+        // Approve the leave request
+        $leaveRequest->status = 'approved';
+        $leaveRequest->save();
+
+        // Remove tenant from listing
+        $listing = $leaveRequest->listing;
+        $listing->tenant_id = null;
+        $listing->save();
+
+        // Change user role from tenant to guest
+        $user = $leaveRequest->tenant;
+        if ($user && $user->role === 'tenant') {
+            $user->role = 'guest';
+            $user->save();
+
+            // If the tenant is currently logged in, log them out
+            DB::table('sessions')->where('user_id', $user->id)->delete();
+        }
+
+        return redirect()->back()->with('success', 'Leave request approved and tenant removed from listing.');
     }
-
-    // Approve the leave request
-    $leaveRequest->status = 'approved';
-    $leaveRequest->save();
-
-    // Remove tenant from listing
-    $listing = $leaveRequest->listing;
-    $listing->tenant_id = null;
-    $listing->save();
-
-    // Change user role from tenant to guest
-    $user = $leaveRequest->tenant;
-    if ($user && $user->role === 'tenant') {
-        $user->role = 'guest';
-        $user->save();
-
-        // If the tenant is currently logged in, log them out
-DB::table('sessions')->where('user_id', $user->id)->delete();
-    }
-
-    return redirect()->back()->with('success', 'Leave request approved and tenant removed from listing.');
-}
 
 public function declineLeaveRequest($id)
 {

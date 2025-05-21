@@ -49,9 +49,10 @@ class PaymentController extends Controller
         $tenant = Auth::user(); // Assuming the tenant is authenticated as a User
 
 
-        // Retrieve billings associated with the tenant
-
-        $billings = Billings::where('user_id', $tenant->id)->get();
+        // Retrieve billings associated with the tenant, order pending first
+        $billings = Billings::where('user_id', $tenant->id)
+            ->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")
+            ->get();
 
 
         // Retrieve listings associated with the tenant
@@ -59,9 +60,11 @@ class PaymentController extends Controller
         $listings = Listing::where('tenant_id', $tenant->id)->pluck('id'); // Get the IDs of the listings where the tenant is assigned
 
 
-        // Retrieve payments associated with the tenant's listings
+        // Retrieve payments associated with the tenant's listings, order latest created first
 
-        $payments = Payment::whereIn('listing_id', $listings)->get(); // Fetch payments for those listings
+        $payments = Payment::whereIn('listing_id', $listings)
+            ->orderBy('created_at', 'desc')
+            ->get(); // Fetch payments for those listings
 
         // Calculate total cash advance amount from completed payments
         $totalCashAdvance = $payments->where('status', 'completed')->sum('cash_advance_amount');
@@ -95,12 +98,17 @@ class PaymentController extends Controller
 
         // Loop through each listing to get associated payments and billings
         foreach ($listings as $listing) {
-            // Fetch payments for the current listing and merge into the collection
-            $listingPayments = Payment::where('listing_id', $listing->id)->get();
+            // Fetch payments for the current listing and merge into the collection, order latest created first
+            $listingPayments = Payment::where('listing_id', $listing->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
             $payments = $payments->merge($listingPayments);
 
-            // Fetch billings for the current listing and eager load utilities, then merge into the collection
-            $listingBillings = Billings::with('utility')->where('listing_id', $listing->id)->get();
+            // Fetch billings for the current listing and eager load utilities, then merge into the collection, order pending first
+            $listingBillings = Billings::with('utility')
+                ->where('listing_id', $listing->id)
+->orderByRaw("CASE WHEN status = 'pending' THEN 0 WHEN status = 'processing' THEN 1 WHEN status = 'completed' THEN 2 WHEN status = 'failed' THEN 3 ELSE 4 END")
+                ->get();
             $billings = $billings->merge($listingBillings);
         }
 
