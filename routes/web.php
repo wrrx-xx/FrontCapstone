@@ -58,6 +58,8 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('/tenant/myrental', [TenantRentalController::class, 'index'])->name('tenant.rental.index');
     Route::resource('maintenance', MaintenanceRequestController::class)->names('tenant.maintenance');
     Route::get('/tenant/support', [SupportMessagesController::class, 'index'])->name('tenant.support');
+    Route::patch('/viewings/{id}/cancel', [ViewingController::class, 'cancel'])->name('viewings.cancel');
+    Route::patch('/viewings/{viewing}', [ViewingController::class, 'update'])->name('viewings.update');
 });
 
 Route::middleware(['auth','verified','admin'])->group(function () {
@@ -86,7 +88,7 @@ Route::get('/listings/{id}', [ListingController::class, 'show'])->name('listings
 Route::middleware('auth')->group(function () {
     Route::get('/listing/mylisting',[ListingController::class, 'ownerindex'])->name('owner.property');
     Route::resource('/listing', ListingController::class);
-    Route::resource('/reserve', ReservationController::class);
+    Route::get('/viewings',[ReservationController::class,'index'])->name('reserve.index');
     Route::get('/listings/owner/myproperty', [ListingController::class, 'myproperty'])->name('listing.myproperty');
     Route::get('/listings/show/{id}', [ListingController::class, 'detail'])->name('listing.detail');
     Route::resource('/owner/caretaker', CaretakerController::class);

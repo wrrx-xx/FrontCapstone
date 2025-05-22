@@ -123,7 +123,7 @@ class ListingController extends Controller
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif', // Validate photo uploads
             'map_link' => '|string|max:255',
             'waiver_file' => 'nullable|mimes:pdf|max:10240', // Validate PDF file for waiver_file, max 10MB
-            'advance_payment_months' => 'required|integer|in:0,1,2', // Validate PDF file for waiver_file
+            'advance_payment_months' => 'required|integer|in:0,1,2,3,4,5', // Validate PDF file for waiver_file
         ]);
 
         // Handle waiver_file upload
@@ -244,7 +244,7 @@ public function update(Request $request, $id)
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif', // Validate photo uploads
             'map_link' => '|string|max:255',
             'waiver_file' => 'nullable|mimes:pdf|max:10240', // Validate PDF file for waiver_file
-            'advance_payment_months' => 'required|integer|in:0,1,2',
+            'advance_payment_months' => 'required|integer|in:0,1,2,3,4,5',
         ]);
 
         // Find the listing

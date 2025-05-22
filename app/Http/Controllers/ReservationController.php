@@ -11,17 +11,17 @@ use Illuminate\Support\Facades\Auth;
 class ReservationController extends Controller
 {
     //Tenant side
-    public function index()
+   public function index()
+{
+    // Fetch the viewings for the authenticated user in descending order by viewing_date
+    $viewings = Viewing::where('requested_by', Auth::id())
+        ->with('listing')
+        ->orderBy('viewing_date', 'desc') // Change 'viewing_date' to 'created_at' if you want to sort by creation date
+        ->get();
 
-    {
+    return view('booking.index', compact('viewings'));
+}
 
-        // Fetch the viewings for the authenticated user
-
-        $viewings = Viewing::where('requested_by', Auth::id())->with('listing')->get();
-
-
-        return view('booking.index', compact('viewings'));
-    }
 
     public function ownerindex()
 {
@@ -100,14 +100,26 @@ public function paystore(Request $request)
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Reservation $reservation)
+    public function update(Request $request, $id)
     {
+        // Validate the incoming request data
         $request->validate([
-            'listing_id' => 'required',
-            'reservation_status' => 'required'
+            'viewing_date' => 'required|date',
+            'viewing_time' => 'required|date_format:H:i', // Assuming time is in HH:MM format
         ]);
-        $request->update();
-        return ['reservations' => $reservation];
+        // Find the viewing by ID
+        $viewing = Viewing::findOrFail($id);
+        // Check if the user is authorized to update the viewing
+        if ($viewing->requested_by !== Auth::id()) {
+            return redirect()->back()->with('error', 'You are not authorized to update this viewing.');
+        }
+        // Update the viewing details
+        $viewing->viewing_date = $request->input('viewing_date');
+        $viewing->viewing_time = $request->input('viewing_time');
+        // Do not update viewing_status
+        $viewing->save();
+        // Redirect back with a success message
+        return redirect()->route('viewings.index')->with('success', 'Viewing updated successfully.');
     }
 
     /**

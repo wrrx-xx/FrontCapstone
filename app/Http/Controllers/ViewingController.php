@@ -54,16 +54,26 @@ class ViewingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Viewing $viewing)
+   public function update(Request $request, $id)
     {
-        $field = $request->validate([
-            'listing_id' => 'required',
-            'viewing_date' => 'required',
-            'viewing_time' => 'required',
-            'viewing_status' => 'required'
-            ]);
-             $viewing->update($field);
-            return response()->json(['message' => 'Viewing updated successfully!', 'viewing' => $viewing]);
+        // Validate the incoming request data
+        $request->validate([
+            'viewing_date' => 'required|date',
+            'viewing_time' => 'required|date_format:H:i', // Assuming time is in HH:MM format
+        ]);
+        // Find the viewing by ID
+        $viewing = Viewing::findOrFail($id);
+        // Check if the user is authorized to update the viewing
+        if ($viewing->requested_by !== Auth::id()) {
+            return redirect()->back()->with('error', 'You are not authorized to update this viewing.');
+        }
+        // Update the viewing details
+        $viewing->viewing_date = $request->input('viewing_date');
+        $viewing->viewing_time = $request->input('viewing_time');
+        // Do not update viewing_status
+        $viewing->save();
+        // Redirect back with a success message
+        return redirect()->route('reserve.index')->with('success', 'Viewing updated successfully.');
     }
 
     /**
@@ -73,5 +83,20 @@ class ViewingController extends Controller
     {
         $viewing->delete();
         return ['message' => 'The Viewing was deleted'];
+    }  
+   
+public function cancel($id)
+    {
+        // Find the viewing by ID
+        $viewing = Viewing::findOrFail($id);
+        // Check if the user is authorized to cancel the viewing
+        if ($viewing->requested_by !== Auth::id()) {
+            return redirect()->back()->with('error', 'You are not authorized to cancel this viewing.');
+        }
+        // Update the viewing status to 'canceled'
+        $viewing->viewing_status = 'cancelled';
+        $viewing->save();
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Viewing canceled successfully.');
     }
 }

@@ -3,6 +3,10 @@
 @section('content')
 
 <div class="main mx-7">
+    @if (session('success') || $errors->any())
+        <!-- Feedback Modal -->
+        @include('components.feedback-modal')
+    @endif
     <div class="row">
         <div class="col-12">
             <!-- Page title -->
@@ -15,14 +19,13 @@
                             <div class="col-12 align-middle py-3">
                                 <div class="row border-bottom">
                                     <div class="col-6">
-                                        <h5>Visting Schedule</h5>
+                                        <h5>Visiting Schedule</h5>
                                     </div>
                                     <div class="col-6">
                                         <div class="row">
                                             <div class="col-4 align-middle text-body py-2">
                                                 <h5>Visit Date</h5>
                                             </div>
-                                            
                                             <div class="col-4 align-middle py-2">
                                                 <h5>Status</h5>
                                             </div>
@@ -63,9 +66,7 @@
                                             <div class="col-md-4 align-middle text-body">
                                                 {{ \Carbon\Carbon::parse($viewing->viewing_date)->format('d M Y') }}
                                                 <div class="col-md-4 align-middle text-body m-2">
-
                                                     {{ \Carbon\Carbon::parse($viewing->viewing_time)->format('h:i A') }} <!-- Format the time -->
-    
                                                 </div>
                                             </div>
                                             <!-- Badge -->
@@ -80,12 +81,20 @@
                                             </div>
                                             <!-- Buttons -->
                                             <div class="col-md-4 align-middle pt-2 pt-md-0">
-                                                <a class="btn btn-sm btn-info-soft me-1 mb-1" href="#"><i class="fas fa-fw fa-eye"></i></a>
-                                                <a class="btn btn-sm btn-success-soft me-1 mb-1" href="#"><i class="far fa-fw fa-edit"></i></a>
-                                                <form action="#" method="POST" style="display:inline;">
+                                                <button class="btn btn-sm btn-info-soft me-1 mb-1" type="button" data-bs-toggle="modal" data-bs-target="#viewingModal" data-viewing-id="{{ $viewing->id }}" data-viewing-date="{{ $viewing->viewing_date }}" data-viewing-time="{{ $viewing->viewing_time }}" title="View">
+                                                    <i class="fas fa-fw fa-eye"></i>
+                                                </button>
+                                                @if(!in_array($viewing->viewing_status, ['approved', 'declined', 'cancelled']))
+                                                <a class="btn btn-sm btn-success-soft me-1 mb-1" href="#" data-bs-toggle="modal" data-bs-target="#editViewingModal" data-viewing-id="{{ $viewing->id }}" data-viewing-date="{{ $viewing->viewing_date }}" data-viewing-time="{{ $viewing->viewing_time }}" title="Edit">
+                                                    <i class="far fa-fw fa-edit"></i>
+                                                </a>
+                                                @endif
+                                                <form action="{{ route('viewings.cancel', $viewing->id) }}" method="POST" style="display:inline;">
                                                     @csrf
-                                                    @method('DELETE')
-                                                    <button class="btn btn-sm btn-danger-soft mb-1" type="submit"><i class="far fa-fw fa-trash-alt"></i></button>
+                                                    @method('PATCH')
+                                                    <button class="btn btn-sm btn-warning-soft mb-1" type="submit" title="Cancel">
+                                                        <i class="fas fa-fw fa-times"></i>
+                                                    </button>
                                                 </form>
                                             </div>
                                         </div>
@@ -106,4 +115,79 @@
         </div>
     </div> <!-- Row END -->
 </div>
+
+<!-- Viewing Details Modal -->
+<div class="modal fade" id="viewingModal" tabindex="-1" aria-labelledby="viewingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewingModalLabel">Viewing Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Viewing details will be populated here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Viewing Modal -->
+<div class="modal fade" id="editViewingModal" tabindex="-1" aria-labelledby="editViewingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editViewingModalLabel">Edit Viewing</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+           <form action="{{ route('viewings.update', $viewing->id) }}" method="POST">
+    @csrf
+    @method('PATCH')
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="viewing_date" class="form-label">Viewing Date</label>
+                        <input type="date" class="form-control" id="viewing_date" name="viewing_date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="viewing_time" class="form-label">Viewing Time</label>
+                        <input type="time" class="form-control" id="viewing_time" name="viewing_time" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update Viewing</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section('scripts')
+<script>
+    // Populate the edit modal with the viewing details
+    var editViewingModal = document.getElementById('editViewingModal');
+    editViewingModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; // Button that triggered the modal
+        var viewingId = button.getAttribute('data-viewing-id');
+        var viewingDate = button.getAttribute('data-viewing-date');
+        var viewingTime = button.getAttribute('data-viewing-time');
+
+        // Update the modal's form action
+        var form = document.getElementById('editViewingForm');
+        form.action = '/viewings/' + viewingId; // Update the action URL
+
+        // Populate the fields with the current viewing details
+        var dateInput = document.getElementById('viewing_date');
+        var timeInput = document.getElementById('viewing_time');
+        dateInput.value = viewingDate;
+        timeInput.value = viewingTime;
+    });
+
+    @if (session('success') || $errors->any())
+    document.addEventListener('DOMContentLoaded', function() {
+        new bootstrap.Modal(document.getElementById('feedbackModal')).show();
+    });
+    @endif
+</script>
+@endsection
+
 @endsection
