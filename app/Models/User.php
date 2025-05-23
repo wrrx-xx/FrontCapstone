@@ -17,7 +17,7 @@ class User extends Authenticatable
         'lname',
         'email',
         'password',
-        'phone_number',     
+        'phone_number',
         'role',
         'owner_id',
         'profile_photo',
@@ -50,55 +50,52 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function listing(){
+    public function listing()
+    {
         return $this->hasMany(Listing::class, 'owner_id');
     }
-    public function verify(){
+    public function verify()
+    {
         return $this->hasMany(Verification::class);
     }
-    public function viewing(){
-        return $this->hasMany(Viewing::class,'requested_by');
-        }
-    public function reservation(){
-        return $this->hasMany(Reservation::class,'prospect_id');
-            }
-    public function support(){
-        return $this->hasMany(Support::class,'requested_by');
-
+    public function viewing()
+    {
+        return $this->hasMany(Viewing::class, 'requested_by');
     }
-    public function suppmess(){
-        return $this->hasMany(SupportMessages::class,'sender_id');
-
+    public function reservation()
+    {
+        return $this->hasMany(Reservation::class, 'prospect_id');
     }
-    public function mess(){
-        return $this->hasMany(Messages::class,'sender_id');
-
+    public function support()
+    {
+        return $this->hasMany(Support::class, 'requested_by');
     }
-
     public function billings()
     {
         return $this->hasMany(Billings::class, 'user_id');
     }
 
-    public function tenant(){
-        return $this->hasOne(listing::class,'tenant_id');
+    public function tenant()
+    {
+        return $this->hasOne(listing::class, 'tenant_id');
     }
     public function tenantProfile()
     {
         return $this->hasOne(TenantProfile::class, 'user_id');
     }
     public function ownerProfile()
-    {   
+    {
         return $this->hasOne(OwnerProfile::class, 'user_id');
     }
     public function processed()
     {
         return $this->hasMany(Payment::class, 'processed_by');
     }
-    public function request(){
+    public function request()
+    {
         return $this->hasMany(MaintenanceRequest::class, 'tenant_id');
     }
-    
+
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
@@ -123,7 +120,16 @@ class User extends Authenticatable
     {
         return $this->role === 'guest';
     }
-     public function listings(){
+    public function listings()
+    {
         return $this->hasMany(Listing::class, 'owner_id');
+    }
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
     }
 }

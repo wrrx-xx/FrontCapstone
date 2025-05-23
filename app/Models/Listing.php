@@ -31,10 +31,6 @@ class Listing extends Model
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
-    public function message()
-    {
-        return $this->hasMany(Messages::class);
-    }
     public function view()
     {
         return $this->hasMany(Viewing::class, 'listing_id');
@@ -57,5 +53,14 @@ class Listing extends Model
     public function inquiries()
     {
         return $this->hasMany(Inquiries::class, 'listing_id');
+    }
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+    public function caretakers()
+    {
+        // All caretakers for this listing's owner
+        return $this->hasMany(User::class, 'owner_id')->where('role', 'caretaker');
     }
 }

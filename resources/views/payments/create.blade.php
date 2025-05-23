@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="main-content">
     <div class="payment-container">
         <!-- Background Elements -->
         <div class="payment-bg-elements">
@@ -949,4 +950,5 @@
             });
         });
     </script>
+</div>
     @endsection

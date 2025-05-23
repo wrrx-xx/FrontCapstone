@@ -81,6 +81,10 @@
                             <a class="list-group-item hover-primary-soft text-light"
                                 href="{{ route('tenant.maintenance.index') }}"><i
                                     class="fas fa-fw fa-tools me-2"></i>Maintenance</a>
+                            <a class="list-group-item hover-primary-soft text-light"
+                                href="{{ route('tenant.messages.index') }}">
+                                <i class="fas fa-fw fa-envelope me-2"></i>Messages (Owner/Caretaker)
+                            </a>
                             {{-- <a class="list-group-item hover-primary-soft text-light" href="{{ route('tenant.support') }}"><i class="fas fa-fw fa-life-ring me-2"></i>Support</a> --}}
                             <p class="text-body mt-3 mb-2">Manage Account</p>
                             <a class="list-group-item hover-primary-soft text-light"
@@ -108,10 +112,9 @@
                         </div>
                     @endif
 
-
-
-                    <!-- Place the modal OUTSIDE the sidebar/container, at the end of the file -->
-
+                    <!-- Message Owner/Caretaker Link -->
+                   
+                    <!-- End Message Owner/Caretaker Link -->
                 </div>
             </div>
         </nav>

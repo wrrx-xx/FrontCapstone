@@ -226,6 +226,10 @@
                                 <i class="fas fa-fw fa-id-badge me-2"></i>My Profile
                             </a>
 
+                            <a class="list-group-item hover-primary-soft" href="{{ route('owner.messages.index') }}">
+                                <i class="fas fa-fw fa-envelope me-2"></i>Messages
+                            </a>
+
                             <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                 @csrf
                                 <button type="submit" class="list-group-item hover-primary-soft"

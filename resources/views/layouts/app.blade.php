@@ -70,7 +70,6 @@
     <script src="{{ asset('assets/vendor/chart/chart.js') }}"></script>
     <!-- Template Functions -->
     <script src="{{ asset('assets/js/functions.js') }}"></script>
-
     @stack('scripts')
 </body>
 

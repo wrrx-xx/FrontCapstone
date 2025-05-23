@@ -134,3 +134,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/admin/approvals/{id}/reject', [ApprovalController::class, 'reject'])->name('admin.approvals.reject');
     Route::get('/admin/maintenance', [OwnerMaintenance::class, 'adminIndex'])->name('admin.maintenance.index');
  });
+use App\Http\Controllers\MessageController;
+Route::middleware(['auth'])->group(function () {
+    Route::get('/tenant/messages', [MessageController::class, 'index'])->name('tenant.messages.index');
+    Route::post('/messages/send', [MessageController::class, 'send'])->name('messages.send');
+    Route::get('/messages/fetch', [MessageController::class, 'fetch'])->name('messages.fetch');
+    Route::get('/owner/messages', [MessageController::class, 'ownerIndex'])->name('owner.messages.index');
+    Route::post('/messages/typing', [MessageController::class, 'typing'])->name('messages.typing');
+    Route::get('/caretaker/messages', [MessageController::class, 'caretakerIndex'])->name('caretaker.messages.index');
+    
+});

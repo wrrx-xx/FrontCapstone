@@ -114,7 +114,10 @@
                                     <i class="fas fa-fw fa-sign-out-alt me-2"></i>Log Out
                                 </button>
                             </form>
-                        
+                            <p class="text-body mt-3 mb-2">Messages</p>
+                            <a class="list-group-item hover-primary-soft" href="{{ route('caretaker.messages.index') }}">
+                                <i class="fas fa-fw fa-envelope me-2"></i>Tenant Messages
+                            </a>
 
 
                         </div>
