@@ -84,7 +84,7 @@
                                 <!-- Secondary image -->
 
                                 <div class="splide splide-thumb"
-                                    data-splide='{"rewind":true,"fixedWidth":200,"fixedHeight":120,"isNavigation":true,"gap":10,"focus":"center","pagination":false,"cover":true,"lazyLoad":"sequential","breakpoints":{"600":{"fixedWidth":100,"fixedHeight":80}}}'>
+                                    data-splide='{"rewind":true,"fixedWidth":200,"fixedHeight":120,"isNavigation":true,"gap":10,"focus":"center","pagination":true,"cover":true,"lazyLoad":"sequential","breakpoints":{"600":{"fixedWidth":100,"fixedHeight":80}}}'>
 
                                     <div class="splide__track">
 
@@ -412,6 +412,15 @@
                                                 <span class="text-dark fw-bold">Advance Payment Required:</span>
                                                 <span class="text-danger">{{ $listing->advance_payment_months }}
                                                     month{{ $listing->advance_payment_months > 1 ? 's' : '' }}</span>
+                                                @if ($listing->advance_payment_months == 2)
+                                                    <p class="small mb-0">1 month deposit 1 month advance</p>
+                                                @elseif ($listing->advance_payment_months == 3)
+                                                    <p class="small mb-0">1 month deposit 2 month cash advance</p>
+                                                @elseif ($listing->advance_payment_months == 4)
+                                                    <p class="small mb-0">1 month deposit 3 month cash advance</p>
+                                                @elseif ($listing->advance_payment_months == 5)
+                                                    <p class="small mb-0">1 month deposit 4 month cash advance</p>
+                                                @endif
                                             </div>
                                         @else
                                             <div class="mb-3">
@@ -461,19 +470,17 @@
                                                     </div>
                                                     <div class="d-grid gap-2 mt-2">
                                                         <button type="submit" class="btn btn-primary" id="reserveButton"
-                                                            onclick="handleReserveClick(this.form)" disabled>Reserve
-                                                            Now</button>
+                                                            disabled>Reserve Now</button>
                                                     </div>
                                                     <div class="form-check mt-3">
                                                         <input class="form-check-input" type="checkbox" value=""
                                                             id="termsCheckbox">
                                                         <label class="form-check-label" for="termsCheckbox">
-                                                            I already read the <a href="#" id="openWaiverModal"
-                                                                style="text-decoration: underline; cursor: pointer;">terms
-                                                                and conditions</a> of the owner
+                                                            I already read the <button type="button" class="btn btn-link p-0 text-decoration-underline"
+                                                                data-bs-toggle="modal" data-bs-target="#waiverModal">terms
+                                                                and conditions</button> of the owner
                                                         </label>
                                                     </div>
-                                                    <x-waiver-modal :waiverFile="$listing->waiver_file" />
 
                                                 </form>
 
@@ -487,32 +494,109 @@
                 </div>
             </div>
         </section>
+
+        <!-- Waiver Modal -->
+        <div class="modal fade" id="waiverModal" tabindex="-1" aria-labelledby="waiverModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="waiverModalLabel">Terms and Conditions</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if(isset($listing->waiver_file) && $listing->waiver_file)
+                            <iframe src="{{ asset($listing->waiver_file) }}" 
+                                    width="100%" 
+                                    height="500px" 
+                                    style="border: none;">
+                                <p>Your browser does not support PDFs. 
+                                   <a href="{{ asset($listing->waiver_file) }}" target="_blank">Download the PDF</a>.
+                                </p>
+                            </iframe>
+                        @else
+                            <div class="text-center p-4">
+                                <i class="bi bi-file-earmark-text" style="font-size: 3rem; color: #6c757d;"></i>
+                                <h5 class="mt-3">No terms and conditions file available</h5>
+                                <p class="text-muted">Please contact the property owner for more information.</p>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 @endsection
-<script>
 
+@push('scripts')
+<script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Initialize elements
+        const termsCheckbox = document.getElementById('termsCheckbox');
+        const reserveButton = document.getElementById('reserveButton');
+        
+        // Auto-show feedback modal if there are messages
         @if (session('success') || $errors->any())
-            var feedbackModal = new bootstrap.Modal(document.getElementById('feedbackModal'));
+            const feedbackModal = new bootstrap.Modal(document.getElementById('feedbackModal'));
             feedbackModal.show();
         @endif
 
-        // Enable or disable reserve button based on checkbox
-        var termsCheckbox = document.getElementById('termsCheckbox');
-        var reserveButton = document.getElementById('reserveButton');
-        termsCheckbox.addEventListener('change', function() {
-            reserveButton.disabled = !this.checked;
-        });
+        // Enable/disable reserve button based on checkbox
+        if (termsCheckbox && reserveButton) {
+            termsCheckbox.addEventListener('change', function() {
+                reserveButton.disabled = !this.checked;
+            });
+        }
 
-        // Open waiver modal on link click
-        var openWaiverModal = document.getElementById('openWaiverModal');
-        var waiverModal = new bootstrap.Modal(document.getElementById('waiverModal'));
-        openWaiverModal.addEventListener('click', function(e) {
-            e.preventDefault();
-            waiverModal.show();
+        // Initialize waiver modal
+        const waiverModalElement = document.getElementById('waiverModal');
+        if (waiverModalElement) {
+            const waiverModal = new bootstrap.Modal(waiverModalElement, {
+                backdrop: true,
+                keyboard: true,
+                focus: true
+            });
+
+            // Clean up modal state when hidden
+            waiverModalElement.addEventListener('hidden.bs.modal', function () {
+                // Remove any backdrop elements that might be left behind
+                const backdrops = document.querySelectorAll('.modal-backdrop');
+                backdrops.forEach(backdrop => backdrop.remove());
+                
+                // Remove modal-open class from body
+                document.body.classList.remove('modal-open');
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+            });
+
+            // Ensure modal shows properly
+            waiverModalElement.addEventListener('show.bs.modal', function () {
+                // Clear any existing backdrop issues
+                const existingBackdrops = document.querySelectorAll('.modal-backdrop');
+                existingBackdrops.forEach(backdrop => backdrop.remove());
+            });
+        }
+
+        // Handle escape key for all modals
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Close any open modal
+                const openModals = document.querySelectorAll('.modal.show');
+                openModals.forEach(modal => {
+                    const modalInstance = bootstrap.Modal.getInstance(modal);
+                    if (modalInstance) {
+                        modalInstance.hide();
+                    }
+                });
+            }
         });
     });
 </script>
+@endpush
+
 <script src="{{ asset('assets/vendor/tiny-slider/tiny-slider.js') }}"></script>
 <script src="{{ asset('assets/vendor/sticky-js/sticky.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/glightbox/js/glightbox.js') }}"></script>
