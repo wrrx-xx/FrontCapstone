@@ -99,4 +99,48 @@ public function cancel($id)
         // Redirect back with a success message
         return redirect()->back()->with('success', 'Viewing canceled successfully.');
     }
+
+    public function suggestTime(Request $request, Viewing $viewing)
+    {
+        $request->validate([
+            'suggested_date' => 'required|date|after:today',
+            'suggested_time' => 'required',
+            'suggestion_reason' => 'required|string|max:500'
+        ]);
+
+        $viewing->update([
+            'suggested_date' => $request->suggested_date,
+            'suggested_time' => $request->suggested_time,
+            'suggestion_reason' => $request->suggestion_reason,
+            'viewing_status' => 'suggested'
+        ]);
+
+        return redirect()->back()->with('success', 'Alternative time suggested successfully.');
+    }
+
+    public function acceptSuggestion(Viewing $viewing)
+    {
+        $viewing->update([
+            'viewing_date' => $viewing->suggested_date,
+            'viewing_time' => $viewing->suggested_time,
+            'suggested_date' => null,
+            'suggested_time' => null,
+            'suggestion_reason' => null,
+            'viewing_status' => 'pending'
+        ]);
+
+        return redirect()->back()->with('success', 'Alternative time accepted successfully.');
+    }
+
+    public function declineSuggestion(Viewing $viewing)
+    {
+        $viewing->update([
+            'suggested_date' => null,
+            'suggested_time' => null,
+            'suggestion_reason' => null,
+            'viewing_status' => 'pending'
+        ]);
+
+        return redirect()->back()->with('success', 'Alternative time declined.');
+    }
 }

@@ -3,10 +3,10 @@
 @section('content')
 
 <div class="main mx-7">
-    @if (session('success') || $errors->any())
-        <!-- Feedback Modal -->
-        @include('components.feedback-modal')
-    @endif
+@if (session('success') || $errors->any())
+            <!-- Feedback Modal -->
+            @include('components.feedback-modal')
+        @endif
     <div class="row">
         <div class="col-12">
             <!-- Page title -->
@@ -102,6 +102,30 @@
                                 </div> <!-- Row END -->
                             </div>
                         </div>
+
+                        @if($viewing->suggested_date && $viewing->suggested_time)
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <div class="alert alert-info">
+                                    <h6 class="mb-2">Alternative Time Suggested</h6>
+                                    <p class="mb-2">Suggested Date: {{ \Carbon\Carbon::parse($viewing->suggested_date)->format('d M Y') }}</p>
+                                    <p class="mb-2">Suggested Time: {{ \Carbon\Carbon::parse($viewing->suggested_time)->format('h:i A') }}</p>
+                                    <p class="mb-2">Reason: {{ $viewing->suggestion_reason }}</p>
+                                    <div class="mt-2">
+                                        <form action="{{ route('viewings.accept-suggestion', $viewing->id) }}" method="POST" class="d-inline me-2">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-success">Accept Suggestion</button>
+                                        </form>
+                                        <form action="{{ route('viewings.cancel', $viewing->id)}}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-danger">Decline Suggestion</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+
                         <hr> <!-- Divider -->
                         @endforeach
 
@@ -181,13 +205,15 @@
         dateInput.value = viewingDate;
         timeInput.value = viewingTime;
     });
-
-    @if (session('success') || $errors->any())
+</script>
+@if (session('success') || $errors->any())
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         new bootstrap.Modal(document.getElementById('feedbackModal')).show();
     });
-    @endif
+    
 </script>
+@endif
 @endsection
 
 @endsection

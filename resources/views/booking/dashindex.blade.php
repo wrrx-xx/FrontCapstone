@@ -192,6 +192,9 @@
                                                                         @csrf
                                                                         <button type="submit" class="btn btn-danger">Decline</button>
                                                                     </form>
+                                                                    <button type="button" class="btn btn-info me-2" data-bs-toggle="modal" data-bs-target="#suggestTimeModal{{ $viewing->id }}">
+                                                                        Suggest Alternative Time
+                                                                    </button>
                                                                 @elseif($viewing->viewing_status == 'approved')
                                                                     <form action="{{ route('booking.decline', $viewing->id) }}" method="POST" class="me-2">
                                                                         @csrf
@@ -208,6 +211,40 @@
                                                             
                                                         </div>
                                                     </div>
+                                                </div>
+
+                                                <!-- Suggest Time Modal -->
+                                                <div class="modal fade" id="suggestTimeModal{{ $viewing->id }}" tabindex="-1" aria-labelledby="suggestTimeModalLabel{{ $viewing->id }}" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="suggestTimeModalLabel{{ $viewing->id }}">Suggest Alternative Time</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <form action="{{ route('booking.suggest-time', $viewing->id) }}" method="POST">
+                                                                @csrf
+                                                                <div class="modal-body">
+                                                                    <div class="mb-3">
+                                                                        <label for="suggested_date" class="form-label">Suggested Date</label>
+                                                                        <input type="date" class="form-control" id="suggested_date" name="suggested_date" required>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="suggested_time" class="form-label">Suggested Time</label>
+                                                                        <input type="time" class="form-control" id="suggested_time" name="suggested_time" required>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="suggestion_reason" class="form-label">Reason for Suggestion</label>
+                                                                        <textarea class="form-control" id="suggestion_reason" name="suggestion_reason" rows="3" required></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btn-primary">Send Suggestion</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

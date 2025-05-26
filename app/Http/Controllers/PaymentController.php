@@ -107,13 +107,27 @@ class PaymentController extends Controller
             // Fetch billings for the current listing and eager load utilities, then merge into the collection, order pending first
             $listingBillings = Billings::with('utility')
                 ->where('listing_id', $listing->id)
-->orderByRaw("CASE WHEN status = 'pending' THEN 0 WHEN status = 'processing' THEN 1 WHEN status = 'completed' THEN 2 WHEN status = 'failed' THEN 3 ELSE 4 END")
+                ->orderByRaw("CASE WHEN status = 'pending' THEN 0 WHEN status = 'processing' THEN 1 WHEN status = 'completed' THEN 2 WHEN status = 'failed' THEN 3 ELSE 4 END")
                 ->get();
             $billings = $billings->merge($listingBillings);
         }
 
-        // Return the view with listings, payments, and billings data
-        return view('payment.index', compact('listings', 'payments', 'billings'));
+        // Calculate monthly revenue for the last 6 months
+        $monthlyRevenue = [];
+        $currentDate = now();
+        
+        for ($i = 5; $i >= 0; $i--) {
+            $monthStart = $currentDate->copy()->subMonths($i)->startOfMonth();
+            $monthEnd = $currentDate->copy()->subMonths($i)->endOfMonth();
+            
+            $monthlyRevenue[$monthStart->format('M')] = $payments
+                ->where('status', 'completed')
+                ->whereBetween('created_at', [$monthStart, $monthEnd])
+                ->sum('amount');
+        }
+
+        // Return the view with listings, payments, billings, and monthly revenue data
+        return view('payment.index', compact('listings', 'payments', 'billings', 'monthlyRevenue'));
     }
 
     /**
@@ -406,6 +420,121 @@ class PaymentController extends Controller
             // Redirect back with error message
             return redirect()->back()->withErrors(['error' => 'An error occurred: ' . $e->getMessage()]);
         }
+    }
+
+    /**
+     * Generate PDF report of unpaid tenants for a specific month
+     */
+    public function unpaidReport(Request $request)
+    {
+        $selectedMonth = $request->input('month', now()->format('Y-m'));
+        $user = Auth::user();
+        
+        // Determine owner ID based on user role
+        $userId = $user->role === 'caretaker' ? $user->owner_id : $user->id;
+        
+        // Fetch all listings owned by the user with unpaid tenants
+        $listings = Listing::where('owner_id', $userId)
+            ->whereNotNull('tenant_id')
+            ->with(['tenant', 'billings' => function($query) use ($selectedMonth) {
+                $query->whereYear('due_date', '=', substr($selectedMonth, 0, 4))
+                      ->whereMonth('due_date', '=', substr($selectedMonth, 5, 2))
+                      ->where('status', 'pending');
+            }])
+            ->get();
+
+        $totalUnpaid = 0;
+        $unpaidTenants = collect();
+
+        foreach ($listings as $listing) {
+            $unpaidBilling = $listing->billings->first();
+            if ($unpaidBilling) {
+                $amount = $unpaidBilling->amount + $unpaidBilling->utility->sum('amount');
+                $totalUnpaid += $amount;
+                
+                $unpaidTenants->push([
+                    'property' => $listing->title,
+                    'tenant' => $listing->tenant->fname . ' ' . $listing->tenant->lname,
+                    'contact' => [
+                        'phone' => $listing->tenant->phone,
+                        'email' => $listing->tenant->email
+                    ],
+                    'due_date' => $unpaidBilling->due_date,
+                    'amount' => $amount,
+                    'rent' => $unpaidBilling->amount,
+                    'utilities' => $unpaidBilling->utility->sum('amount')
+                ]);
+            }
+        }
+
+        $data = [
+            'month' => \Carbon\Carbon::parse($selectedMonth)->format('F Y'),
+            'unpaidTenants' => $unpaidTenants,
+            'totalUnpaid' => $totalUnpaid,
+            'owner' => $user->role === 'caretaker' ? $user->owner : $user
+        ];
+
+        $pdf = PDF::loadView('reports.unpaid-tenants', $data);
+        
+        return $pdf->download('unpaid-tenants-report-' . $selectedMonth . '.pdf');
+    }
+
+    /**
+     * Download unpaid billings report
+     */
+    public function downloadUnpaidReport(Request $request)
+    {
+        $selectedMonth = $request->input('month', now()->format('Y-m'));
+        $user = Auth::user();
+        
+        // Determine owner ID based on user role
+        $userId = $user->role === 'caretaker' ? $user->owner_id : $user->id;
+        
+        // Fetch all listings owned by the user with unpaid tenants
+        $listings = Listing::where('owner_id', $userId)
+            ->whereNotNull('tenant_id')
+            ->with(['tenant', 'billings' => function($query) use ($selectedMonth) {
+                $query->whereYear('due_date', '=', substr($selectedMonth, 0, 4))
+                      ->whereMonth('due_date', '=', substr($selectedMonth, 5, 2))
+                      ->where('status', 'pending')
+                      ->with('utility');
+            }])
+            ->get();
+
+        $totalUnpaid = 0;
+        $unpaidTenants = collect();
+
+        foreach ($listings as $listing) {
+            foreach ($listing->billings as $billing) {
+                $amount = $billing->amount + $billing->utility->sum('amount');
+                $totalUnpaid += $amount;
+                
+                $unpaidTenants->push([
+                    'property' => $listing->title,
+                    'tenant' => $listing->tenant->fname . ' ' . $listing->tenant->lname,
+                    'contact' => [
+                        'phone' => $listing->tenant->phone,
+                        'email' => $listing->tenant->email
+                    ],
+                    'due_date' => $billing->due_date,
+                    'amount' => $amount,
+                    'rent' => $billing->amount,
+                    'utilities' => $billing->utility->sum('amount'),
+                    'days_overdue' => $billing->getDaysOverdue()
+                ]);
+            }
+        }
+
+        $data = [
+            'month' => \Carbon\Carbon::parse($selectedMonth)->format('F Y'),
+            'unpaidTenants' => $unpaidTenants,
+            'totalUnpaid' => $totalUnpaid,
+            'owner' => $user->role === 'caretaker' ? $user->owner : $user
+        ];
+
+        $pdf = PDF::loadView('reports.unpaid-billings', $data);
+        
+        return $pdf->download('unpaid-billings-' . $selectedMonth . '.pdf');
     }
 }
 

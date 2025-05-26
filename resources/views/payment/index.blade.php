@@ -24,6 +24,15 @@
             @endif
         </div>
 
+        <!-- Unpaid Billings Section -->
+        @if (!Auth::user()->isCaretaker())
+        <div class="row mb-4">
+            <div class="col-12">
+                <x-unpaid-billings :listings="$listings" />
+            </div>
+        </div>
+        @endif
+
         <!-- Dashboard Stats -->
         <div class="row g-4 mb-4">
             <div class="col-md-3">
@@ -471,38 +480,61 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             new bootstrap.Modal(document.getElementById('feedbackModal')).show();
-            
-            // Revenue Chart
-            var ctx = document.getElementById('revenueChart').getContext('2d');
-            var revenueChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    datasets: [{
-                        label: 'Monthly Revenue',
-                        data: [
-                            // This would be replaced with actual data in production
-                            {{ number_format($payments->where('status', 'completed')->sum('amount') * 0.2, 2) }},
-                            {{ number_format($payments->where('status', 'completed')->sum('amount') * 0.3, 2) }},
-                            {{ number_format($payments->where('status', 'completed')->sum('amount') * 0.5, 2) }},
-                            {{ number_format($payments->where('status', 'completed')->sum('amount') * 0.7, 2) }},
-                            {{ number_format($payments->where('status', 'completed')->sum('amount') * 0.9, 2) }},
-                            {{ number_format($payments->where('status', 'completed')->sum('amount'), 2) }}
-                        ],
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
         });
     </script>
 @endif
+
+<!-- Revenue Chart Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Revenue Chart
+    var ctx = document.getElementById('revenueChart');
+    if (ctx) {
+        // Get the monthly revenue data from PHP
+        var monthlyRevenue = @json($monthlyRevenue);
+        var months = Object.keys(monthlyRevenue);
+        var revenues = Object.values(monthlyRevenue);
+        
+        var revenueChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Monthly Revenue',
+                    data: revenues,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '₱' + value.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return '₱' + context.raw.toLocaleString(undefined, {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
 @endsection

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="main-content">
 <div class="container">
     <h1>Guests</h1>
     <a href="{{ route('admin.guest.create') }}" class="btn btn-primary mb-3">Add New Guest</a>
@@ -39,5 +40,6 @@
             @endforeach
         </tbody>
     </table>
+</div>
 </div>
 @endsection

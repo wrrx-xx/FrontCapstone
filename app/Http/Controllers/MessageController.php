@@ -10,33 +10,41 @@ use Pusher\Pusher;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use App\Jobs\BroadcastNewMessage;
+use Illuminate\Support\Facades\Log;
 
 class MessageController extends Controller
 {
     public function index(Request $request)
     {
+        $userId = Auth::id();
         $listingId = $request->input('listing_id');
         $listing = null;
         $owner = null;
         $tenant = null;
         $caretaker = null;
+        $chatPartners = collect();
 
+        // Get the current tenant's active listing with relationships
         if ($listingId) {
-            $listing = Listing::with('user', 'caretakers')->find($listingId);
+            $listing = Listing::with(['user', 'caretakers', 'tenant'])->find($listingId);
         } else {
-            // Get the current tenant's active listing
-            $listing = Listing::with('user', 'caretakers')
-                ->where('tenant_id', Auth::id())
+            $listing = Listing::with(['user', 'caretakers', 'tenant'])
+                ->where('tenant_id', $userId)
                 ->first();
         }
 
         if ($listing) {
-            $owner = $listing->user; // owner of the listing
-            $tenant = $listing->tenant; // assigned tenant (should be current user)
-            $caretaker = $listing->caretakers->first(); // get the first caretaker for this listing's owner
+            $owner = $listing->user;
+            $tenant = $listing->tenant;
+            $caretaker = $listing->caretakers->first();
+            // Add owner and caretaker as chat partners if they exist
+            $chatPartners = collect();
+            if ($owner) $chatPartners->push($owner);
+            if ($caretaker) $chatPartners->push($caretaker);
         }
 
-        return view('tenant.messages.index', compact('listing', 'owner', 'tenant', 'caretaker'));
+        return view('tenant.messages.index', compact('listing', 'owner', 'tenant', 'caretaker', 'chatPartners'));
     }
 
     public function send(Request $request)
@@ -54,17 +62,17 @@ class MessageController extends Controller
             'message' => $request->message,
         ]);
 
-        $options = Config::get('services.pusher.options');
-        $pusher = new Pusher(
-            Config::get('services.pusher.key'),
-            Config::get('services.pusher.secret'),
-            Config::get('services.pusher.app_id'),
-            $options
-        );
-        // Attach sender_role to the message for frontend display
+        // Load the message with relationships for complete data
+        $message->load(['sender', 'receiver', 'listing']);
+        
+        // Create the message array with all necessary data
         $messageArr = $message->toArray();
         $messageArr['sender_role'] = $message->sender ? $message->sender->role : null;
-        $pusher->trigger('chat-channel', 'new-message', $messageArr);
+        $messageArr['sender_name'] = $message->sender ? $message->sender->fname . ' ' . $message->sender->lname : null;
+        $messageArr['receiver_name'] = $message->receiver ? $message->receiver->fname . ' ' . $message->receiver->lname : null;
+
+        // Dispatch the broadcast job asynchronously
+        BroadcastNewMessage::dispatch($messageArr);
 
         return response()->json($messageArr);
     }
@@ -73,88 +81,125 @@ class MessageController extends Controller
     {
         $request->validate([
             'listing_id' => 'required|exists:listings,id',
-            'user_id' => 'required|exists:users,id', // receiver id (selected in dropdown)
+            'user_id' => 'required|exists:users,id',
         ]);
+        
         $userId = Auth::id();
         $otherUserId = $request->user_id;
 
-        // Only fetch messages between the current user and the selected recipient for this listing
-        $messages = Message::where('listing_id', $request->listing_id)
-            ->where(function($q) use ($userId, $otherUserId) {
-                $q->where(function($q2) use ($userId, $otherUserId) {
-                    $q2->where('sender_id', $userId)
-                       ->where('receiver_id', $otherUserId);
-                })->orWhere(function($q2) use ($userId, $otherUserId) {
-                    $q2->where('sender_id', $otherUserId)
-                       ->where('receiver_id', $userId);
+        try {
+            // Fetch messages with all necessary relationships
+            $messages = Message::with(['sender', 'receiver', 'listing'])
+                ->where('listing_id', $request->listing_id)
+                ->where(function($q) use ($userId, $otherUserId) {
+                    $q->where(function($q2) use ($userId, $otherUserId) {
+                        $q2->where('sender_id', $userId)
+                           ->where('receiver_id', $otherUserId);
+                    })->orWhere(function($q2) use ($userId, $otherUserId) {
+                        $q2->where('sender_id', $otherUserId)
+                           ->where('receiver_id', $userId);
+                    });
+                })
+                ->orderBy('created_at', 'asc')
+                ->get()
+                ->map(function($message) {
+                    $messageArr = $message->toArray();
+                    $messageArr['sender_role'] = $message->sender ? $message->sender->role : null;
+                    $messageArr['sender_name'] = $message->sender ? $message->sender->fname . ' ' . $message->sender->lname : null;
+                    $messageArr['receiver_name'] = $message->receiver ? $message->receiver->fname . ' ' . $message->receiver->lname : null;
+                    $messageArr['created_at'] = $message->created_at->toIso8601String();
+                    $messageArr['updated_at'] = $message->updated_at->toIso8601String();
+                    return $messageArr;
                 });
-            })
-            ->orderBy('created_at')
-            ->get();
 
-        // Attach sender_role for each message (for frontend display)
-        $messages = $messages->map(function($msg) {
-            $msgArr = $msg->toArray();
-            $msgArr['sender_role'] = $msg->sender ? $msg->sender->role : null;
-            return $msgArr;
+            return response()->json($messages);
+        } catch (\Exception $e) {
+            Log::error('Error fetching messages: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to fetch messages'], 500);
+        }
+    }
+
+    public function ownerIndex(Request $request)
+    {
+        $userId = Auth::id();
+        
+        // Fetch all messages where the owner is involved (as receiver or sender)
+        $messages = Message::with(['sender', 'receiver', 'listing'])
+            ->where(function($q) use ($userId) {
+                $q->where('receiver_id', $userId)
+                  ->orWhere('sender_id', $userId);
+            })
+            ->orderBy('created_at', 'asc')
+            ->get()
+            ->map(function($message) {
+                // Add sender_role for frontend display
+                $message->sender_role = $message->sender ? $message->sender->role : null;
+                return $message;
+            });
+
+        // Get all unique chat partners (both tenants and caretakers)
+        $chatPartners = collect($messages)->map(function($m) use ($userId) {
+            return $m->sender_id == $userId ? $m->receiver : $m->sender;
+        })->filter(function($user) use ($userId) {
+            return $user && $user->id != $userId && ($user->role === 'tenant' || $user->role === 'caretaker');
+        })->unique('id')->values();
+
+        // Get caretakers specifically
+        $caretakers = $chatPartners->filter(function($user) {
+            return $user->role === 'caretaker';
         });
 
-        return response()->json($messages);
-    }
-    public function ownerIndex(Request $request)
-{
-    // Fetch all messages where the owner is involved (as receiver or sender), eager load sender and receiver
-    $messages = Message::with(['sender', 'receiver', 'listing'])
-        ->where(function($q) {
-            $q->where('receiver_id', Auth::id())
-              ->orWhere('sender_id', Auth::id());
-        })
-        ->orderBy('created_at', 'asc')
-        ->get();
-    // Get all unique chat partners (tenants) for the sidebar
-    $userId = Auth::id();
-    $tenants = collect($messages)->map(function($m) use ($userId) {
-        // Only show tenants (not the owner themselves)
-        return $m->sender_id == $userId ? $m->receiver : $m->sender;
-    })->filter(function($user) use ($userId) {
-        return $user && $user->id != $userId;
-    })->unique('id')->values();
+        // Get tenants specifically
+        $tenants = $chatPartners->filter(function($user) {
+            return $user->role === 'tenant';
+        });
 
-    // Send all messages to Pusher for real-time sync (optional, only if you want to broadcast all on load)
-    $options = Config::get('services.pusher.options');
-    $pusher = new Pusher(
-        Config::get('services.pusher.key'),
-        Config::get('services.pusher.secret'),
-        Config::get('services.pusher.app_id'),
-        $options
-    );
-    foreach ($messages as $msg) {
-        $pusher->trigger('chat-channel', 'new-message', $msg->toArray());
+        return view('owner.messages.index', compact('messages', 'tenants', 'caretakers', 'chatPartners'));
     }
 
-    return view('owner.messages.index', compact('messages', 'tenants'));
-}
-public function caretakerIndex(Request $request)
+    public function caretakerIndex(Request $request)
     {
-        // Fetch all messages where the caretaker is involved (as receiver or sender), eager load sender and receiver
+        $userId = Auth::id();
+        
+        // Fetch the caretaker user with their owner relationship
+        $caretaker = User::with(['owner'])->find($userId);
+        $owner = $caretaker->owner; // Get the owner directly from the relationship
+        
+        // Get the listing associated with the care@taker
+        $listing = Listing::whereHas('caretakers', function($query) use ($userId) {
+            $query->where('users.id', $userId);
+        })->first();
+
+        // Fetch all messages where the caretaker is involved
         $messages = Message::with(['sender', 'receiver', 'listing'])
-            ->where(function($q) {
-                $q->where('receiver_id', Auth::id())
-                  ->orWhere('sender_id', Auth::id());
+            ->where(function($q) use ($userId) {
+                $q->where('receiver_id', $userId)
+                  ->orWhere('sender_id', $userId);
             })
             ->orderBy('created_at', 'asc')
             ->get();
-        // Get all unique chat partners (tenants) for the sidebar
-        $userId = Auth::id();
-        $tenants = collect($messages)->map(function($m) use ($userId) {
+
+        // Get all unique chat partners
+        $chatPartners = collect($messages)->map(function($m) use ($userId) {
             return $m->sender_id == $userId ? $m->receiver : $m->sender;
         })->filter(function($user) use ($userId) {
             return $user && $user->id != $userId;
         })->unique('id')->values();
 
-        return view('caretaker.messages.index', compact('messages', 'tenants'));
+        // Add owner to chat partners if not already present
+        if ($owner && !$chatPartners->contains('id', $owner->id)) {
+            $chatPartners->push($owner);
+        }
+
+        return view('caretaker.messages.index', [
+            'messages' => $messages,
+            'tenants' => $chatPartners,
+            'owner' => $owner,
+            'listing' => $listing,
+        ]);
     }
-public function typing(Request $request)
+
+    public function typing(Request $request)
     {
         $request->validate([
             'receiver_id' => 'required|exists:users,id',
@@ -166,32 +211,10 @@ public function typing(Request $request)
         $cacheKey = "typing_{$request->listing_id}_{$request->receiver_id}_{$request->user()->id}";
         
         if ($request->typing) {
-            Cache::put($cacheKey, true, now()->addSeconds(5));
+            Cache::put($cacheKey, true, now()->addSeconds(.05));
         } else {
             Cache::forget($cacheKey);
         }
-
-        // Broadcast typing event
-        $pusher = new Pusher(
-            env('PUSHER_APP_KEY'),
-            env('PUSHER_APP_SECRET'),
-            env('PUSHER_APP_ID'),
-            [
-                'cluster' => env('PUSHER_APP_CLUSTER'),
-                'host' => env('PUSHER_HOST'),
-                'port' => env('PUSHER_PORT'),
-                'scheme' => env('PUSHER_SCHEME', 'http'),
-                'encrypted' => env('PUSHER_SCHEME') === 'https',
-            ]
-        );
-
-        $pusher->trigger('chat-channel', 'user-typing', [
-            'sender_id' => Auth::id(),
-            'receiver_id' => $request->receiver_id,
-            'listing_id' => $request->listing_id,
-            'typing' => $request->typing,
-            'timestamp' => now()->toISOString()
-        ]);
 
         return response()->json([
             'success' => true,
@@ -202,5 +225,4 @@ public function typing(Request $request)
     /**
      * Get current typing users (optional endpoint)
      */
-
 }

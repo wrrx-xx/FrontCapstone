@@ -13,10 +13,20 @@ class ReservationController extends Controller
     //Tenant side
    public function index()
 {
-    // Fetch the viewings for the authenticated user in descending order by viewing_date
+    // Fetch the viewings for the authenticated user
     $viewings = Viewing::where('requested_by', Auth::id())
         ->with('listing')
-        ->orderBy('viewing_date', 'desc') // Change 'viewing_date' to 'created_at' if you want to sort by creation date
+        ->orderByRaw("
+            CASE viewing_status 
+                WHEN 'pending' THEN 1
+                WHEN 'approved' THEN 2
+                WHEN 'declined' THEN 3
+                WHEN 'cancelled' THEN 4
+                WHEN 'suggested' THEN 5
+                ELSE 6
+            END
+        ")
+        ->orderBy('viewing_date', 'desc')
         ->get();
 
     return view('booking.index', compact('viewings'));

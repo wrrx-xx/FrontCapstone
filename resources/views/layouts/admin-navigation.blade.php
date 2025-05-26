@@ -142,6 +142,12 @@
                                             class="badge bg-danger rounded-pill">{{ $pendingMaintenanceCount }}</span>
                                     @endif
                                 </a>
+                                <!-- <div class="list-group list-group-flush">
+    <a class="list-group-item hover-primary-soft" href="{{ route('admin.transaction-logs.index') }}">
+        <i class="fas fa-fw fa-history me-2"></i>All Transaction Logs
+    </a>
+   
+</div> -->
                             {{-- <a class="list-group-item hover-primary-soft" href="agent-review.html"><i
                                     class="far fa-fw fa-comment-dots me-2"></i>Review</a> --}}
 
@@ -162,9 +168,7 @@
                             </div>
                                <a class="list-group-item hover-primary-soft" href="{{ route('admin.approvals.index') }}"><i
                                     class="fas fa-fw fa-user-check me-2"></i>Pending Approvals</a>
-    
                                 
-    
                             <p class="text-body mt-3 mb-2">Manage Account</p>
                             <a class="list-group-item hover-primary-soft" href="{{route('profile.edit')}}"><i
                                     class="fas fa-fw fa-user-alt me-2"></i>My Profile</a>

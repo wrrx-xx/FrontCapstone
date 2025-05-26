@@ -57,4 +57,36 @@ class Billings extends Model
         return $this->belongsTo(Payment::class);
     }
     
+    /**
+     * Check if the billing is overdue
+     * 
+     * @return bool
+     */
+    public function isOverdue()
+    {
+        return $this->status === 'pending' && $this->due_date->isPast();
+    }
+
+    /**
+     * Get the total amount including utilities
+     * 
+     * @return float
+     */
+    public function getTotalAmount()
+    {
+        return $this->amount + $this->utility->sum('amount');
+    }
+
+    /**
+     * Get the number of days overdue
+     * 
+     * @return int|null
+     */
+    public function getDaysOverdue()
+    {
+        if ($this->isOverdue()) {
+            return now()->diffInDays($this->due_date);
+        }
+        return null;
+    }
 }

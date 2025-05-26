@@ -14,7 +14,7 @@ use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PhotosController;
 use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\ReviewsController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\SupportMessagesController;
 use App\Http\Controllers\TenantController;
@@ -41,13 +41,11 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Listing as ControllersListing;
-
-Route::get('/', [HomeController::class, 'filteredListings']);
-
+use App\Http\Controllers\Admin\TransactionLogController;
 
 use App\Http\Controllers\Owner;
 
-Route::get('/owner/dashboard', [Owner::class, 'index'])->middleware(['auth', 'verified'])->name('owner.dashboard');
+Route::get('/', [HomeController::class, 'filteredListings']);
 
 
 Route::middleware(['auth','verified'])->group(function () {
@@ -60,6 +58,11 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('/tenant/support', [SupportMessagesController::class, 'index'])->name('tenant.support');
     Route::patch('/viewings/{id}/cancel', [ViewingController::class, 'cancel'])->name('viewings.cancel');
     Route::patch('/viewings/{viewing}', [ViewingController::class, 'update'])->name('viewings.update');
+    Route::post('/viewings/{viewing}/suggest-time', [ViewingController::class, 'suggestTime'])->name('booking.suggest-time');
+    Route::post('/viewings/{viewing}/accept-suggestion', [ViewingController::class, 'acceptSuggestion'])->name('viewings.accept-suggestion');
+    Route::post('/viewings/{viewing}/decline-suggestion', [ViewingController::class, 'declineSuggestion'])->name('viewings.decline-suggestion');
+    Route::get('/owner/dashboard', [Owner::class, 'index'])->middleware(['auth', 'verified'])->name('owner.dashboard');
+
 });
 
 Route::middleware(['auth','verified','admin'])->group(function () {
@@ -71,7 +74,12 @@ Route::middleware(['auth','verified','admin'])->group(function () {
     Route::resource('admin/guests', AdminGuestController::class)->names('admin.guest');
     Route::resource('admin/bookings',AdminBookingController::class)->names('admin.booking');
     Route::get('admin/reservations',[AdminBookingController::class, 'adminIndex'])->name('admin.reservation.index');
-Route::get('admin/payments',[PaymentController::class, 'adminIndex'])->name('admin.payment.index');
+    Route::get('admin/payments',[PaymentController::class, 'adminIndex'])->name('admin.payment.index');
+    
+    // Transaction Logs Routes
+    Route::get('admin/transaction-logs', [TransactionLogController::class, 'index'])->name('admin.transaction-logs.index');
+    Route::get('admin/transaction-logs/{id}', [TransactionLogController::class, 'show'])->name('admin.transaction-logs.show');
+    Route::get('admin/transaction-logs/export', [TransactionLogController::class, 'export'])->name('admin.transaction-logs.export');
 });
 Route::get('/listing', function () {
     $listings = Listing::paginate(10);
@@ -144,3 +152,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/caretaker/messages', [MessageController::class, 'caretakerIndex'])->name('caretaker.messages.index');
     
 });
+
+Route::post('/listings/{id}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+
+Route::get('/payment/unpaid-report', [PaymentController::class, 'unpaidReport'])->name('payment.unpaid-report');
+
+// Unpaid Billings Report Download
+Route::get('/payment/unpaid/download', [PaymentController::class, 'downloadUnpaidReport'])
+    ->name('payment.unpaid.download')
+    ->middleware(['auth']);

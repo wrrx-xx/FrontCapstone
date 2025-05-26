@@ -15,7 +15,10 @@ class Viewing extends Model
         'requested_by',
         'viewing_date',
         'viewing_time',
-        'viewing_status'
+        'viewing_status',
+        'suggested_date',
+        'suggested_time',
+        'suggestion_reason'
     ];
 
     public function  listing(){

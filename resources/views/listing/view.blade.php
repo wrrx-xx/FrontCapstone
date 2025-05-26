@@ -383,6 +383,68 @@
 
                         </div>
 
+                        <div class="row g-0 mt-5" id="review">
+                            <div class="col-12 border rounded p-4">
+                                <div class="row">
+                                    <div class="mb-4">
+                                        <h3>Reviews & Ratings</h3>
+                                    </div>
+
+                                    <!-- Rating Form -->
+                                    @auth
+                                        @if(Auth::user()->id !== $listing->owner_id)
+                                            <div class="card mb-4">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Write a Review</h5>
+                                                    <form action="{{ route('reviews.store', $listing->id) }}" method="POST">
+                                                        @csrf
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Rating</label>
+                                                            <div class="rating">
+                                                                <input type="radio" name="rating" value="5" id="5" required><label for="5">☆</label>
+                                                                <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+                                                                <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+                                                                <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+                                                                <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="comment" class="form-label">Your Review</label>
+                                                            <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endauth
+
+                                    <!-- Reviews List -->
+                                    <div class="reviews-list">
+                                        @forelse($listing->reviews as $review)
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <h6 class="card-subtitle mb-2 text-muted">
+                                                            {{ $review->user->fname }} {{ $review->user->lname }}
+                                                        </h6>
+                                                        <div class="rating-display">
+                                                            @for($i = 1; $i <= 5; $i++)
+                                                                <span class="star {{ $i <= $review->rating ? 'filled' : '' }}">☆</span>
+                                                            @endfor
+                                                        </div>
+                                                    </div>
+                                                    <p class="card-text">{{ $review->comment }}</p>
+                                                    <small class="text-muted">{{ $review->created_at->format('M d, Y') }}</small>
+                                                </div>
+                                            </div>
+                                        @empty
+                                            <p class="text-center text-muted">No reviews yet. Be the first to review this property!</p>
+                                        @endforelse
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -601,3 +663,52 @@
 <script src="{{ asset('assets/vendor/sticky-js/sticky.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/glightbox/js/glightbox.js') }}"></script>
 <script src="{{ asset('assets/vendor/splide-master/dist/js/splide.min.js') }}"></script>
+
+<style>
+    /* Rating Stars Styling */
+    .rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+    }
+
+    .rating input {
+        display: none;
+    }
+
+    .rating label {
+        cursor: pointer;
+        font-size: 30px;
+        color: #ddd;
+        padding: 5px;
+    }
+
+    .rating input:checked ~ label,
+    .rating label:hover,
+    .rating label:hover ~ label {
+        color: #ffd700;
+    }
+
+    .rating-display {
+        display: flex;
+        gap: 2px;
+    }
+
+    .rating-display .star {
+        font-size: 20px;
+        color: #ddd;
+    }
+
+    .rating-display .star.filled {
+        color: #ffd700;
+    }
+
+    .reviews-list .card {
+        transition: transform 0.2s;
+    }
+
+    .reviews-list .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+</style>

@@ -63,4 +63,44 @@ class Listing extends Model
         // All caretakers for this listing's owner
         return $this->hasMany(User::class, 'owner_id')->where('role', 'caretaker');
     }
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Get unpaid billings for a specific month
+     * 
+     * @param string|null $month Format: Y-m (e.g., '2024-03')
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getUnpaidBillings($month = null)
+    {
+        $query = $this->billings()
+            ->where('status', 'pending')
+            ->with(['utility', 'user']);
+
+        if ($month) {
+            $query->whereYear('due_date', substr($month, 0, 4))
+                  ->whereMonth('due_date', substr($month, 5, 2));
+        }
+
+        return $query->get();
+    }
+
+    /**
+     * Get all unpaid billings grouped by month
+     * 
+     * @return \Illuminate\Support\Collection
+     */
+    public function getUnpaidBillingsByMonth()
+    {
+        return $this->billings()
+            ->where('status', 'pending')
+            ->with(['utility', 'user'])
+            ->get()
+            ->groupBy(function($billing) {
+                return $billing->due_date->format('Y-m');
+            });
+    }
 }

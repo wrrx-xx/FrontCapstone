@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Reviews;
-use App\Http\Requests\StoreReviewsRequest;
-use App\Http\Requests\UpdateReviewsRequest;
+use App\Models\Review;
+use App\Models\Listing;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class ReviewsController extends Controller
+class ReviewController extends Controller
 {
-    public function store(Request $request, Listing $listing)
+    public function store(Request $request, $id)
     {
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'required|string|min:10|max:500'
+            'comment' => 'required|string|min:5|max:500'
         ]);
+
+        $listing = Listing::findOrFail($id);
 
         // Check if user has already reviewed this listing
         $existingReview = Review::where('listing_id', $listing->id)
