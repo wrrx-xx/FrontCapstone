@@ -65,8 +65,9 @@
                                                 <!-- Info -->
                                                 <div class="col-xl-9 pt-2 pt-xl-0">
                                                     <h6 class="mb-1">{{ $reservation->listing->title }}</h6>
-                                                    <p class="mb-1 text-body">{{ Str::limit($reservation->listing->body, 100) }}</p>
-                                                    <span class="text-success">${{ $reservation->listing->price }}</span>
+                                                    <p class="mb-1 text-body">{{ Str::limit($reservation->listing->baranggay, 100) }}</p>
+                                                    <p class="mb-1 text-body">{{ Str::limit($reservation->listing->address, 100) }}</p>
+                                                    <span class="text-success">₱{{ $reservation->listing->price }}</span>
                                                 </div>
                                             </div>
                                         </div>

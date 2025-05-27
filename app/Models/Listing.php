@@ -68,6 +68,12 @@ class Listing extends Model
         return $this->hasMany(Review::class);
     }
 
+    // Add payments relationship
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     /**
      * Get unpaid billings for a specific month
      * 

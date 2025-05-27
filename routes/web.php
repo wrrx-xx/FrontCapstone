@@ -15,6 +15,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PhotosController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\SalesController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\SupportMessagesController;
 use App\Http\Controllers\TenantController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\ViewingController;
 use App\Http\Controllers\Admin\ApprovalController;
+use App\Http\Controllers\Admin\SalesController as AdminSalesController;
 use App\Http\Controllers\AdminBookingController;
 use App\Http\Controllers\AdminCaretakerController;
 use App\Http\Controllers\AdminController;
@@ -80,6 +82,8 @@ Route::middleware(['auth','verified','admin'])->group(function () {
     Route::get('admin/transaction-logs', [TransactionLogController::class, 'index'])->name('admin.transaction-logs.index');
     Route::get('admin/transaction-logs/{id}', [TransactionLogController::class, 'show'])->name('admin.transaction-logs.show');
     Route::get('admin/transaction-logs/export', [TransactionLogController::class, 'export'])->name('admin.transaction-logs.export');
+    
+    Route::get('admin/sales', [SalesController::class, 'adminIndex'])->name('admin.sales.index');
 });
 Route::get('/listing', function () {
     $listings = Listing::paginate(10);
@@ -118,6 +122,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('/utilitybill', UtilityBillsController::class);
     Route::resource('owner/maintenance/request', OwnerMaintenance::class)->names('owner.maintenance');
     Route::post('/tenant/rental/{listing}/leave', [ListingController::class, 'leave'])->name('tenant.rental.leave');
+    Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
+    Route::get('/sales/payments', [SalesController::class, 'payments'])->name('sales.payments');
+    Route::get('/sales/payments/{payment}', [SalesController::class, 'show'])->name('sales.payments.show');
+    Route::get('/api/payments/{payment}', [SalesController::class, 'getPaymentDetails'])->name('api.payments.details');
     
     // Owner/Caretaker leave request management
    
@@ -141,6 +149,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/approvals/{id}/approve', [ApprovalController::class, 'approve'])->name('admin.approvals.approve');
     Route::delete('/admin/approvals/{id}/reject', [ApprovalController::class, 'reject'])->name('admin.approvals.reject');
     Route::get('/admin/maintenance', [OwnerMaintenance::class, 'adminIndex'])->name('admin.maintenance.index');
+    
  });
 use App\Http\Controllers\MessageController;
 Route::middleware(['auth'])->group(function () {

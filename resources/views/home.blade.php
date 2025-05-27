@@ -587,10 +587,10 @@ Property START -->
 						<!-- Badge and icon -->
 						<div class="d-flex justify-content-between">
 							<div>
-								<a href="#" class="badge bg-primary-soft text-primary"><i class="fas fa-user-friends pe-1"></i>Family</a>
+				
 								<a href="#" class="badge bg-danger-soft text-danger"><i class="fas fa-rupee-sign pe-1"></i>{{ $listing->type }}</a>
 							</div>
-							<a href="#"><i class="fas fa-heart fa-fw text-danger ms-auto"></i></a>
+					
 						</div>
 						<!-- Title -->
 						<h4 class="card-title mt-3">

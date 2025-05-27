@@ -166,6 +166,7 @@ public function paystore(Request $request)
 
     public function approve($id)
 {
+        
     $reservation = Reservation::findOrFail($id);
     
     // Redirect to the payment form with the reservation ID

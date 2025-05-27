@@ -4,7 +4,17 @@
     <div class="d-flex justify-content-between align-items-center">
         <!-- Logo -->
         <a class="navbar-brand d-flex align-items-center py-2" href="{{route('caretaker.dashboard')}}">
-            <img class="navbar-brand-item" src="{{ asset('assets/images/logo2.png') }}" alt="logo">
+            <svg width="200" height="80" viewBox="0 0 320 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="320" height="80" rx="18" />
+                <!-- Icon: stylized compass/arrow -->
+                <g>
+                    <circle cx="40" cy="40" r="28" fill="#E3F0FF" stroke="#1A3A6B" stroke-width="3" />
+                    <polygon points="40,20 48,48 40,40 32,48" fill="#2563EB" stroke="#1A3A6B" stroke-width="2" />
+                    <circle cx="40" cy="56" r="2.5" fill="#2563EB" />
+                </g>
+                <!-- Text -->
+                <text x="80" y="54" font-family="Montserrat, Arial, sans-serif" font-size="38" font-weight="bold" fill="#1A3A6B" letter-spacing="2">Boardeast</text>
+            </svg>
         </a>
 
         <!-- Navbar right -->
@@ -20,16 +30,9 @@
                 </form>
             </li>
             <!-- Icon -->
-            <li class="list-inline-item me-2 me-sm-3"> <a href="#" class="text-dark"><i
+            <li class="list-inline-item me-2 me-sm-3"> <a href="{{ route('caretaker.messages.index') }}" class="text-dark"><i
                         class="far fa-envelope"></i></a></li>
-            <li class="list-inline-item me-2 me-sm-3">
-                <a href="#" class="text-dark position-relative">
-                    <i class="far fa-bell"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger p-1">
-                        <span class="visually-hidden">unread messages</span>
-                    </span>
-                </a>
-            </li>
+
             <!-- Dropdown avatar -->
             <li class="list-inline-item">
                 <a href="#" class="btn-link" role="button" id="dropdownAvatar" data-bs-toggle="dropdown"
@@ -39,9 +42,13 @@
                 <!-- Dropdown list -->
                 <ul class="dropdown-menu min-w-auto" aria-labelledby="dropdownAvatar">
                     <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
-                    <li><a class="dropdown-item" href="#">Setting</a></li>
-                    <li><a class="dropdown-item" href="#">My Wallet</a></li>
-                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="dropdown-item">Sign out</button>
+                        </form>
+                    </li>
+
                 </ul>
             </li>
             <!-- Toggle button -->
@@ -70,54 +77,55 @@
                                     class="fas fa-fw fa-tachometer-alt me-2"></i>Dashboard</a>
 
                             <p class="text-body mt-3 mb-2">Manage Listing</p>
-                          
+
                             <a class="list-group-item hover-primary-soft"
                                 href="{{ route('listing.myproperty', ['id' => auth()->user()->id]) }}"><i
                                     class="fas fa-fw fa-home me-2"></i>Properties</a>
 
-                                    <a class="list-group-item hover-primary-soft d-flex justify-content-between align-items-center" href="{{ route('booking.owner') }}">
-                                        <span><i class="fas fa-fw fa-calendar-check me-2"></i>Bookings</span>
-                                        @php
-                                            $pendingBookingsCount = App\Models\Viewing::getPendingCount();
-                                        @endphp
-                                        @if($pendingBookingsCount > 0)
-                                            <span class="badge bg-danger rounded-pill">{{ $pendingBookingsCount }}</span>
-                                        @endif
-                                    </a>
-                                    <a class="list-group-item hover-primary-soft" href="{{ route('reservations.index') }}"><i
-                                        class="fas fa-fw fa-users me-2"></i>Reservations</a>
-                                        <a class="list-group-item hover-primary-soft" href="{{ route('payment.owner') }}">
-                                            <i class="fas fa-fw fa-wallet me-2"></i>Payments
-                                        </a>
-                                        <a class="list-group-item hover-primary-soft d-flex justify-content-between align-items-center"
-                                        href="{{ route('owner.maintenance.index') }}">
-                                        <span><i class="fas fa-fw fa-tools me-2"></i>Maintenance Requests</span>
-                                        @if (isset($pendingMaintenanceCountCaretaker) && $pendingMaintenanceCountCaretaker > 0)
-                                            <span
-                                                class="badge bg-danger rounded-pill">{{ $pendingMaintenanceCountCaretaker }}</span>
-                                        @endif
-                                    </a>
+                            <a class="list-group-item hover-primary-soft d-flex justify-content-between align-items-center" href="{{ route('booking.owner') }}">
+                                <span><i class="fas fa-fw fa-calendar-check me-2"></i>Bookings</span>
+                                @php
+                                $pendingBookingsCount = App\Models\Viewing::getPendingCount();
+                                @endphp
+                                @if($pendingBookingsCount > 0)
+                                <span class="badge bg-danger rounded-pill">{{ $pendingBookingsCount }}</span>
+                                @endif
+                            </a>
+                            <a class="list-group-item hover-primary-soft" href="{{ route('reservations.index') }}"><i
+                                    class="fas fa-fw fa-users me-2"></i>Reservations</a>
+                            <a class="list-group-item hover-primary-soft" href="{{ route('payment.owner') }}">
+                                <i class="fas fa-fw fa-wallet me-2"></i>Payments
+                            </a>
+                            <a class="list-group-item hover-primary-soft d-flex justify-content-between align-items-center"
+                                href="{{ route('owner.maintenance.index') }}">
+                                <span><i class="fas fa-fw fa-tools me-2"></i>Maintenance Requests</span>
+                                @if (isset($pendingMaintenanceCountCaretaker) && $pendingMaintenanceCountCaretaker > 0)
+                                <span
+                                    class="badge bg-danger rounded-pill">{{ $pendingMaintenanceCountCaretaker }}</span>
+                                @endif
+                            </a>
+                            <p class="text-body mt-3 mb-2">Messages</p>
+                            <a class="list-group-item hover-primary-soft" href="{{ route('caretaker.messages.index') }}">
+                                <i class="fas fa-fw fa-envelope me-2"></i>Tenant Messages
+                            </a>
+
                             {{-- <a class="list-group-item hover-primary-soft" href="agent-review.html"><i
                                     class="far fa-fw fa-comment-dots me-2"></i>Review</a> --}}
 
                             {{-- <p class="text-body mt-3 mb-2">Messages</p>
                             <a class="list-group-item hover-primary-soft" href="{{ route('suppmess.index') }}"><i class="fas fa-fw fa-envelope me-2"></i>Message</a>
- --}}
+                            --}}
                             <p class="text-body mt-3 mb-2">Manage Account</p>
                             <a class="list-group-item hover-primary-soft" href="{{ route('profile.edit') }}"><i
                                     class="fas fa-fw fa-user-alt me-2"></i>My Profile</a>
-                          
-                                <form action="{{ route('logout') }}" method="POST" class="d-inline">
+
+                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                 @csrf
                                 <button type="submit" class="list-group-item hover-primary-soft"
                                     style="border: none; background: none; cursor: pointer;">
                                     <i class="fas fa-fw fa-sign-out-alt me-2"></i>Log Out
                                 </button>
                             </form>
-                            <p class="text-body mt-3 mb-2">Messages</p>
-                            <a class="list-group-item hover-primary-soft" href="{{ route('caretaker.messages.index') }}">
-                                <i class="fas fa-fw fa-envelope me-2"></i>Tenant Messages
-                            </a>
 
 
                         </div>

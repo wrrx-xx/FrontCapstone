@@ -51,7 +51,10 @@ class BookingsController extends Controller
         'reservation_status' => 'pending', // Default status
     ]);
 
-        return redirect()->route('reservations.index')->with('success', 'Viewing request accepted successfully!');
+    return redirect()->route(
+        Auth::user()->role === 'admin' ? 'admin.reservation.index' : 'reservations.index'
+    )->with('success', 'Viewing request accepted successfully!');
+    
     }
 
 

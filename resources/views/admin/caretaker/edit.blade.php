@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="main-content">
 <div class="container py-5">
     <div class="card shadow-sm border-0 rounded-lg">
         <div class="card-header bg-gradient-primary text-white p-4">
@@ -144,5 +145,6 @@
     <div class="text-center mt-3 text-muted small">
         <p>Last updated: {{ $caretaker->updated_at->format('F d, Y at h:i A') }}</p>
     </div>
+</div>
 </div>
 @endsection

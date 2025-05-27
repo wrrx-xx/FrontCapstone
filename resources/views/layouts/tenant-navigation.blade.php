@@ -5,7 +5,17 @@
     <div class="d-flex justify-content-between align-items-center">
         <!-- Logo -->
         <a class="navbar-brand d-flex align-items-center py-2" href="{{ route('tenant.dashboard') }}">
-            <img class="navbar-brand-item" src="{{ asset('assets/images/logo2.png') }}" alt="logo">
+            <svg width="200" height="80" viewBox="0 0 320 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="320" height="80" rx="18" />
+  <!-- Icon: stylized compass/arrow -->
+  <g>
+    <circle cx="40" cy="40" r="28" fill="#E3F0FF" stroke="#1A3A6B" stroke-width="3"/>
+    <polygon points="40,20 48,48 40,40 32,48" fill="#2563EB" stroke="#1A3A6B" stroke-width="2"/>
+    <circle cx="40" cy="56" r="2.5" fill="#2563EB"/>
+  </g>
+  <!-- Text -->
+  <text x="80" y="54" font-family="Montserrat, Arial, sans-serif" font-size="38" font-weight="bold" fill="#1A3A6B" letter-spacing="2">Boardeast</text>
+</svg>
         </a>
 
         <!-- Navbar right -->

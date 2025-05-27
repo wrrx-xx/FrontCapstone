@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="main-content">
 <div class="container py-5">
     <!-- Header with animated gradient background -->
     <div class="card shadow-lg mb-5">
@@ -223,7 +224,7 @@
         </div>
     </div>
 </div>
-
+</div>
 <script>
 // Form validation
 (function () {

@@ -313,12 +313,7 @@
                                                             <!-- Meta -->
                                                             <div class="d-flex justify-content-between">
                                                                 <a href="#" class="badge bg-orange">{{ $listing->availability }}</a>
-                                                                <div>
-                                                                    <a href="#" class="badge bg-primary me-2"><i
-                                                                            class="fas fa-user-friends pe-1"></i>Family</a>
-                                                                    <a href="#" class="badge bg-danger"><i
-                                                                            class="fas fa-rupee-sign pe-1"></i>Sale</a>
-                                                                </div>
+                                                              
                                                             </div>
                                                         </div>
                                                         <!-- Title -->
