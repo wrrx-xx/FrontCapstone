@@ -176,7 +176,7 @@
                             <!-- Valid ID Front -->
                             <p><strong>Valid ID Front:</strong></p>
                             @if ($listing->tenant->tenantProfile->valid_id_front_path)
-                                <img src="{{ asset('storage/' . $listing->tenant->tenantProfile->valid_id_front_path) }}" alt="Valid ID Front" class="img-fluid" style="max-width: 100%; height: auto;">
+                                <img src="{{ asset( $listing->tenant->tenantProfile->valid_id_front_path) }}" alt="Valid ID Front" class="img-fluid" style="max-width: 100%; height: auto;">
                             @else
                                 <p>N/A</p>
                             @endif
@@ -184,7 +184,7 @@
                             <!-- Valid ID Back -->
                             <p><strong>Valid ID Back:</strong></p>
                             @if ($listing->tenant->tenantProfile->valid_id_back_path)
-                                <img src="{{ asset('storage/' . $listing->tenant->tenantProfile->valid_id_back_path) }}" alt="Valid ID Back" class="img-fluid" style="max-width: 100%; height: auto;">
+                                <img src="{{ asset($listing->tenant->tenantProfile->valid_id_back_path) }}" alt="Valid ID Back" class="img-fluid" style="max-width: 100%; height: auto;">
                             @else
                                 <p>N/A</p>
                             @endif

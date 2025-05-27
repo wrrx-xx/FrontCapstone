@@ -449,6 +449,10 @@ public function leaveRequests()
             ->where('status', 'pending')
             ->update(['status' => 'failed']);
 
+        // Set all cash advance to 0 for the tenant in payments
+        \App\Models\Payment::where('id', $leaveRequest->tenant_id)
+            ->update(['cash_advance_amount' => 0, 'cash_advance_used' => 0]);
+
         // Approve the leave request
         $leaveRequest->status = 'approved';
         $leaveRequest->save();
