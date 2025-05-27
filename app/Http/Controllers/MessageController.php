@@ -44,7 +44,7 @@ class MessageController extends Controller
             if ($caretaker) $chatPartners->push($caretaker);
         }
 
-        return view('tenant.messages.index', compact('listing', 'owner', 'tenant', 'caretaker', 'chatPartners'));
+        return view('Tenant.messages.index', compact('listing', 'owner', 'tenant', 'caretaker', 'chatPartners'));
     }
 
     public function send(Request $request)
