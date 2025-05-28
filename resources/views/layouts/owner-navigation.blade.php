@@ -14,7 +14,7 @@
                 </g>
                 <!-- Text -->
                 <text x="80" y="54" font-family="Montserrat, Arial, sans-serif" font-size="38" font-weight="bold"
-                    fill="#1A3A6B" letter-spacing="2">boardeast</text>
+                    fill="#1A3A6B" letter-spacing="2">boardease</text>
             </svg>
         </a>
 

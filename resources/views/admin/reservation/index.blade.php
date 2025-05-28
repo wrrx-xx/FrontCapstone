@@ -2,6 +2,10 @@
 
 @section('content')
 <div class="main-content">
+@if (session('success') || $errors->any())
+    <!-- Feedback Modal -->
+    @include('components.feedback-modal')
+    @endif
     <div class="row">
         <div class="col-12">
             <div class="row">
@@ -113,6 +117,13 @@
             <!-- Reservations list END -->
         </div>
     </div> <!-- Row END -->
+    @if (session('success') || $errors->any())
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        new bootstrap.Modal(document.getElementById('feedbackModal')).show();
+                    });
+                </script>
+            @endif
 </div>
 
 @endsection

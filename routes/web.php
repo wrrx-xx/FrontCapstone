@@ -170,3 +170,5 @@ Route::get('/payment/unpaid-report', [PaymentController::class, 'unpaidReport'])
 Route::get('/payment/unpaid/download', [PaymentController::class, 'downloadUnpaidReport'])
     ->name('payment.unpaid.download')
     ->middleware(['auth']);
+
+Route::post('/listing/{id}/terminate-tenant', [ListingController::class, 'terminateTenant'])->name('listing.terminate-tenant');

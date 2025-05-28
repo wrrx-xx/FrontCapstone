@@ -2,6 +2,10 @@
 
 @section('content')
 <div class="main-content">
+    @if (session('success') || $errors->any())
+    <!-- Feedback Modal -->
+    @include('components.feedback-modal')
+    @endif
     <div class="row">
         <div class="col-12">
             <div class="row">
@@ -32,72 +36,80 @@
                         </div>
 
                         @if($reservations->isEmpty())
-                            <p>No reservations found.</p>
+                        <p>No reservations found.</p>
                         @else
-                            @foreach($reservations as $reservation)
-                                <div class="row align-middle py-4">
-                                    <div class="col-xxl-6">
-                                        <div class="card bg-transparent">
-                                            <div class="row">
-                                                <!-- Image -->
-                                                <div class="col-xl-3">
-                                                    @if($reservation->listing->photos->isNotEmpty())
-                                                        <img class="rounded" src="{{ asset($reservation->listing->photos->first()->photo_url) }}" alt="{{ $reservation->listing->title }}">
-                                                    @else
-                                                        <img class="rounded" src="{{ asset('path/to/default/image.jpg') }}" alt="Default Image">
-                                                    @endif
-                                                </div>
-                                                <!-- Info -->
-                                                <div class="col-xl-9 pt-2 pt-xl-0">
-                                                    <h6 class="mb-1">{{ $reservation->listing->title }}</h6>
-                                                    <p class="mb-1 text-body">{{ Str::limit($reservation->listing->body, 100) }}</p>
-                                                    <span class="text-success">₱{{ $reservation->listing->price }}</span>
-                                                </div>
-                                            </div>
+                        @foreach($reservations as $reservation)
+                        <div class="row align-middle py-4">
+                            <div class="col-xxl-6">
+                                <div class="card bg-transparent">
+                                    <div class="row">
+                                        <!-- Image -->
+                                        <div class="col-xl-3">
+                                            @if($reservation->listing->photos->isNotEmpty())
+                                            <img class="rounded" src="{{ asset($reservation->listing->photos->first()->photo_url) }}" alt="{{ $reservation->listing->title }}">
+                                            @else
+                                            <img class="rounded" src="{{ asset('path/to/default/image.jpg') }}" alt="Default Image">
+                                            @endif
+                                        </div>
+                                        <!-- Info -->
+                                        <div class="col-xl-9 pt-2 pt-xl-0">
+                                            <h6 class="mb-1">{{ $reservation->listing->title }}</h6>
+                                            <p class="mb-1 text-body">{{ Str::limit($reservation->listing->body, 100) }}</p>
+                                            <span class="text-success">₱{{ $reservation->listing->price }}</span>
                                         </div>
                                     </div>
-                                    <!-- Content -->
-                                    <div class="col-xxl-6 pt-2 pt-xxl-0">
-                                        <div class="row">
-                                            <!-- Tenant Name -->
-                                            <div class="col-md-4 align-middle text-body">
-                                                {{ $reservation->prospect->fname . ' ' . $reservation->prospect->mname . ' ' . $reservation->prospect->lname }}
-                                            </div>
-                                            <!-- Reservation Status -->
-                                            <div class="col-md-4 align-middle pt-2 pt-md-0">
-                                                <div class="badge {{ $reservation->reservation_status == 'approved' ? 'bg-success-soft text-success' : ($reservation->reservation_status == 'declined' ? 'bg-danger-soft text-danger' : 'bg-warning-soft text-warning') }}">
-                                                    {{ ucfirst($reservation->reservation_status) }}
-                                                </div>
-                                            </div>
-                                            <!-- Action Buttons -->
-                                            <div class="col-md-4 align-middle pt-2 pt-md-0">
-                                                @if($reservation->reservation_status != 'approved' && $reservation->reservation_status != 'declined')
-                                                    <form action="{{ route('reservation.approve', $reservation->id) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-sm btn-success-soft me-1 mb-1">
-                                                            Approve
-                                                        </button>
-                                                    </form>
-                                                    <form action="{{ route('reservation.decline', $reservation->id) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-sm btn-danger-soft mb-1">
-                                                            Decline
-                                                        </button>
-                                                    </form>
-                                                @endif
-                                            </div>
+
+                                </div>
+                            </div>
+                            <!-- Content -->
+                            <div class="col-xxl-6 pt-2 pt-xxl-0">
+                                <div class="row">
+                                    <!-- Tenant Name -->
+                                    <div class="col-md-4 align-middle text-body">
+                                        {{ $reservation->prospect->fname . ' ' . $reservation->prospect->mname . ' ' . $reservation->prospect->lname }}
+                                    </div>
+                                    <!-- Reservation Status -->
+                                    <div class="col-md-4 align-middle pt-2 pt-md-0">
+                                        <div class="badge {{ $reservation->reservation_status == 'approved' ? 'bg-success-soft text-success' : ($reservation->reservation_status == 'declined' ? 'bg-danger-soft text-danger' : 'bg-warning-soft text-warning') }}">
+                                            {{ ucfirst($reservation->reservation_status) }}
                                         </div>
                                     </div>
-                                </div> <!-- Row END -->
-                                <hr> <!-- Divider -->
-                            @endforeach
+                                    <!-- Action Buttons -->
+                                    <div class="col-md-4 align-middle pt-2 pt-md-0">
+                                        @if($reservation->reservation_status != 'approved' && $reservation->reservation_status != 'declined')
+                                        <form action="{{ route('reservation.approve', $reservation->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-success-soft me-1 mb-1">
+                                                Approve
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('reservation.decline', $reservation->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-danger-soft mb-1">
+                                                Decline
+                                            </button>
+                                        </form>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- Row END -->
+                        <hr> <!-- Divider -->
+                        @endforeach
                         @endif
                     </div>
                 </div>
             </div>
             <!-- Reservations list END -->
         </div>
-    </div> <!-- Row END -->
+    </div>
+    @if (session('success') || $errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new bootstrap.Modal(document.getElementById('feedbackModal')).show();
+        });
+    </script>
+    @endif <!-- Row END -->
 </div>
 
 @endsection

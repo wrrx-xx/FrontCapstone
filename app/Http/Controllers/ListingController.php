@@ -490,4 +490,75 @@ public function declineLeaveRequest($id)
 
     return redirect()->back()->with('success', 'Leave request declined.');
 }
+
+    /**
+     * Terminate a tenant from a listing
+     */
+    public function terminateTenant(Request $request, $id)
+    {
+        try {
+            // Find the listing
+            $listing = Listing::findOrFail($id);
+
+            // Check if user is the owner
+            if (Auth::id() !== $listing->owner_id) {
+                return back()->with('error', 'Unauthorized action. Only the owner can terminate tenants.');
+            }
+
+            // Validate the request
+            $request->validate([
+                'termination_reason' => 'required|string|min:10'
+            ]);
+
+            // Check if there is a tenant
+            if (!$listing->tenant_id) {
+                return back()->with('error', 'No tenant to terminate.');
+            }
+
+            // Store the tenant ID before removing it
+            $tenantId = $listing->tenant_id;
+
+            // Fail all pending billings for the tenant
+            \App\Models\Billings::where('user_id', $tenantId)
+                ->where('status', 'pending')
+                ->update(['status' => 'failed']);
+
+            // Set all cash advance to 0 for the tenant in payments
+            \App\Models\Payment::where('id', $tenantId)
+                ->update(['cash_advance_amount' => 0, 'cash_advance_used' => 0]);
+
+            // Update the listing to remove tenant
+            $listing->update([
+                'tenant_id' => null,
+                'availability' => 'open'
+            ]);
+
+            // Change user role from tenant to guest
+            $user = \App\Models\User::find($tenantId);
+            if ($user && $user->role === 'tenant') {
+                $user->role = 'guest';
+                $user->save();
+
+                // If the tenant is currently logged in, log them out
+                DB::table('sessions')->where('user_id', $user->id)->delete();
+            }
+
+            // Create a record of the termination
+            DB::table('tenant_terminations')->insert([
+                'listing_id' => $listing->id,
+                'tenant_id' => $tenantId,
+                'owner_id' => Auth::id(),
+                'reason' => $request->termination_reason,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            return redirect()->back()->with('success', 'Tenant has been terminated successfully.');
+        } catch (ModelNotFoundException $e) {
+            return back()->with('error', 'Listing not found.');
+        } catch (Exception $e) {
+            Log::error('Error terminating tenant: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while terminating the tenant.');
+        }
+    }
 }

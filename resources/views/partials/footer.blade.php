@@ -28,7 +28,7 @@
                         </g>
                         <!-- Text -->
                         <text x="80" y="54" font-family="Montserrat, Arial, sans-serif" font-size="38"
-                            font-weight="bold" fill="#E5EBFB" letter-spacing="2">Boardeast</text>
+                            font-weight="bold" fill="#E5EBFB" letter-spacing="2">Boardease</text>
                     </svg>
 
                     <!-- Description -->
