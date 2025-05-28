@@ -553,6 +553,16 @@ public function declineLeaveRequest($id)
                 'updated_at' => now()
             ]);
 
+            // Create notification for the terminated tenant
+            DB::table('notifications')->insert([
+                'user_id' => $tenantId,
+                'type' => 'termination',
+                'message' => 'You have been terminated from your rental. Reason: ' . $request->termination_reason,
+                'is_read' => false,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
             return redirect()->back()->with('success', 'Tenant has been terminated successfully.');
         } catch (ModelNotFoundException $e) {
             return back()->with('error', 'Listing not found.');

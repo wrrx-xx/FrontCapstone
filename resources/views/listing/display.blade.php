@@ -77,6 +77,45 @@
     <section class="pt-5">
         <div class="container">
             <!-- Title -->
+            @if(Auth::check())
+                @php
+                    $unreadNotifications = DB::table('notifications')
+                        ->where('user_id', Auth::id())
+                        ->where('is_read', false)
+                        ->get();
+                @endphp
+
+                @if($unreadNotifications->count() > 0)
+                    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="notificationModalLabel">Important Notification</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    @foreach($unreadNotifications as $notification)
+                                        <div class="alert alert-warning">
+                                            {{ $notification->message }}
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    @push('scripts')
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var notificationModal = new bootstrap.Modal(document.getElementById('notificationModal'));
+                            notificationModal.show();
+                        });
+                    </script>
+                @endif
+                @endpush
+            @endif
             <div class="row mb-4">
                 <div class="col-md-12">
                     <!-- Title START -->

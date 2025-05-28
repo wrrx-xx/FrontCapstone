@@ -42,6 +42,10 @@
 
         </style>
         <div class="main-content">
+        @if (session('success') || $errors->any())
+                <!-- Feedback Modal -->
+                @include('components.feedback-modal')
+            @endif
             <div class="container-fluid">
                 @if (session('success'))
                     <div class="alert alert-success">
@@ -332,4 +336,11 @@
                 margin: 0;
             }
         </style>
+        @if (session('success') || $errors->any())
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        new bootstrap.Modal(document.getElementById('feedbackModal')).show();
+                    });
+                </script>
+            @endif
     @endsection

@@ -31,7 +31,7 @@
                 </form>
             </li>
             <!-- Icon -->
-            <li class="list-inline-item me-2 me-sm-3"> <a href="#" class="text-dark"><i
+            <li class="list-inline-item me-2 me-sm-3"> <a href="{{ route('tenant.messages.index') }}" class="text-dark"><i
                         class="far fa-envelope"></i></a></li>
             <li class="list-inline-item me-2 me-sm-3">
                 <a href="#" class="text-black position-relative">
@@ -51,10 +51,10 @@
                 <!-- Dropdown list -->
                 <ul class="dropdown-menu min-w-auto" aria-labelledby="dropdownAvatar">
                     <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
-                    <li><a class="dropdown-item" href="#">Setting</a></li>
-                    <li><a class="dropdown-item" href="#">My Wallet</a></li>
+            
                     <li><a class="dropdown-item" href="#">Sign out</a></li>
                 </ul>
+
             </li>
             <!-- Toggle button -->
             <li class="list-inline-item d-md-inline-block d-lg-none">

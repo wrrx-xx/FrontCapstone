@@ -43,7 +43,23 @@
 
                     @if (Auth::check())
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('reserve.index') }}" >Bookings</a>
+                        <a class="nav-link" href="{{ route('reserve.index') }}">
+                            Bookings
+                            @php
+                                $pendingCount = \App\Models\Viewing::where('requested_by', Auth::id())
+                                    ->whereIn('viewing_status', ['approved', 'suggested'])
+                                    ->count();
+                                $declinedCount = \App\Models\Viewing::where('requested_by', Auth::id())
+                                    ->where('viewing_status', 'suggested')
+                                    ->count();
+                            @endphp
+                            @if($pendingCount > 0)
+                                <span class="badge bg-warning ms-1">{{ $pendingCount }}</span>
+                            @endif
+                            @if($declinedCount > 0)
+                                <span class="badge bg-danger ms-1">{{ $declinedCount }}</span>
+                            @endif
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('profile.edit') }}">Profile</a>

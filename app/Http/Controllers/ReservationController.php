@@ -19,10 +19,11 @@ class ReservationController extends Controller
         ->orderByRaw("
             CASE viewing_status 
                 WHEN 'pending' THEN 1
-                WHEN 'approved' THEN 2
-                WHEN 'declined' THEN 3
-                WHEN 'cancelled' THEN 4
-                WHEN 'suggested' THEN 5
+                WHEN 'suggested' THEN 2
+                WHEN 'approved' THEN 3
+                WHEN 'declined' THEN 4
+                WHEN 'cancelled' THEN 5
+            
                 ELSE 6
             END
         ")
