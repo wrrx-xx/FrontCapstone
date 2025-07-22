@@ -41,7 +41,7 @@ class TenantController extends Controller
             ->get();
             
         // Get pending maintenance count
-        $pendingMaintenanceCount = $maintenanceRequests
+        $pendingMaintenanceCount = MaintenanceRequest::where('tenant_id', $user->id)
             ->where('status', 'Pending')
             ->count();
 

@@ -13,7 +13,7 @@
                 <div class="modal-body">
                     <p class="text-danger fw-bold">
                         Please be aware of the
-                        <a href="#" target="_blank">User Agreement</a>
+                       User Agreement
                         and the
                         <button type="button" class="btn btn-link p-0 m-0 align-baseline" data-bs-toggle="modal" data-bs-target="#waiverModal{{ $listing->id }}">
                             Terms and Conditions

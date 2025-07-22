@@ -31,383 +31,398 @@
 
     <!-- Owner Cards Container -->
     <div class="row g-4 owners-container">
-        @foreach($ownersViewings as $ownerId => $viewings)
-            @php
-                $owner = $viewings->first()->listing->user;
-                $pendingCount = $viewings->where('viewing_status', 'pending')->count();
-                $approvedCount = $viewings->where('viewing_status', 'approved')->count();
-                $declinedCount = $viewings->where('viewing_status', 'declined')->count();
-                $cancelledCount = $viewings->where('viewing_status', 'cancelled')->count();
-            @endphp
-            
+        @if($ownersViewings->isEmpty())
             <div class="col-12">
-                <div class="owner-card mb-4">
-                    <!-- Owner Header -->
-                    <div class="owner-card-header">
-                        <div class="row align-items-center">
-                            <div class="col-md-6">
-                                <div class="d-flex align-items-center">
-                                    <div class="owner-avatar me-3">
-                                        <i class="fas fa-user-circle"></i>
-                                    </div>
-                                    <div>
-                                        <h5 class="fw-bold mb-0">{{ $owner->fname }} {{ $owner->lname }}</h5>
-                                        <span class="badge bg-primary">Owner</span>
-                                        <span class="text-muted ms-2">{{ $viewings->count() }} viewings</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="d-flex justify-content-md-end mt-3 mt-md-0">
-                                    <div class="d-flex status-pills">
-                                        <div class="status-pill">
-                                            <span class="badge rounded-pill bg-warning text-dark">{{ $pendingCount }} Pending</span>
-                                        </div>
-                                        <div class="status-pill">
-                                            <span class="badge rounded-pill bg-success">{{ $approvedCount }} Approved</span>
-                                        </div>
-                                        <div class="status-pill">
-                                            <span class="badge rounded-pill bg-danger">{{ $declinedCount }} Declined</span>
-                                        </div>
-                                        <div class="status-pill">
-                                            <span class="badge rounded-pill bg-secondary">{{ $cancelledCount }} Cancelled</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Owner Bookings Table -->
-                    <div class="owner-card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover booking-table">
-                                <thead>
-                                    <tr>
-                                        <th>Listing</th>
-                                        <th>Tenant</th>
-                                        <th>Date & Time</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($viewings as $viewing)
-                                        <tr class="align-middle @if($viewing->viewing_status == 'pending') table-warning-subtle @endif">
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="listing-icon me-3">
-                                                        <i class="fas fa-home"></i>
-                                                    </div>
-                                                    <div>
-                                                        <h6 class="mb-0">{{ $viewing->listing->title }}</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="tenant-icon me-2">
-                                                        <i class="fas fa-user"></i>
-                                                    </div>
-                                                    <div>
-                                                        <h6 class="mb-0">{{ $viewing->requestedBy->fname }} {{ $viewing->requestedBy->lname }}</h6>
-                                                        <small class="text-muted">{{ $viewing->requestedBy->email }}</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    <div class="d-flex align-items-center mb-1">
-                                                        <i class="fas fa-calendar-alt me-2 text-primary"></i>
-                                                        <span>{{ \Carbon\Carbon::parse($viewing->viewing_date)->format('d M Y') }}</span>
-                                                    </div>
-                                                    <div class="d-flex align-items-center">
-                                                        <i class="fas fa-clock me-2 text-primary"></i>
-                                                        <span>{{ \Carbon\Carbon::parse($viewing->viewing_time)->format('h:i A') }}</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span
-                                                    class="badge 
-                                                @if ($viewing->viewing_status == 'approved') bg-success 
-                                                @elseif($viewing->viewing_status == 'declined') bg-danger 
-                                                @elseif($viewing->viewing_status == 'cancelled') bg-warning 
-                                                @else bg-secondary text-black @endif">
-                                                    {{ ucfirst($viewing->viewing_status) }}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex">
-                                                    <button type="button" class="btn btn-sm btn-primary me-2" data-bs-toggle="modal"
-                                                        data-bs-target="#viewingModal{{ $viewing->id }}">
-                                                        <i class="fas fa-eye me-1"></i> View
-                                                    </button>
-                                                    
-                                                    @if($viewing->viewing_status == 'pending')
-                                                        <div class="dropdown">
-                                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton{{ $viewing->id }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="fas fa-cog"></i>
-                                                            </button>
-                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $viewing->id }}">
-                                                                <li>
-                                                                    <form action="{{ route('booking.accept', $viewing->id) }}" method="POST">
-                                                                        @csrf
-                                                                        <button type="submit" class="dropdown-item text-success">
-                                                                            <i class="fas fa-check me-2"></i> Accept
-                                                                        </button>
-                                                                    </form>
-                                                                </li>
-                                                                <li>
-                                                                    <form action="{{ route('booking.decline', $viewing->id) }}" method="POST">
-                                                                        @csrf
-                                                                        <button type="submit" class="dropdown-item text-danger">
-                                                                            <i class="fas fa-times me-2"></i> Decline
-                                                                        </button>
-                                                                    </form>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    @elseif($viewing->viewing_status == 'approved')
-                                                        <form action="{{ route('booking.decline', $viewing->id) }}" method="POST">
-                                                            @csrf
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                                <i class="fas fa-times me-1"></i> Decline
-                                                            </button>
-                                                        </form>
-                                                    @elseif($viewing->viewing_status == 'declined')
-                                                        <form action="{{ route('booking.accept', $viewing->id) }}" method="POST">
-                                                            @csrf
-                                                            <button type="submit" class="btn btn-sm btn-outline-success">
-                                                                <i class="fas fa-check me-1"></i> Accept
-                                                            </button>
-                                                        </form>
-                                                    @endif
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        
-                                        <!-- Viewing Modal -->
-                                        <div class="modal fade" id="viewingModal{{ $viewing->id }}" tabindex="-1"
-                                            aria-labelledby="viewingModalLabel{{ $viewing->id }}"
-                                            aria-hidden="true">
-                                            <div class="modal-dialog modal-lg">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="viewingModalLabel{{ $viewing->id }}">
-                                                            Viewing Details
-                                                        </h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body p-4">
-                                                        <!-- Valid ID Flip Card -->
-                                                        @if ($viewing->requestedBy->tenantProfile && $viewing->requestedBy->tenantProfile->valid_id_front_path && $viewing->requestedBy->tenantProfile->valid_id_back_path)
-                                                            <div class="id-card-container mb-4">
-                                                                <h6 class="mb-3 id-card-title">
-                                                                    <i class="fas fa-id-card me-2"></i> Tenant ID
-                                                                    <small class="text-muted ms-2">(Click to flip)</small>
-                                                                </h6>
-                                                                <div class="d-flex justify-content-center">
-                                                                    <div class="id-flip-card" onclick="this.classList.toggle('flipped')">
-                                                                        <div class="id-flip-card-inner">
-                                                                            <div class="id-flip-card-front">
-                                                                                <img src="{{ asset($viewing->requestedBy->tenantProfile->valid_id_front_path) }}" alt="ID Front" class="img-fluid rounded">
-                                                                            </div>
-                                                                            <div class="id-flip-card-back">
-                                                                                <img src="{{ asset($viewing->requestedBy->tenantProfile->valid_id_back_path) }}" alt="ID Back" class="img-fluid rounded">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                        
-                                                        <div class="row g-4">
-                                                            <!-- Viewing Information Section -->
-                                                            <div class="col-md-12">
-                                                                <div class="info-card">
-                                                                    <div class="info-card-header">
-                                                                        <h6 class="mb-0">
-                                                                            <i class="fas fa-calendar-check me-2"></i>
-                                                                            Viewing Information
-                                                                        </h6>
-                                                                    </div>
-                                                                    <div class="info-card-body">
-                                                                        <div class="row g-3">
-                                                                            <div class="col-md-12">
-                                                                                <div class="d-flex align-items-center listing-info mb-3">
-                                                                                    <i class="fas fa-building listing-icon me-3"></i>
-                                                                                    <div>
-                                                                                        <label class="info-label">Listing</label>
-                                                                                        <h6 class="mb-0">{{ $viewing->listing->title }}</h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            
-                                                                            <div class="col-md-6">
-                                                                                <div class="info-item">
-                                                                                    <label class="info-label"><i class="fas fa-calendar-alt me-2"></i>Visit Date</label>
-                                                                                    <p class="info-value">{{ \Carbon\Carbon::parse($viewing->viewing_date)->format('d M Y') }}</p>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-md-6">
-                                                                                <div class="info-item">
-                                                                                    <label class="info-label"><i class="fas fa-clock me-2"></i>Visit Time</label>
-                                                                                    <p class="info-value">{{ \Carbon\Carbon::parse($viewing->viewing_time)->format('h:i A') }}</p>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-md-6">
-                                                                                <div class="info-item">
-                                                                                    <label class="info-label"><i class="fas fa-tag me-2"></i>Current Status</label>
-                                                                                    <p class="info-value">
-                                                                                        <span class="status-badge 
-                                                                                            @if ($viewing->viewing_status == 'approved') status-approved
-                                                                                            @elseif($viewing->viewing_status == 'declined') status-declined
-                                                                                            @elseif($viewing->viewing_status == 'cancelled') status-cancelled
-                                                                                            @else status-pending @endif">
-                                                                                            <i class="fas fa-circle status-dot me-1"></i>
-                                                                                            {{ ucfirst($viewing->viewing_status) }}
-                                                                                        </span>
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            
-                                                            <!-- Tenant Profile Details -->
-                                                            <div class="col-md-12">
-                                                                <div class="info-card">
-                                                                    <div class="info-card-header">
-                                                                        <h6 class="mb-0">
-                                                                            <i class="fas fa-user me-2"></i>
-                                                                            Tenant Profile
-                                                                        </h6>
-                                                                    </div>
-                                                                    <div class="info-card-body">
-                                                                        <div class="tenant-header mb-3">
-                                                                            <h6 class="fw-bold mb-1">{{ $viewing->requestedBy->fname }} {{ $viewing->requestedBy->mname }} {{ $viewing->requestedBy->lname }}</h6>
-                                                                        </div>
-                                                                    
-                                                                        @if ($viewing->requestedBy->tenantProfile)
-                                                                            <div class="row g-3">
-                                                                                <div class="col-md-6">
-                                                                                    <div class="info-item">
-                                                                                        <label class="info-label"><i class="fas fa-map-marker-alt me-2"></i>Current Address</label>
-                                                                                        <p class="info-value">{{ $viewing->requestedBy->tenantProfile->current_address }}</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-md-6">
-                                                                                    <div class="info-item">
-                                                                                        <label class="info-label"><i class="fas fa-envelope me-2"></i>Email</label>
-                                                                                        <p class="info-value">{{ $viewing->requestedBy->email }}</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-md-6">
-                                                                                    <div class="info-item">
-                                                                                        <label class="info-label"><i class="fas fa-phone me-2"></i>Phone Number</label>
-                                                                                        <p class="info-value">{{ $viewing->requestedBy->phone_number }}</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-md-6">
-                                                                                    <div class="info-item">
-                                                                                        <label class="info-label"><i class="fas fa-briefcase me-2"></i>Employment Status</label>
-                                                                                        <p class="info-value">{{ $viewing->requestedBy->tenantProfile->employment_status }}</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-md-6">
-                                                                                    <div class="info-item">
-                                                                                        <label class="info-label"><i class="fas fa-money-bill-wave me-2"></i>Monthly Income</label>
-                                                                                        <p class="info-value">{{ number_format($viewing->requestedBy->tenantProfile->monthly_income, 2) }}</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-md-6">
-                                                                                    <div class="info-item">
-                                                                                        <label class="info-label"><i class="fas fa-id-card me-2"></i>Valid ID Type</label>
-                                                                                        <p class="info-value">
-                                                                                            @switch($viewing->requestedBy->tenantProfile->valid_id_type)
-                                                                                                @case('driver_license') Driver's License @break
-                                                                                                @case('student_id') School ID @break
-                                                                                                @case('passport') Passport @break
-                                                                                                @case('national_id') National ID @break
-                                                                                                @case('voter_id') Voter ID @break
-                                                                                                @case('other') Other @break
-                                                                                                @default Not specified
-                                                                                            @endswitch
-                                                                                        </p>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-md-6">
-                                                                                    <div class="info-item">
-                                                                                        <label class="info-label"><i class="fas fa-user-friends me-2"></i>Emergency Contact</label>
-                                                                                        <p class="info-value">{{ $viewing->requestedBy->tenantProfile->emergency_contact_name }}</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-md-6">
-                                                                                    <div class="info-item">
-                                                                                        <label class="info-label"><i class="fas fa-phone-alt me-2"></i>Emergency Phone</label>
-                                                                                        <p class="info-value">{{ $viewing->requestedBy->tenantProfile->emergency_contact_phone }}</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        @else
-                                                                            <div class="alert alert-warning">
-                                                                                <i class="fas fa-exclamation-triangle me-2"></i>
-                                                                                No tenant profile information available.
-                                                                            </div>
-                                                                        @endif
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <!-- Modal Footer -->
-                                                    <div class="modal-footer">
-                                                        @if($viewing->viewing_status == 'pending')
-                                                            <form action="{{ route('booking.accept', $viewing->id) }}" method="POST" class="me-2">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-success">
-                                                                    <i class="fas fa-check me-1"></i> Accept Booking
-                                                                </button>
-                                                            </form>
-                                                            <form action="{{ route('booking.decline', $viewing->id) }}" method="POST" class="me-2">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-danger">
-                                                                    <i class="fas fa-times me-1"></i> Decline Booking
-                                                                </button>
-                                                            </form>
-                                                        @elseif($viewing->viewing_status == 'approved')
-                                                            <form action="{{ route('booking.decline', $viewing->id) }}" method="POST" class="me-2">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-danger">
-                                                                    <i class="fas fa-times me-1"></i> Cancel Approval
-                                                                </button>
-                                                            </form>
-                                                        @elseif($viewing->viewing_status == 'declined')
-                                                            <form action="{{ route('booking.accept', $viewing->id) }}" method="POST" class="me-2">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-success">
-                                                                    <i class="fas fa-check me-1"></i> Approve Instead
-                                                                </button>
-                                                            </form>
-                                                        @endif
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                            <i class="fas fa-times me-1"></i> Close
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                <div class="text-center py-5">
+                    <div class="empty-state mb-4">
+                        <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+                        <h4 class="text-muted">No Bookings Found</h4>
+                        <p class="text-muted">There are currently no property viewings to display.</p>
+                        <a href="{{ route('admin.booking.create') }}" class="btn btn-primary mt-3">
+                            <i class="fas fa-plus me-1"></i> Create New Booking
+                        </a>
                     </div>
                 </div>
             </div>
-        @endforeach
+        @else
+            @foreach($ownersViewings as $ownerId => $viewings)
+                @php
+                    $owner = $viewings->first()->listing->user;
+                    $pendingCount = $viewings->where('viewing_status', 'pending')->count();
+                    $approvedCount = $viewings->where('viewing_status', 'approved')->count();
+                    $declinedCount = $viewings->where('viewing_status', 'declined')->count();
+                    $cancelledCount = $viewings->where('viewing_status', 'cancelled')->count();
+                @endphp
+                
+                <div class="col-12">
+                    <div class="owner-card mb-4">
+                        <!-- Owner Header -->
+                        <div class="owner-card-header">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <div class="owner-avatar me-3">
+                                            <i class="fas fa-user-circle"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="fw-bold mb-0">{{ $owner->fname }} {{ $owner->lname }}</h5>
+                                            <span class="badge bg-primary">Owner</span>
+                                            <span class="text-muted ms-2">{{ $viewings->count() }} viewings</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex justify-content-md-end mt-3 mt-md-0">
+                                        <div class="d-flex status-pills">
+                                            <div class="status-pill">
+                                                <span class="badge rounded-pill bg-warning text-dark">{{ $pendingCount }} Pending</span>
+                                            </div>
+                                            <div class="status-pill">
+                                                <span class="badge rounded-pill bg-success">{{ $approvedCount }} Approved</span>
+                                            </div>
+                                            <div class="status-pill">
+                                                <span class="badge rounded-pill bg-danger">{{ $declinedCount }} Declined</span>
+                                            </div>
+                                            <div class="status-pill">
+                                                <span class="badge rounded-pill bg-secondary">{{ $cancelledCount }} Cancelled</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Owner Bookings Table -->
+                        <div class="owner-card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover booking-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Listing</th>
+                                            <th>Tenant</th>
+                                            <th>Date & Time</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($viewings as $viewing)
+                                            <tr class="align-middle @if($viewing->viewing_status == 'pending') table-warning-subtle @endif">
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="listing-icon me-3">
+                                                            <i class="fas fa-home"></i>
+                                                        </div>
+                                                        <div>
+                                                            <h6 class="mb-0">{{ $viewing->listing->title }}</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="tenant-icon me-2">
+                                                            <i class="fas fa-user"></i>
+                                                        </div>
+                                                        <div>
+                                                            <h6 class="mb-0">{{ $viewing->requestedBy->fname }} {{ $viewing->requestedBy->lname }}</h6>
+                                                            <small class="text-muted">{{ $viewing->requestedBy->email }}</small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <div class="d-flex align-items-center mb-1">
+                                                            <i class="fas fa-calendar-alt me-2 text-primary"></i>
+                                                            <span>{{ \Carbon\Carbon::parse($viewing->viewing_date)->format('d M Y') }}</span>
+                                                        </div>
+                                                        <div class="d-flex align-items-center">
+                                                            <i class="fas fa-clock me-2 text-primary"></i>
+                                                            <span>{{ \Carbon\Carbon::parse($viewing->viewing_time)->format('h:i A') }}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span
+                                                        class="badge 
+                                                    @if ($viewing->viewing_status == 'approved') bg-success 
+                                                    @elseif($viewing->viewing_status == 'declined') bg-danger 
+                                                    @elseif($viewing->viewing_status == 'cancelled') bg-warning 
+                                                    @else bg-secondary text-black @endif">
+                                                        {{ ucfirst($viewing->viewing_status) }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <button type="button" class="btn btn-sm btn-primary me-2" data-bs-toggle="modal"
+                                                            data-bs-target="#viewingModal{{ $viewing->id }}">
+                                                            <i class="fas fa-eye me-1"></i> View
+                                                        </button>
+                                                        
+                                                        @if($viewing->viewing_status == 'pending')
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton{{ $viewing->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fas fa-cog"></i>
+                                                                </button>
+                                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $viewing->id }}">
+                                                                    <li>
+                                                                        <form action="{{ route('booking.accept', $viewing->id) }}" method="POST">
+                                                                            @csrf
+                                                                            <button type="submit" class="dropdown-item text-success">
+                                                                                <i class="fas fa-check me-2"></i> Accept
+                                                                            </button>
+                                                                        </form>
+                                                                    </li>
+                                                                    <li>
+                                                                        <form action="{{ route('booking.decline', $viewing->id) }}" method="POST">
+                                                                            @csrf
+                                                                            <button type="submit" class="dropdown-item text-danger">
+                                                                                <i class="fas fa-times me-2"></i> Decline
+                                                                            </button>
+                                                                        </form>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        @elseif($viewing->viewing_status == 'approved')
+                                                            <form action="{{ route('booking.decline', $viewing->id) }}" method="POST">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                                    <i class="fas fa-times me-1"></i> Decline
+                                                                </button>
+                                                            </form>
+                                                        @elseif($viewing->viewing_status == 'declined')
+                                                            <form action="{{ route('booking.accept', $viewing->id) }}" method="POST">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-sm btn-outline-success">
+                                                                    <i class="fas fa-check me-1"></i> Accept
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            
+                                            <!-- Viewing Modal -->
+                                            <div class="modal fade" id="viewingModal{{ $viewing->id }}" tabindex="-1"
+                                                aria-labelledby="viewingModalLabel{{ $viewing->id }}"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="viewingModalLabel{{ $viewing->id }}">
+                                                                Viewing Details
+                                                            </h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body p-4">
+                                                            <!-- Valid ID Flip Card -->
+                                                            @if ($viewing->requestedBy->tenantProfile && $viewing->requestedBy->tenantProfile->valid_id_front_path && $viewing->requestedBy->tenantProfile->valid_id_back_path)
+                                                                <div class="id-card-container mb-4">
+                                                                    <h6 class="mb-3 id-card-title">
+                                                                        <i class="fas fa-id-card me-2"></i> Tenant ID
+                                                                        <small class="text-muted ms-2">(Click to flip)</small>
+                                                                    </h6>
+                                                                    <div class="d-flex justify-content-center">
+                                                                        <div class="id-flip-card" onclick="this.classList.toggle('flipped')">
+                                                                            <div class="id-flip-card-inner">
+                                                                                <div class="id-flip-card-front">
+                                                                                    <img src="{{ asset($viewing->requestedBy->tenantProfile->valid_id_front_path) }}" alt="ID Front" class="img-fluid rounded">
+                                                                                </div>
+                                                                                <div class="id-flip-card-back">
+                                                                                    <img src="{{ asset($viewing->requestedBy->tenantProfile->valid_id_back_path) }}" alt="ID Back" class="img-fluid rounded">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                            
+                                                            <div class="row g-4">
+                                                                <!-- Viewing Information Section -->
+                                                                <div class="col-md-12">
+                                                                    <div class="info-card">
+                                                                        <div class="info-card-header">
+                                                                            <h6 class="mb-0">
+                                                                                <i class="fas fa-calendar-check me-2"></i>
+                                                                                Viewing Information
+                                                                            </h6>
+                                                                        </div>
+                                                                        <div class="info-card-body">
+                                                                            <div class="row g-3">
+                                                                                <div class="col-md-12">
+                                                                                    <div class="d-flex align-items-center listing-info mb-3">
+                                                                                        <i class="fas fa-building listing-icon me-3"></i>
+                                                                                        <div>
+                                                                                            <label class="info-label">Listing</label>
+                                                                                            <h6 class="mb-0">{{ $viewing->listing->title }}</h6>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                
+                                                                                <div class="col-md-6">
+                                                                                    <div class="info-item">
+                                                                                        <label class="info-label"><i class="fas fa-calendar-alt me-2"></i>Visit Date</label>
+                                                                                        <p class="info-value">{{ \Carbon\Carbon::parse($viewing->viewing_date)->format('d M Y') }}</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-6">
+                                                                                    <div class="info-item">
+                                                                                        <label class="info-label"><i class="fas fa-clock me-2"></i>Visit Time</label>
+                                                                                        <p class="info-value">{{ \Carbon\Carbon::parse($viewing->viewing_time)->format('h:i A') }}</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-6">
+                                                                                    <div class="info-item">
+                                                                                        <label class="info-label"><i class="fas fa-tag me-2"></i>Current Status</label>
+                                                                                        <p class="info-value">
+                                                                                            <span class="status-badge 
+                                                                                                @if ($viewing->viewing_status == 'approved') status-approved
+                                                                                                @elseif($viewing->viewing_status == 'declined') status-declined
+                                                                                                @elseif($viewing->viewing_status == 'cancelled') status-cancelled
+                                                                                                @else status-pending @endif">
+                                                                                                <i class="fas fa-circle status-dot me-1"></i>
+                                                                                                {{ ucfirst($viewing->viewing_status) }}
+                                                                                            </span>
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <!-- Tenant Profile Details -->
+                                                                <div class="col-md-12">
+                                                                    <div class="info-card">
+                                                                        <div class="info-card-header">
+                                                                            <h6 class="mb-0">
+                                                                                <i class="fas fa-user me-2"></i>
+                                                                                Tenant Profile
+                                                                            </h6>
+                                                                        </div>
+                                                                        <div class="info-card-body">
+                                                                            <div class="tenant-header mb-3">
+                                                                                <h6 class="fw-bold mb-1">{{ $viewing->requestedBy->fname }} {{ $viewing->requestedBy->mname }} {{ $viewing->requestedBy->lname }}</h6>
+                                                                            </div>
+                                                                        
+                                                                            @if ($viewing->requestedBy->tenantProfile)
+                                                                                <div class="row g-3">
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="info-item">
+                                                                                            <label class="info-label"><i class="fas fa-map-marker-alt me-2"></i>Current Address</label>
+                                                                                            <p class="info-value">{{ $viewing->requestedBy->tenantProfile->current_address }}</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="info-item">
+                                                                                            <label class="info-label"><i class="fas fa-envelope me-2"></i>Email</label>
+                                                                                            <p class="info-value">{{ $viewing->requestedBy->email }}</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="info-item">
+                                                                                            <label class="info-label"><i class="fas fa-phone me-2"></i>Phone Number</label>
+                                                                                            <p class="info-value">{{ $viewing->requestedBy->phone_number }}</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="info-item">
+                                                                                            <label class="info-label"><i class="fas fa-briefcase me-2"></i>Employment Status</label>
+                                                                                            <p class="info-value">{{ $viewing->requestedBy->tenantProfile->employment_status }}</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="info-item">
+                                                                                            <label class="info-label"><i class="fas fa-money-bill-wave me-2"></i>Monthly Income</label>
+                                                                                            <p class="info-value">{{ number_format($viewing->requestedBy->tenantProfile->monthly_income, 2) }}</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="info-item">
+                                                                                            <label class="info-label"><i class="fas fa-id-card me-2"></i>Valid ID Type</label>
+                                                                                            <p class="info-value">
+                                                                                                @switch($viewing->requestedBy->tenantProfile->valid_id_type)
+                                                                                                    @case('driver_license') Driver's License @break
+                                                                                                    @case('student_id') School ID @break
+                                                                                                    @case('passport') Passport @break
+                                                                                                    @case('national_id') National ID @break
+                                                                                                    @case('voter_id') Voter ID @break
+                                                                                                    @case('other') Other @break
+                                                                                                    @default Not specified
+                                                                                                @endswitch
+                                                                                            </p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="info-item">
+                                                                                            <label class="info-label"><i class="fas fa-user-friends me-2"></i>Emergency Contact</label>
+                                                                                            <p class="info-value">{{ $viewing->requestedBy->tenantProfile->emergency_contact_name }}</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="info-item">
+                                                                                            <label class="info-label"><i class="fas fa-phone-alt me-2"></i>Emergency Phone</label>
+                                                                                            <p class="info-value">{{ $viewing->requestedBy->tenantProfile->emergency_contact_phone }}</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            @else
+                                                                                <div class="alert alert-warning">
+                                                                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                                                                    No tenant profile information available.
+                                                                                </div>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <!-- Modal Footer -->
+                                                        <div class="modal-footer">
+                                                            @if($viewing->viewing_status == 'pending')
+                                                                <form action="{{ route('booking.accept', $viewing->id) }}" method="POST" class="me-2">
+                                                                    @csrf
+                                                                    <button type="submit" class="btn btn-success">
+                                                                        <i class="fas fa-check me-1"></i> Accept Booking
+                                                                    </button>
+                                                                </form>
+                                                                <form action="{{ route('booking.decline', $viewing->id) }}" method="POST" class="me-2">
+                                                                    @csrf
+                                                                    <button type="submit" class="btn btn-danger">
+                                                                        <i class="fas fa-times me-1"></i> Decline Booking
+                                                                    </button>
+                                                                </form>
+                                                            @elseif($viewing->viewing_status == 'approved')
+                                                                <form action="{{ route('booking.decline', $viewing->id) }}" method="POST" class="me-2">
+                                                                    @csrf
+                                                                    <button type="submit" class="btn btn-danger">
+                                                                        <i class="fas fa-times me-1"></i> Cancel Approval
+                                                                    </button>
+                                                                </form>
+                                                            @elseif($viewing->viewing_status == 'declined')
+                                                                <form action="{{ route('booking.accept', $viewing->id) }}" method="POST" class="me-2">
+                                                                    @csrf
+                                                                    <button type="submit" class="btn btn-success">
+                                                                        <i class="fas fa-check me-1"></i> Approve Instead
+                                                                    </button>
+                                                                </form>
+                                                            @endif
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                                <i class="fas fa-times me-1"></i> Close
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        @endif
     </div>
 </div>
 </div>
@@ -632,6 +647,28 @@
             height: auto;
             aspect-ratio: 16/9;
         }
+    }
+
+    /* Empty State Styles */
+    .empty-state {
+        padding: 3rem;
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .empty-state i {
+        color: #6c757d;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state h4 {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+        margin-bottom: 1.5rem;
     }
 </style>
 @endpush
